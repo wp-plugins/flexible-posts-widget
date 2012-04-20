@@ -1,12 +1,10 @@
 === Flexible Posts Widget ===
-Author: David Paul Ellenwood
-Author URI: http://dpedesign.com
-Plugin URI: http://wordpress.org/extend/plugins/flexible-posts-widget/
-Tags: widget, widgets, posts, recent posts, thumbnails, custom post types, custom taxonomies
 Contributors: David Paul Ellenwood
+Donate link: 
+Tags: widget, widgets, posts, recent posts, thumbnails, custom post types, custom taxonomies
 Requires at least: 3.2
 Tested up to: 3.3.1
-Stable tag: 1.0.1
+Stable tag: 1.0.2
 
 An advanced posts display widget with many options: post by taxonomy & term or post type, thumbnails, order & order by, customizable templates
 
