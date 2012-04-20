@@ -8,7 +8,7 @@ Requires at least: 3.2
 Tested up to: 3.3.1
 Stable tag: 1.0
 Tags: widget, widgets, posts, recent posts, thumbnails, custom post types, custom taxonomies
-Description: An advanced posts display widget with many options: post by taxonomy & term or post type, thumbnails, order & order by and customizable templates.
+Description: An advanced posts display widget with many options: post by taxonomy & term or post type, thumbnails, order & order by, customizable templates
 */
 
 // Block direct requests

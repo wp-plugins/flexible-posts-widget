@@ -1,4 +1,4 @@
-=== DPE Recent Posts ===
+=== Flexible Posts Widget ===
 Author: David Paul Ellenwood
 Author URI: http://dpedesign.com
 Plugin URI: http://wordpress.org/extend/plugins/flexible-posts-widget/
