@@ -15,18 +15,17 @@ The default WordPress Recent Posts widget is exceptionally basic. I found myself
 = Features & options =
 
 * Customizable widget title
-* Get posts using either a selectable taxonomy & term *OR* by selecting any available post type.
+* Get posts using either a selectable taxonomy & term *OR* by selecting any post type.
 * Control the number of posts displayed.
 * Option to display the post thumbnail (feature image).
 * Select the post thumbnail size to display from available image sizes.
-* Select the sort orderby: Date, ID, Title, Menu Order, Random and sort order: ascending or descending.
+* Select the sort orderby: Date, ID, Title, Menu Order, Random and sort order: ASC or DESC.
 * The widget's HTML output can be customized by user-defined templates located in the current theme folder.
-* Currently, no additional styles or scripts added to the theme.  Style the widget output how ever you'd like!
 
 
 == Installation ==
 
-1. Upload the 'fleible-posts-widget' folder to the `/wp-content/plugins/` directory.
+1. Upload the `flexible-posts-widget` folder to the `/wp-content/plugins/` directory.
 1. Activate the plugin through the 'Plugins' menu in WordPress.
 1. Go to 'Appearance' > 'Widgets' and place the widget into a sidebar to begin configuring it.
 
@@ -34,27 +33,9 @@ The default WordPress Recent Posts widget is exceptionally basic. I found myself
 
 1. Create a folder called `flexible-posts-widget` in the root of your theme folder.
 1. Copy `widget.php` from within this plugin's `views` folder into your theme's new `flexible-posts-widget` folder.
-1. Optional: Rename your theme's `widget.php` template file to a more descriptive name of your choice.
-1. Go to 'Appearance' > 'Widgets' page in WordPress and configure a new Flexible Posts Widget
-1. Enter the name of the template file you added to your theme *without* the .php extension in the 'Template Filename' field.
-
-
-== Other Notes ==
-
-= Default vs. Custom Templates =
-
-Flexible Posts Widget comes with a default template for the widget output. If you would like to alter the widget display code, create a new folder called `flexible-posts-widget` in your template directory and copy over the "views/widget.php" file.
-
-Edit the new file in your theme to your desired HTML layout. Please do not edit the one in the plugin folder as that will cause conflicts when you update the plugin to the latest release.
-
-= Wish List =
-
-Plugin updates & future features list
-
-* Dynamically populate available terms based on a selected taxonomy.
-* Make the "Get Posts By" section selectable and only show the chosen method: Taxonomy & Term or Post Type.
-* Dynamically populate the "Template Filename" field based on the templates available.
-* Add default styles for the widget display & an option to load or not load them (?)
+1. Optional: Rename your theme's `widget.php` template file to a name of your choice.
+1. Go to 'Appearance' > 'Widgets' in WordPress to configure an instance of the widget.
+1. In the 'Template Filename' field enter the name of the template file you added to your theme *without* the .php extension.
 
 
 == Frequently Asked Questions ==
@@ -69,12 +50,27 @@ To get answers to your questions, request help or submit a bug report, please vi
 1. Example Flexible Posts Widget showing the post thumbnail and title wrapped in a link to the post.
 
 
+== Other Notes ==
+
+= Default vs. Custom Templates =
+
+Flexible Posts Widget comes with a default template for the widget output. If you would like to alter the widget display code, create a new folder called `flexible-posts-widget` in your template directory and copy over the "views/widget.php" file.
+
+Edit the new file in your theme to your desired HTML layout. Please do not edit the one in the plugin folder as that will cause conflicts when you update the plugin to the latest release.
+
+= Future updates & features list =
+
+* Dynamically populate available terms based on a selected taxonomy.
+* Make the "Get Posts By" section selectable and only show the chosen method: Taxonomy & Term or Post Type.
+* Dynamically populate the "Template Filename" field based on the templates available.
+* Add default styles for the widget display & an option to load or not load them (?)
+
 
 == Changelog ==
 
 = 1.0.3 =
-* Fixed PHP notices that showed in the admin when WP_DEBUG was enabled
-* Added some stub code for future admin JavaScripts to control the widget settings display (not active yet).
+* Fixed PHP notices that showed in the admin when WP_DEBUG is enabled
+* Added some stub code for future admin JavaScripts (not active yet).
 * Readme.txt updates
 
 = 1.0.2 =
