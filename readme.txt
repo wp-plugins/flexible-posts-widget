@@ -1,29 +1,27 @@
 === Flexible Posts Widget ===
-Contributors: David Paul Ellenwood
-Donate link: 
+Contributors: dpe415
+Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=DJKSKHJWYAWDU
 Tags: widget, widgets, posts, recent posts, thumbnails, custom post types, custom taxonomies
 Requires at least: 3.2
-Tested up to: 3.3.1
-Stable tag: 1.0.2
+Tested up to: 3.3.2
+Stable tag: 1.0.3
 
-An advanced posts display widget with many options: post by taxonomy & term or post type, thumbnails, order & order by, customizable templates
+An advanced posts display widget with many options. Display posts in your sidebars exactly the way you like!
 
 == Description ==
 
-The default WordPress Recent Posts widget is exceptionally basic.  Flexible Posts Widget extends this widget with many per-widget customizable options.
-
-Flexible Posts Widget was born as I found myself always needing a simple way to display a selection of posts from any taxonomy or post type as a list of "Recent" or "Related" posts.
+The default WordPress Recent Posts widget is exceptionally basic. I found myself always in need of a simple way to display a selection of posts from any taxonomy or post type in a theme sidebar; hence, Flexible Posts Widget. Flexible Posts Widget extends the default widget with many per-instance options.
 
 = Features & options =
 
 * Customizable widget title
-* Get posts by either a taxonomy & term *OR* by any available post type.
+* Get posts using either a selectable taxonomy & term *OR* by selecting any available post type.
 * Control the number of posts displayed.
 * Option to display the post thumbnail (feature image).
-* Selectable post thumbnail size from available image sizes.
-* Selectable sort order by (Date, ID, Title, Menu Order, Random) and order (ASC, DESC).
+* Select the post thumbnail size to display from available image sizes.
+* Select the sort orderby: Date, ID, Title, Menu Order, Random and sort order: ascending or descending.
 * The widget's HTML output can be customized by user-defined templates located in the current theme folder.
-* Currently, no added CSS or JavaScripts added to your site.  Style the widget how ever you'd like!
+* Currently, no additional styles or scripts added to the theme.  Style the widget output how ever you'd like!
 
 
 == Installation ==
@@ -53,7 +51,6 @@ Edit the new file in your theme to your desired HTML layout. Please do not edit 
 
 Plugin updates & future features list
 
-* Fix debug notices for undefined indexes on widgets admin screen.
 * Dynamically populate available terms based on a selected taxonomy.
 * Make the "Get Posts By" section selectable and only show the chosen method: Taxonomy & Term or Post Type.
 * Dynamically populate the "Template Filename" field based on the templates available.
@@ -74,6 +71,14 @@ To get answers to your questions, request help or submit a bug report, please vi
 
 
 == Changelog ==
+
+= 1.0.3 =
+* Fixed PHP notices that showed in the admin when WP_DEBUG was enabled
+* Added some stub code for future admin JavaScripts to control the widget settings display (not active yet).
+* Readme.txt updates
+
+= 1.0.2 =
+* Readme.txt updates
 
 = 1.0 =
 * First public release

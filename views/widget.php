@@ -9,7 +9,7 @@ if ( !defined('ABSPATH') )
 
 echo $before_widget;
 
-if ( $title )
+if ( !empty($title) )
 	echo $before_title . $title . $after_title;
 	
 	if( $flexible_posts->have_posts() ):
@@ -19,8 +19,8 @@ if ( $title )
 			<li id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
 				<a href="<?php echo the_permalink(); ?>">
 					<?php
-						if($thumbnail == true)
-							the_post_thumbnail($thumb_size);
+						if( $thumbnail == true )
+							the_post_thumbnail( $thumbsize );
 					?>
 					<h4 class="title"><?php the_title(); ?></h4>
 				</a>

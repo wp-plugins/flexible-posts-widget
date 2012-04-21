@@ -2,9 +2,9 @@
 /*
 Plugin Name: Flexible Posts Widget
 Plugin URI: http://wordpress.org/extend/plugins/flexible-posts-widget/
-Author: David Paul Ellenwood
+Author: dpe415
 Author URI: http://dpedesign.com
-Version: 1.0.2
+Version: 1.0.3
 Description: An advanced posts display widget with many options: post by taxonomy & term or post type, thumbnails, order & order by, customizable templates
 */
 
@@ -25,22 +25,30 @@ class DPE_Flexible_Posts_Widget extends WP_Widget {
 	
     /** constructor */
     function DPE_Flexible_Posts_Widget() {
-        parent::WP_Widget(false, $name = 'Flexible Posts Widget');	
+		
+        parent::WP_Widget(false, $name = 'Flexible Posts Widget');
+		//$this->register_sns();
+		/*
+		global $pagenow;
+		if (defined("WP_ADMIN") && WP_ADMIN) {
+			if ( 'widgets.php' == $pagenow ) {
+				wp_enqueue_script( 'dpe-flexible-posts-widget' );
+			}
+		}
+		*/
     }
+
+	function register_sns() {
+		$dir = plugins_url('/', __FILE__);
+		wp_register_script( 'dpe-flexible-posts-widget', $dir . 'flexible-posts-widget.js', array('jquery','thickbox'), false, true );
+	}
+	
 
     /** @see WP_Widget::widget */
     function widget($args, $instance) {	
         extract( $args );
-        $title 		= apply_filters('widget_title', $instance['title']);		
-		$taxonomy	= esc_attr( $instance['taxonomy'] );
-        $term 		= esc_attr( $instance['term'] );
-        $number 	= esc_attr( (int)$instance['number'] );
-        $thumb_size = esc_attr( $instance['thumb_size'] );
-        $thumbnail 	= esc_attr( $instance['thumbnail'] );
-        $posttype 	= esc_attr( $instance['posttype'] );
-		$orderby	= esc_attr( $instance['orderby'] );
-		$order		= esc_attr( $instance['order'] );
-		$template	= esc_attr( $instance['template'] );
+		extract( $instance );
+		$title = apply_filters( 'widget_title', empty( $title ) ? '' : $title );
 		
 		if( empty($template) )
 			$template = 'widget';
@@ -73,8 +81,10 @@ class DPE_Flexible_Posts_Widget extends WP_Widget {
 		// Get the posts for this instance
 		$flexible_posts = new WP_Query( $args );
 		
+		// Get and include the template we're going to use
 		include( $this->getTemplateHierarchy( $template ) );
 		
+		// Be sure to reset any post_data before proceeding
 		wp_reset_postdata();
         
     }
@@ -84,14 +94,14 @@ class DPE_Flexible_Posts_Widget extends WP_Widget {
 		global $posttypes;
 		$instance 				= $old_instance;
 		$instance['title']		= strip_tags( $new_instance['title'] );
+		$instance['posttype']	= $new_instance['posttype'];
 		$instance['taxonomy']	= $new_instance['taxonomy'];
 		$instance['term']		= strip_tags( $new_instance['term'] );
 		$instance['number']		= strip_tags( $new_instance['number'] );
-		$instance['thumb_size']	= $new_instance['thumb_size'];
-		$instance['thumbnail']	= $new_instance['thumbnail'];
-		$instance['posttype']	= $new_instance['posttype'];
 		$instance['orderby']	= $new_instance['orderby'];
 		$instance['order']		= $new_instance['order'];
+		$instance['thumb_size']	= $new_instance['thumb_size'];
+		$instance['thumbnail']	= $new_instance['thumbnail'];
 		$instance['template']	= strip_tags( $new_instance['template'] );
         return $instance;
     }
@@ -101,43 +111,24 @@ class DPE_Flexible_Posts_Widget extends WP_Widget {
 		
 		$posttypes = get_post_types('', 'objects');
 		$taxonomies = get_taxonomies('', 'objects'); 
+		$orderbys = array( 'ID', 'title', 'date', 'rand', 'menu_order', );
+		$orders = array( 'ASC', 'DESC', );
+		$thumb_sizes = get_intermediate_image_sizes();		
+
+		$instance = wp_parse_args( (array) $instance, array(
+			'title'		=> '',
+			'posttype'	=> 'post',
+			'taxonomy'	=> '',
+			'term'		=> '',
+			'number'	=> '',
+			'orderby'	=> 'date',
+			'order'		=> 'DESC',
+			'thumbnail' => false,
+			'thumbsize' => '',
+			'template'	=> 'widget',
+		) );
 		
-		$orderbys = array(
-			'ID',
-			'title',
-			'date',
-			'rand',
-			'menu_order',
-		);
-		
-		$orders = array(
-			'ASC',
-			'DESC',
-		);
-		
-		$thumb_sizes = get_intermediate_image_sizes();
-		
-		if( !empty($instance) ) {
-			$title		= esc_attr ($instance['title'] );
-			$taxonomy	= esc_attr( $instance['taxonomy'] );
-			$term		= esc_attr( $instance['term'] );
-			$number		= esc_attr( $instance['number'] );
-			$thumb_size	= esc_attr( $instance['thumb_size'] );
-			$thumbnail	= esc_attr( $instance['thumbnail'] );
-			$posttype	= esc_attr( $instance['posttype'] );
-			$orderby	= esc_attr( $instance['orderby'] );
-			$order		= esc_attr( $instance['order'] );
-			$template	= esc_attr( $instance['template'] );
-		}
-		
-		if( empty($orderby) )
-			$orderby = 'date';
-		
-		if( empty($order) )
-			$order = 'DESC';
-			
-		if( empty($template) )
-			$template = 'widget';
+		extract( $instance );
 		
         ?>
          <p>
@@ -188,7 +179,7 @@ class DPE_Flexible_Posts_Widget extends WP_Widget {
 			<select class="widefat" name="<?php echo $this->get_field_name('thumb_size'); ?>" id="<?php echo $this->get_field_id('thumb_size'); ?>">
 				<?php
 				foreach ($thumb_sizes as $option) {
-					echo '<option value="' . $option . '" id="' . $option . '"', $thumb_size == $option ? ' selected="selected"' : '', '>', $option, '</option>';
+					echo '<option value="' . $option . '" id="' . $option . '"', $thumbsize == $option ? ' selected="selected"' : '', '>', $option, '</option>';
 				}
 				?>
 			</select>		
