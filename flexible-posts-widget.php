@@ -100,7 +100,7 @@ class DPE_Flexible_Posts_Widget extends WP_Widget {
 		$instance['number']		= strip_tags( $new_instance['number'] );
 		$instance['orderby']	= $new_instance['orderby'];
 		$instance['order']		= $new_instance['order'];
-		$instance['thumb_size']	= $new_instance['thumb_size'];
+		$instance['thumbsize']	= $new_instance['thumbsize'];
 		$instance['thumbnail']	= $new_instance['thumbnail'];
 		$instance['template']	= strip_tags( $new_instance['template'] );
         return $instance;
@@ -175,8 +175,8 @@ class DPE_Flexible_Posts_Widget extends WP_Widget {
           <label for="<?php echo $this->get_field_id('thumbnail'); ?>"><?php _e('Display thumbnails?'); ?></label> 
         </p>
 		<p>	
-			<label for="<?php echo $this->get_field_id('thumb_size'); ?>"><?php _e('Select a thumbnail size to show'); ?></label> 
-			<select class="widefat" name="<?php echo $this->get_field_name('thumb_size'); ?>" id="<?php echo $this->get_field_id('thumb_size'); ?>">
+			<label for="<?php echo $this->get_field_id('thumbsize'); ?>"><?php _e('Select a thumbnail size to show'); ?></label> 
+			<select class="widefat" name="<?php echo $this->get_field_name('thumbsize'); ?>" id="<?php echo $this->get_field_id('thumbsize'); ?>">
 				<?php
 				foreach ($thumb_sizes as $option) {
 					echo '<option value="' . $option . '" id="' . $option . '"', $thumbsize == $option ? ' selected="selected"' : '', '>', $option, '</option>';
