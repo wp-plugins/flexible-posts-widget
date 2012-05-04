@@ -60,6 +60,7 @@ Edit the new file in your theme to your desired HTML layout. Please do not edit 
 
 = Future updates & features list =
 
+* Create shortcode functionality
 * Dynamically populate available terms based on a selected taxonomy.
 * Make the "Get Posts By" section selectable and only show the chosen method: Taxonomy & Term or Post Type.
 * Dynamically populate the "Template Filename" field based on the templates available.
