@@ -68,6 +68,9 @@ Edit the new file in your theme to your desired HTML layout. Please do not edit 
 
 == Changelog ==
 
+= 1.0.4 =
+* Fixed an issue where post thumbnails aren't displaying.
+
 = 1.0.3 =
 * Fixed PHP notices that showed in the admin when WP_DEBUG is enabled
 * Added some stub code for future admin JavaScripts (not active yet).
