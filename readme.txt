@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_i
 Tags: widget, widgets, posts, recent posts, thumbnails, custom post types, custom taxonomies
 Requires at least: 3.2
 Tested up to: 3.3.2
-Stable tag: 1.0.3
+Stable tag: 1.0.4
 
 An advanced posts display widget with many options. Display posts in your sidebars exactly the way you like!
 
