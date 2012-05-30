@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_i
 Tags: widget, widgets, posts, recent posts, thumbnails, custom post types, custom taxonomies
 Requires at least: 3.2
 Tested up to: 3.3.2
-Stable tag: 1.0.4
+Stable tag: 1.0.5
 
 An advanced posts display widget with many options. Display posts in your sidebars exactly the way you like!
 
@@ -68,6 +68,9 @@ Edit the new file in your theme to your desired HTML layout. Please do not edit 
 
 
 == Changelog ==
+
+= 1.0.5 =
+* Bug fix - Removed post_status 'private' from wp_queries. We don't want to show private posts in our loops.
 
 = 1.0.4 =
 * Fixed an issue where post thumbnails aren't displaying.
