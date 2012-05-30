@@ -63,14 +63,14 @@ class DPE_Flexible_Posts_Widget extends WP_Widget {
 						'terms' => $term,
 					)
 				),
-				'post_status'		=> array('publish', 'private', 'inherit'),
+				'post_status'		=> array('publish', 'inherit'),
 				'posts_per_page'	=> $number,
 				'orderby'			=> $orderby,
 				'order'				=> $order,
 			);
 		} else {
 			$args = array(
-				'post_status'		=> array('publish', 'private', 'inherit'),
+				'post_status'		=> array('publish', 'inherit'),
 				'post_type'			=> $posttype,
 				'posts_per_page'	=> $number,
 				'orderby'			=> $orderby,
