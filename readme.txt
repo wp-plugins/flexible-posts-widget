@@ -51,7 +51,8 @@ To get answers to your questions, request help or submit a bug report, please vi
 
 == Screenshots ==
 
-1. Flexible Posts Widget admin screen.
+1. Flexible Posts Widget admin screen showing get posts by taxonomy and term with thumbnails.
+1. Flexible Posts Widget admin screen showing get posts by post type without thumbnails.
 1. Example Flexible Posts Widget showing the post thumbnail and title wrapped in a link to the post.
 
 == Upgrade Notice ==
