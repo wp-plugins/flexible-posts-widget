@@ -61,13 +61,17 @@ Edit the new file in your theme to your desired HTML layout. Please do not edit 
 = Future updates & features list =
 
 * Create shortcode functionality
-* Dynamically populate available terms based on a selected taxonomy.
-* Make the "Get Posts By" section selectable and only show the chosen method: Taxonomy & Term or Post Type.
 * Dynamically populate the "Template Filename" field based on the templates available.
+* Adjust widget output template for Media-type posts.
 * Add default styles for the widget display & an option to load or not load them (?)
 
 
 == Changelog ==
+
+= 2.0 =
+* Dynamically populate available terms based on selected taxonomy.
+* Make the "Get Posts By" section selectable and only show the chosen method: Taxonomy & Term or Post Type.
+* Miscellaneous admin improvements.
 
 = 1.0.5 =
 * Bug fix - Removed post_status 'private' from wp_queries. We don't want to show private posts in our loops.
