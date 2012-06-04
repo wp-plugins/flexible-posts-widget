@@ -6,7 +6,8 @@ Author: dpe415
 Author URI: http://dpedesign.com
 Version: 2.0
 Description: An advanced posts display widget with many options: post by taxonomy & term or post type, thumbnails, order & order by, customizable templates
-License: GPL2
+License: GPL2 or later
+License URI: http://www.gnu.org/licenses/gpl-2.0.html
 */
 
 /*  Copyright 2012  David Paul Ellenwood  (email : david@dpedesign.com)
