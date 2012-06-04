@@ -236,7 +236,7 @@ class DPE_Flexible_Posts_Widget extends WP_Widget {
 		
 		<div id="<?php echo $this->get_field_id('pt-box'); ?>" class="getembies pt" <?php echo $getemby == 'pt' ? '' : 'style="display:none;"'?>>
 			<p>	
-				<label for="<?php echo $this->get_field_id('posttype'); ?>"><?php _e('Post type:'); ?></label> 
+				<label for="<?php echo $this->get_field_id('posttype'); ?>"><?php _e('Select a post type:'); ?></label> 
 				<select class="widefat" name="<?php echo $this->get_field_name('posttype'); ?>" id="<?php echo $this->get_field_id('posttype'); ?>">
 					<?php
 					foreach ($posttypes as $option) {
