@@ -217,7 +217,7 @@ class DPE_Flexible_Posts_Widget extends WP_Widget {
 			</p>
 			<p>
 				<label for="<?php echo $this->get_field_id('term'); ?>"><?php _e('Select a term:'); ?></label> 
-				<select style="background-color:#fff;" class="widefat dpe-fp-term" name="<?php echo $this->get_field_name('term'); ?>" id="<?php echo $this->get_field_id('term'); ?>">
+				<select class="widefat dpe-fp-term" name="<?php echo $this->get_field_name('term'); ?>" id="<?php echo $this->get_field_id('term'); ?>">
 					<option value="-1">Please select...</option>
 					<?php
 						if( $taxonomy ) {
@@ -242,7 +242,7 @@ class DPE_Flexible_Posts_Widget extends WP_Widget {
 		<div id="<?php echo $this->get_field_id('pt-box'); ?>" class="getembies pt" <?php echo $getemby == 'pt' ? '' : 'style="display:none;"'?>>
 			<p>	
 				<label for="<?php echo $this->get_field_id('posttype'); ?>"><?php _e('Select a post type:'); ?></label> 
-				<select style="background-color:#fff;" class="widefat" name="<?php echo $this->get_field_name('posttype'); ?>" id="<?php echo $this->get_field_id('posttype'); ?>">
+				<select class="widefat" name="<?php echo $this->get_field_name('posttype'); ?>" id="<?php echo $this->get_field_id('posttype'); ?>">
 					<?php
 					foreach ($posttypes as $option) {
 						echo '<option value="' . $option->name . '"', $posttype == $option->name ? ' selected="selected"' : '', '>', $option->labels->name, '</option>';
