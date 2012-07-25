@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_i
 Tags: widget, widgets, posts, recent posts, thumbnails, custom post types, custom taxonomies
 Requires at least: 3.2
 Tested up to: 3.4
-Stable tag: 2.0
+Stable tag: 2.1
 License: GPL2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -74,13 +74,16 @@ Edit the new file in your theme to your desired HTML layout. Please do not edit 
 
 = Future updates & features list =
 
-* Create shortcode functionality
+* Allow for multiple post type or term selections.
 * Dynamically populate the "Template Filename" field based on the templates available.
 * Adjust widget output template for Media-type posts.
-* Add default styles for the widget display & an option to load or not load them (?)
+* Add default styles for the widget display & an option to load or not load them. (?)
 
 
 == Changelog ==
+
+= 2.1 =
+* Added offset parameter to display options.
 
 = 2.0 =
 * *Upgrade notice:* When upgrading from v1.x.x to v2.x, remember to double-check the settings for any existing widgets.
