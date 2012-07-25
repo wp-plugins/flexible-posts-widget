@@ -4,7 +4,7 @@ Plugin Name: Flexible Posts Widget
 Plugin URI: http://wordpress.org/extend/plugins/flexible-posts-widget/
 Author: dpe415
 Author URI: http://dpedesign.com
-Version: 2.0
+Version: 2.1
 Description: An advanced posts display widget with many options: post by taxonomy & term or post type, thumbnails, order & order by, customizable templates
 License: GPL2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -104,6 +104,7 @@ class DPE_Flexible_Posts_Widget extends WP_Widget {
 				),
 				'post_status'		=> array('publish', 'inherit'),
 				'posts_per_page'	=> $number,
+				'offset'			=> $offset,
 				'orderby'			=> $orderby,
 				'order'				=> $order,
 			);
@@ -112,6 +113,7 @@ class DPE_Flexible_Posts_Widget extends WP_Widget {
 				'post_status'		=> array('publish', 'inherit'),
 				'post_type'			=> $posttype,
 				'posts_per_page'	=> $number,
+				'offset'			=> $offset,
 				'orderby'			=> $orderby,
 				'order'				=> $order,
 			);
@@ -147,6 +149,7 @@ class DPE_Flexible_Posts_Widget extends WP_Widget {
 		$instance['taxonomy']	= $new_instance['taxonomy'];
 		$instance['term']		= strip_tags( $new_instance['term'] );
 		$instance['number']		= strip_tags( $new_instance['number'] );
+		$instance['offset']		= strip_tags( $new_instance['offset'] );
 		$instance['orderby']	= $new_instance['orderby'];
 		$instance['order']		= $new_instance['order'];
 		$instance['thumbsize']	= $new_instance['thumbsize'];
@@ -178,6 +181,7 @@ class DPE_Flexible_Posts_Widget extends WP_Widget {
 			'taxonomy'	=> 'category',
 			'term'		=> '',
 			'number'	=> '3',
+			'offset'	=> '0',
 			'orderby'	=> 'date',
 			'order'		=> 'DESC',
 			'thumbnail' => false,
@@ -203,7 +207,7 @@ class DPE_Flexible_Posts_Widget extends WP_Widget {
 		<div id="<?php echo $this->get_field_id('tnt-box'); ?>" class="getembies tnt" <?php echo $getemby == 'tnt' ? '' : 'style="display:none;"'?>>
 			<p>	
 				<label for="<?php echo $this->get_field_id('taxonomy'); ?>"><?php _e('Select a taxonomy:'); ?></label> 
-				<select class="widefat dpe-fp-taxonomy" name="<?php echo $this->get_field_name('taxonomy'); ?>" id="<?php echo $this->get_field_id('taxonomy'); ?>">
+				<select style="background-color:#fff;" class="widefat dpe-fp-taxonomy" name="<?php echo $this->get_field_name('taxonomy'); ?>" id="<?php echo $this->get_field_id('taxonomy'); ?>">
 					<?php
 					foreach ($taxonomies as $option) {
 						echo '<option value="' . $option->name . '"', $taxonomy == $option->name ? ' selected="selected"' : '', '>', $option->label, '</option>';
@@ -213,7 +217,7 @@ class DPE_Flexible_Posts_Widget extends WP_Widget {
 			</p>
 			<p>
 				<label for="<?php echo $this->get_field_id('term'); ?>"><?php _e('Select a term:'); ?></label> 
-				<select class="widefat dpe-fp-term" name="<?php echo $this->get_field_name('term'); ?>" id="<?php echo $this->get_field_id('term'); ?>">
+				<select style="background-color:#fff;" class="widefat dpe-fp-term" name="<?php echo $this->get_field_name('term'); ?>" id="<?php echo $this->get_field_id('term'); ?>">
 					<option value="-1">Please select...</option>
 					<?php
 						if( $taxonomy ) {
@@ -238,7 +242,7 @@ class DPE_Flexible_Posts_Widget extends WP_Widget {
 		<div id="<?php echo $this->get_field_id('pt-box'); ?>" class="getembies pt" <?php echo $getemby == 'pt' ? '' : 'style="display:none;"'?>>
 			<p>	
 				<label for="<?php echo $this->get_field_id('posttype'); ?>"><?php _e('Select a post type:'); ?></label> 
-				<select class="widefat" name="<?php echo $this->get_field_name('posttype'); ?>" id="<?php echo $this->get_field_id('posttype'); ?>">
+				<select style="background-color:#fff;" class="widefat" name="<?php echo $this->get_field_name('posttype'); ?>" id="<?php echo $this->get_field_id('posttype'); ?>">
 					<?php
 					foreach ($posttypes as $option) {
 						echo '<option value="' . $option->name . '"', $posttype == $option->name ? ' selected="selected"' : '', '>', $option->labels->name, '</option>';
@@ -254,7 +258,11 @@ class DPE_Flexible_Posts_Widget extends WP_Widget {
           <label for="<?php echo $this->get_field_id('number'); ?>"><?php _e('Number of posts to show:'); ?></label> 
           <input id="<?php echo $this->get_field_id('number'); ?>" name="<?php echo $this->get_field_name('number'); ?>" type="text" value="<?php echo $number; ?>" style="width:40px; margin-left:.2em; text-align:right;" />
         </p>
-		<p>	
+		<p>
+          <label for="<?php echo $this->get_field_id('offset'); ?>"><?php _e('Number of posts to skip:'); ?></label> 
+          <input id="<?php echo $this->get_field_id('offset'); ?>" name="<?php echo $this->get_field_name('offset'); ?>" type="text" value="<?php echo $offset; ?>" style="width:40px; margin-left:.2em; text-align:right;" />
+        </p>
+   		<p>	
 			<label for="<?php echo $this->get_field_id('orderby'); ?>"><?php _e('Order post by:'); ?></label> 
 			<select class="widefat" name="<?php echo $this->get_field_name('orderby'); ?>" id="<?php echo $this->get_field_id('orderby'); ?>">
 				<?php
