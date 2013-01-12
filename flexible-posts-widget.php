@@ -144,21 +144,33 @@ class DPE_Flexible_Posts_Widget extends WP_Widget {
 	 * @return array Updated safe values to be saved.
 	 */
     function update($new_instance, $old_instance) {		
-		global $posttypes;
+		
+		// Get the default values to test against
+		$posttypes		= get_post_types( array('public' => true ), 'names' );
+		$taxonomies		= get_taxonomies( array('public' => true ), 'names' );
+		$orderbys		= array( 'ID', 'title', 'date', 'rand', 'menu_order', );
+		$orders			= array( 'ASC', 'DESC', );
+		$thumb_sizes	= get_intermediate_image_sizes();
+		
+		// Add our defaults
+		$posttypes[]	= 'all';
+		$taxonomies[]	= 'none';
+		
 		$instance 				= $old_instance;
 		$instance['title']		= strip_tags( $new_instance['title'] );
-		$instance['getemby']	= $new_instance['getemby'];
-		$instance['posttype']	= $new_instance['posttype'];
-		$instance['taxonomy']	= $new_instance['taxonomy'];
+		$instance['posttype']	= ( in_array( $new_instance['posttype'], $posttypes ) ? $new_instance['posttype'] : 'post' );
+		$instance['taxonomy']	= ( in_array( $new_instance['taxonomy'], $taxonomies ) ? $new_instance['taxonomy'] : 'none' );
 		$instance['term']		= strip_tags( $new_instance['term'] );
-		$instance['number']		= strip_tags( $new_instance['number'] );
-		$instance['offset']		= strip_tags( $new_instance['offset'] );
-		$instance['orderby']	= $new_instance['orderby'];
-		$instance['order']		= $new_instance['order'];
-		$instance['thumbsize']	= $new_instance['thumbsize'];
-		$instance['thumbnail']	= $new_instance['thumbnail'];
+		$instance['number']		= (int)$new_instance['number'];
+		$instance['offset']		= (int)$new_instance['offset'];
+		$instance['orderby']	= ( in_array( $new_instance['orderby'], $orderbys ) ? $new_instance['orderby'] : 'date' );
+		$instance['order']		= ( in_array( $new_instance['order'], $orders ) ? $new_instance['order'] : 'DESC' );
+		$instance['thumbnail']	= (bool)$new_instance['thumbnail'];
+		$instance['thumbsize']	= strip_tags( $new_instance['thumbsize'] );
 		$instance['template']	= strip_tags( $new_instance['template'] );
+        
         return $instance;
+      
     }
 
     /**
@@ -168,18 +180,16 @@ class DPE_Flexible_Posts_Widget extends WP_Widget {
 	 *
 	 * @param array $instance Previously saved values from database.
 	 */
-    function form($instance) {
+    function form( $instance ) {
 		
-		$getembies = array( 'tnt', 'pt' );
-		$posttypes = get_post_types( array('public' => true ), 'objects' );
-		$taxonomies = get_taxonomies( array('public' => true ), 'objects' );
-		$orderbys = array( 'ID', 'title', 'date', 'rand', 'menu_order', );
-		$orders = array( 'ASC', 'DESC', );
-		$thumb_sizes = get_intermediate_image_sizes();		
+		$posttypes		= get_post_types( array('public' => true ), 'objects' );
+		$taxonomies		= get_taxonomies( array('public' => true ), 'objects' );
+		$orderbys		= array( 'ID', 'title', 'date', 'rand', 'menu_order', );
+		$orders			= array( 'ASC', 'DESC', );
+		$thumb_sizes	= get_intermediate_image_sizes();
 
 		$instance = wp_parse_args( (array) $instance, array(
 			'title'		=> '',
-			'getemby'	=> 'tnt',
 			'posttype'	=> 'post',
 			'taxonomy'	=> 'none',
 			'term'		=> '',
@@ -195,124 +205,127 @@ class DPE_Flexible_Posts_Widget extends WP_Widget {
 		extract( $instance );
 		
         ?>
-        <p>
-			<label for="<?php echo $this->get_field_id('title'); ?>"><?php _e('Widget Title:'); ?></label> 
-			<input class="widefat" id="<?php echo $this->get_field_id('title'); ?>" name="<?php echo $this->get_field_name('title'); ?>" type="text" value="<?php echo $title; ?>" />
-        </p>
-		<h4 style="margin-bottom:.2em;"><label for="<?php echo $this->get_field_id('getemby'); ?>"><?php _e('Get posts by:'); ?></label></strong></h4>
-		
-		<!-- p>
-			<select class="widefat dpe-fp-widget dpe-fp-getemby" name="<?php echo $this->get_field_name('getemby'); ?>" id="<?php echo $this->get_field_id('getemby'); ?>">
-				<option value="tnt"<?php echo $getemby == 'tnt' ? ' selected="selected"' : ''?>>Taxonomy &amp; Term</option>
-				<option value="pt"<?php echo $getemby == 'pt' ? ' selected="selected"' : ''?>>Post Type</option>
-			</select>
-		</p -->
-
-		<div id="<?php echo $this->get_field_id('pt-box'); ?>" class="getembies pt">
-			<p>	
-				<label for="<?php echo $this->get_field_id('posttype'); ?>"><?php _e('Select a post type:'); ?></label> 
-				<select class="widefat dpe-fp-widget" name="<?php echo $this->get_field_name('posttype'); ?>" id="<?php echo $this->get_field_id('posttype'); ?>">
-					<option value="all">All Post Types</option>
-					<?php
-					foreach ($posttypes as $option) {
-						echo '<option value="' . $option->name . '"', $posttype == $option->name ? ' selected="selected"' : '', '>', $option->labels->name, '</option>';
-					}
-					?>
-				</select>
-			</p>
-		</div><!-- .pt.getemby -->
-				
-		<div id="<?php echo $this->get_field_id('tnt-box'); ?>" class="getembies tnt">
-			<p>	
-				<label for="<?php echo $this->get_field_id('taxonomy'); ?>"><?php _e('Select a taxonomy:'); ?></label> 
-				<select class="widefat dpe-fp-widget dpe-fp-taxonomy" name="<?php echo $this->get_field_name('taxonomy'); ?>" id="<?php echo $this->get_field_id('taxonomy'); ?>">
-					<option value="none" <?php echo 'none' == $taxonomy ? ' selected="selected"' : ''; ?>>No Taxonomy</option>
-					<?php
-					foreach ($taxonomies as $option) {
-						echo '<option value="' . $option->name . '"', $taxonomy == $option->name ? ' selected="selected"' : '', '>', $option->label, '</option>';
-					}
-					?>
-				</select>		
-			</p>
-			<p <?php dbgx_trace_var($taxonomy); echo 'none' == $taxonomy ? ' style="display:none;"' : ''; ?>>
-				<label for="<?php echo $this->get_field_id('term'); ?>"><?php _e('Select a term:'); ?></label> 
-				<select class="widefat dpe-fp-widget dpe-fp-term" name="<?php echo $this->get_field_name('term'); ?>" id="<?php echo $this->get_field_id('term'); ?>">
-					<option value="-1">Please select...</option>
-					<?php
-						if ( $taxonomy && $taxonomy != 'none' ) {
-							$args = array (
-								'hide_empty' => 0,
-							);
-							
-							$terms = get_terms( $taxonomy, $args );
-							
-							if ( !empty($terms) ) {
-								$output = '';
-								foreach ( $terms as $option )
-									$output .= '<option value="' . $option->slug . '"' . ( $term == $option->slug ? ' selected="selected"' : '' ) . '>' . $option->name . '</option>';
-								echo $output;
+        <div class="dpe-fp-widget">
+        
+        	<div class="section title">
+		        <p>
+					<label for="<?php echo $this->get_field_id('title'); ?>"><?php _e('Widget title:'); ?></label> 
+					<input class="widefat" id="<?php echo $this->get_field_id('title'); ?>" name="<?php echo $this->get_field_name('title'); ?>" type="text" value="<?php echo $title; ?>" />
+		        </p>
+        	</div>
+	        
+	        <div class="section getemby">
+				<h4><label for="<?php echo $this->get_field_id('getemby'); ?>"><?php _e('Get posts by'); ?></label></strong></h4>
+				<div id="<?php echo $this->get_field_id('pt-box'); ?>" class="pt">
+					<p>	
+						<label for="<?php echo $this->get_field_id('posttype'); ?>"><?php _e('Select a post type:'); ?></label> 
+						<select class="widefat dpe-fp-pt" name="<?php echo $this->get_field_name('posttype'); ?>" id="<?php echo $this->get_field_id('posttype'); ?>">
+							<option value="all">All Post Types</option>
+							<?php
+							foreach ($posttypes as $option) {
+								echo '<option value="' . $option->name . '"', $posttype == $option->name ? ' selected="selected"' : '', '>', $option->labels->name, '</option>';
 							}
+							?>
+						</select>
+					</p>
+				</div><!-- .pt.getemby -->
+				<div id="<?php echo $this->get_field_id('tnt-box'); ?>" class="tnt">
+					<p>	
+						<label for="<?php echo $this->get_field_id('taxonomy'); ?>"><?php _e('Select a taxonomy:'); ?></label> 
+						<select class="widefat dpe-fp-taxonomy" name="<?php echo $this->get_field_name('taxonomy'); ?>" id="<?php echo $this->get_field_id('taxonomy'); ?>">
+							<option value="none" <?php echo 'none' == $taxonomy ? ' selected="selected"' : ''; ?>>No Taxonomy</option>
+							<?php
+							foreach ($taxonomies as $option) {
+								echo '<option value="' . $option->name . '"', $taxonomy == $option->name ? ' selected="selected"' : '', '>', $option->label, '</option>';
+							}
+							?>
+						</select>		
+					</p>
+					<p<?php echo 'none' == $taxonomy ? ' style="display:none;"' : ''; ?>>
+						<label for="<?php echo $this->get_field_id('term'); ?>"><?php _e('Select a term:'); ?></label> 
+						<select class="widefat dpe-fp-term" name="<?php echo $this->get_field_name('term'); ?>" id="<?php echo $this->get_field_id('term'); ?>">
+							<option value="-1">Please select...</option>
+							<?php
+								if ( $taxonomy && $taxonomy != 'none' ) {
+									$args = array (
+										'hide_empty' => 0,
+									);
+									
+									$terms = get_terms( $taxonomy, $args );
+									
+									if ( !empty($terms) ) {
+										$output = '';
+										foreach ( $terms as $option )
+											$output .= '<option value="' . $option->slug . '"' . ( $term == $option->slug ? ' selected="selected"' : '' ) . '>' . $option->name . '</option>';
+										echo $output;
+									}
+								}
+							?>
+						</select>
+					</p>
+				</div><!-- .tnt.getemby -->
+				<p class="description warning" style="display:none;"><strong>Woah!</strong> Your current settings will return absolutely everything. You might want to choose a post type or taxonomy &amp; term.</p> 
+			</div>
+			
+			<div class="section display">
+				<h4>Display options</h4>
+				<p class="cf">
+		          <label for="<?php echo $this->get_field_id('number'); ?>"><?php _e('Number of posts to show:'); ?></label> 
+		          <input id="<?php echo $this->get_field_id('number'); ?>" name="<?php echo $this->get_field_name('number'); ?>" type="text" value="<?php echo $number; ?>" />
+		        </p>
+				<p class="cf">
+		          <label for="<?php echo $this->get_field_id('offset'); ?>"><?php _e('Number of posts to skip:'); ?></label> 
+		          <input id="<?php echo $this->get_field_id('offset'); ?>" name="<?php echo $this->get_field_name('offset'); ?>" type="text" value="<?php echo $offset; ?>" />
+		        </p>
+		   		<p class="cf">
+					<label for="<?php echo $this->get_field_id('orderby'); ?>"><?php _e('Order posts by:'); ?></label> 
+					<select name="<?php echo $this->get_field_name('orderby'); ?>" id="<?php echo $this->get_field_id('orderby'); ?>">
+						<?php
+						foreach ($orderbys as $option) {
+							echo '<option value="' . $option . '" id="' . $option . '"', $orderby == $option ? ' selected="selected"' : '', '>', $option, '</option>';
 						}
-					?>
-				</select>
-			</p>
-		</div><!-- .tnt.getemby -->
-		
-		<hr style="margin-bottom:1.33em; border:none; border-bottom:1px solid #dfdfdf;" />
-		<h4 style="">Display options</h4>
-		<p>
-          <label for="<?php echo $this->get_field_id('number'); ?>"><?php _e('Number of posts to show:'); ?></label> 
-          <input id="<?php echo $this->get_field_id('number'); ?>" name="<?php echo $this->get_field_name('number'); ?>" type="text" value="<?php echo $number; ?>" style="width:40px; margin-left:.2em; text-align:right;" />
-        </p>
-		<p>
-          <label for="<?php echo $this->get_field_id('offset'); ?>"><?php _e('Number of posts to skip:'); ?></label> 
-          <input id="<?php echo $this->get_field_id('offset'); ?>" name="<?php echo $this->get_field_name('offset'); ?>" type="text" value="<?php echo $offset; ?>" style="width:40px; margin-left:.2em; text-align:right;" />
-        </p>
-   		<p>	
-			<label for="<?php echo $this->get_field_id('orderby'); ?>"><?php _e('Order post by:'); ?></label> 
-			<select class="widefat dpe-fp-widget" name="<?php echo $this->get_field_name('orderby'); ?>" id="<?php echo $this->get_field_id('orderby'); ?>">
-				<?php
-				foreach ($orderbys as $option) {
-					echo '<option value="' . $option . '" id="' . $option . '"', $orderby == $option ? ' selected="selected"' : '', '>', $option, '</option>';
-				}
-				?>
-			</select>		
-		</p>
-		<p>	
-			<label for="<?php echo $this->get_field_id('order'); ?>"><?php _e('Order:'); ?></label> 
-			<select class="widefat dpe-fp-widget" name="<?php echo $this->get_field_name('order'); ?>" id="<?php echo $this->get_field_id('order'); ?>">
-				<?php
-				foreach ($orders as $option) {
-					echo '<option value="' . $option . '"', $order == $option ? ' selected="selected"' : '', '>', $option, '</option>';
-				}
-				?>
-			</select>
-			<br />
-			<span style="padding-top:3px;" class="description"><?php _e('ASC = 1,2,3 or A,B,C<br />DESC = 3,2,1 or C,B,A'); ?></span>		
-		</p>
-		<hr style="margin-bottom:1.33em; border:none; border-bottom:1px solid #dfdfdf;" />
-		<p style="margin-top:1.33em;">
-          <input class="dpe-fp-thumbnail" id="<?php echo $this->get_field_id('thumbnail'); ?>" name="<?php echo $this->get_field_name('thumbnail'); ?>" type="checkbox" value="1" <?php checked( '1', $thumbnail ); ?>/>
-          <label style="font-weight:bold;" for="<?php echo $this->get_field_id('thumbnail'); ?>"><?php _e('Display thumbnails?'); ?></label> 
-        </p>
-		<p <?php echo $thumbnail == '1' ? '' : 'style="display:none;"'?>  class="thumb-size">	
-			<label for="<?php echo $this->get_field_id('thumbsize'); ?>"><?php _e('Select a thumbnail size to show:'); ?></label> 
-			<select class="widefat dpe-fp-widget" name="<?php echo $this->get_field_name('thumbsize'); ?>" id="<?php echo $this->get_field_id('thumbsize'); ?>">
-				<?php
-				foreach ($thumb_sizes as $option) {
-					echo '<option value="' . $option . '" id="' . $option . '"', $thumbsize == $option ? ' selected="selected"' : '', '>', $option, '</option>';
-				}
-				?>
-			</select>		
-		</p>
-		<hr style="margin-bottom:1.33em; border:none; border-bottom:1px solid #dfdfdf;" />
-		<p style="margin:1.33em 0;">
-			<label for="<?php echo $this->get_field_id('template'); ?>"><?php _e('Template filename:'); ?></label>
-			<input id="<?php echo $this->get_field_id('template'); ?>" name="<?php echo $this->get_field_name('template'); ?>" type="text" value="<?php echo $template; ?>" />
-			<br />
-			<span style="padding-top:3px;" class="description"><a target="_blank" href="http://wordpress.org/extend/plugins/flexible-posts-widget/other_notes/">See documentation</a> for details.</span>
-		</p>
-		<hr style="margin-bottom:1.33em; border:none; border-bottom:1px solid #dfdfdf;" />
+						?>
+					</select>		
+				</p>
+				<p class="cf">
+					<label for="<?php echo $this->get_field_id('order'); ?>"><?php _e('Order:'); ?></label> 
+					<select name="<?php echo $this->get_field_name('order'); ?>" id="<?php echo $this->get_field_id('order'); ?>">
+						<?php
+						foreach ($orders as $option) {
+							echo '<option value="' . $option . '"', $order == $option ? ' selected="selected"' : '', '>', $option, '</option>';
+						}
+						?>
+					</select>		
+				</p>
+			</div>
+			
+			<div class="section thumbnails">
+				<p style="margin-top:1.33em;">
+		          <input class="dpe-fp-thumbnail" id="<?php echo $this->get_field_id('thumbnail'); ?>" name="<?php echo $this->get_field_name('thumbnail'); ?>" type="checkbox" value="1" <?php checked( '1', $thumbnail ); ?>/>
+		          <label style="font-weight:bold;" for="<?php echo $this->get_field_id('thumbnail'); ?>"><?php _e('Display thumbnails?'); ?></label> 
+		        </p>
+				<p <?php echo $thumbnail ? '' : 'style="display:none;"'?>  class="thumb-size">	
+					<label for="<?php echo $this->get_field_id('thumbsize'); ?>"><?php _e('Select a thumbnail size to show:'); ?></label> 
+					<select class="widefat" name="<?php echo $this->get_field_name('thumbsize'); ?>" id="<?php echo $this->get_field_id('thumbsize'); ?>">
+						<?php
+						foreach ($thumb_sizes as $option) {
+							echo '<option value="' . $option . '" id="' . $option . '"', $thumbsize == $option ? ' selected="selected"' : '', '>', $option, '</option>';
+						}
+						?>
+					</select>		
+				</p>
+			</div>
+			
+			<div class="section template">
+				<p style="margin:1.33em 0;">
+					<label for="<?php echo $this->get_field_id('template'); ?>"><?php _e('Template filename:'); ?></label>
+					<input id="<?php echo $this->get_field_id('template'); ?>" name="<?php echo $this->get_field_name('template'); ?>" type="text" value="<?php echo $template; ?>" />
+					<br />
+					<span style="padding-top:3px;" class="description"><a target="_blank" href="http://wordpress.org/extend/plugins/flexible-posts-widget/other_notes/">See documentation</a> for details.</span>
+				</p>
+			</div>
+			
+		</div>
         <?php 
     }
 

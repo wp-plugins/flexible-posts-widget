@@ -7,15 +7,6 @@
 
 jQuery(document).ready(function($) {
 	
-	// Setup the get posts by select box
-	/*
-	jQuery('select.dpe-fp-getemby').each( function() {
-		var thisone = 'div.' + jQuery(this).val();
-		jQuery(this).parent().nextAll('.getembies').hide();
-		jQuery(this).parent().nextAll(thisone).show();
-	});
-	*/
-	
 	// Setup the show/hide thumbnails box
 	jQuery('input.dpe-fp-thumbnail').each( function() {
 		if( this.checked ) {
@@ -25,17 +16,8 @@ jQuery(document).ready(function($) {
 		}
 	});
 	
+	
 });
-
-
-// Add event triggers to the get posts by box
-/*
-jQuery(document).on("change", 'select.dpe-fp-getemby', function(event) {
-	var thisone = 'div.' + jQuery(this).val();
-	jQuery(this).parent().nextAll('.getembies').hide();
-	jQuery(this).parent().nextAll(thisone).slideDown('fast');
-});
-*/
 
 // Add event triggers to the show/hide thumbnails box
 jQuery(document).on("change", 'input.dpe-fp-thumbnail', function(event) {
@@ -78,5 +60,20 @@ jQuery(document).on("change", 'select.dpe-fp-taxonomy', function(event) {
 		terms_p.slideUp();
 	}
 	
-	
+});
+
+// Setup the "Show me everything" warnings
+jQuery(document).on("change", 'select.dpe-fp-taxonomy', function(event) {
+	if( 'none' == jQuery(this).val() && 'all' == jQuery(this).closest('.getemby').find('.dpe-fp-pt').val() ) {
+		jQuery(this).closest('.getemby').find('.warning').slideDown();
+	} else {
+		jQuery(this).closest('.getemby').find('.warning').slideUp();
+	}
+});
+jQuery(document).on("change", 'select.dpe-fp-pt', function(event) {
+	if( 'all' == jQuery(this).val() && 'none' == jQuery(this).closest('.getemby').find('.dpe-fp-taxonomy').val() ) {
+		jQuery(this).closest('.getemby').find('.warning').slideDown();
+	} else {
+		jQuery(this).closest('.getemby').find('.warning').slideUp();
+	}
 });
