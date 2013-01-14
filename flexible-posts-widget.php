@@ -151,7 +151,7 @@ class DPE_Flexible_Posts_Widget extends WP_Widget {
 		$taxonomies		= get_taxonomies( array('public' => true ), 'names' );
 		$orderbys		= array( 'ID', 'title', 'date', 'rand', 'menu_order', );
 		$orders			= array( 'ASC', 'DESC', );
-		$thumb_sizes	= get_intermediate_image_sizes();
+		$thumbsizes	= get_intermediate_image_sizes();
 		
 		// Add our defaults
 		$posttypes[]	= 'all';
@@ -167,7 +167,7 @@ class DPE_Flexible_Posts_Widget extends WP_Widget {
 		$instance['orderby']	= ( in_array( $new_instance['orderby'], $orderbys ) ? $new_instance['orderby'] : 'date' );
 		$instance['order']		= ( in_array( $new_instance['order'], $orders ) ? $new_instance['order'] : 'DESC' );
 		$instance['thumbnail']	= (bool)$new_instance['thumbnail'];
-		$instance['thumbsize']	= strip_tags( $new_instance['thumbsize'] );
+		$instance['thumbsize']	= (in_array ( $new_instance['thumbsize'], $thumbsizes ) ? $new_instance['thumbsize'] : '' );
 		$instance['template']	= strip_tags( $new_instance['template'] );
         
         return $instance;
@@ -187,7 +187,7 @@ class DPE_Flexible_Posts_Widget extends WP_Widget {
 		$taxonomies		= get_taxonomies( array('public' => true ), 'objects' );
 		$orderbys		= array( 'ID', 'title', 'date', 'rand', 'menu_order', );
 		$orders			= array( 'ASC', 'DESC', );
-		$thumb_sizes	= get_intermediate_image_sizes();
+		$thumbsizes	= get_intermediate_image_sizes();
 
 		$instance = wp_parse_args( (array) $instance, array(
 			'title'		=> '',
@@ -309,7 +309,7 @@ class DPE_Flexible_Posts_Widget extends WP_Widget {
 					<label for="<?php echo $this->get_field_id('thumbsize'); ?>"><?php _e('Select a thumbnail size to show:'); ?></label> 
 					<select class="widefat" name="<?php echo $this->get_field_name('thumbsize'); ?>" id="<?php echo $this->get_field_id('thumbsize'); ?>">
 						<?php
-						foreach ($thumb_sizes as $option) {
+						foreach ($thumbsizes as $option) {
 							echo '<option value="' . $option . '" id="' . $option . '"', $thumbsize == $option ? ' selected="selected"' : '', '>', $option, '</option>';
 						}
 						?>
