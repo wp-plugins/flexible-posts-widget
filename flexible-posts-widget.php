@@ -4,7 +4,7 @@ Plugin Name: Flexible Posts Widget
 Plugin URI: http://wordpress.org/extend/plugins/flexible-posts-widget/
 Author: dpe415
 Author URI: http://dpedesign.com
-Version: 2.1.1
+Version: 3.0
 Description: An advanced posts display widget with many options: post by taxonomy & term or post type, thumbnails, order & order by, customizable templates
 License: GPL2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -31,7 +31,7 @@ if( !defined('ABSPATH') )
 	die('-1');
 	
 if( !defined('DPE_FP_Version') )
-	define( 'DPE_FP_Version', '2.1.1' );
+	define( 'DPE_FP_Version', '2.2' );
 
 
 // Load the widget on widgets_init
@@ -61,7 +61,8 @@ class DPE_Flexible_Posts_Widget extends WP_Widget {
 			array( 'description' => __( 'Display posts as widget items', 'text_domain' ), ) // Args
 		);
 		
-		$this->register_sns(); // Register styles & scripts
+		$this->add_actions_filters();	// Register actions & filters
+		$this->register_sns(); 			// Register styles & scripts
 		
 		global $pagenow;
 		
@@ -143,7 +144,7 @@ class DPE_Flexible_Posts_Widget extends WP_Widget {
 	 *
 	 * @return array Updated safe values to be saved.
 	 */
-    function update($new_instance, $old_instance) {		
+    function update( $new_instance, $old_instance ) {		
 		
 		// Get the default values to test against
 		$posttypes		= get_post_types( array('public' => true ), 'names' );
@@ -341,8 +342,7 @@ class DPE_Flexible_Posts_Widget extends WP_Widget {
 	 * @param string $template template file to search for
 	 * @return template path
 	 **/
-
-	function getTemplateHierarchy( $template ) {
+	public function getTemplateHierarchy( $template ) {
 		
 		// whether or not .php was added
 		$template_slug = rtrim( $template, '.php' );
@@ -360,47 +360,57 @@ class DPE_Flexible_Posts_Widget extends WP_Widget {
 		
 	}
 	
-	// Register styles & scripts
-	function register_sns() {
+	/**
+	 * Register styles & scripts
+	 */
+	public function register_sns() {
 		$dir = plugins_url('/', __FILE__);
 		wp_register_script( 'dpe-fp-widget', $dir . 'js/admin.js', array('jquery'), DPE_FP_Version, true );
 		wp_register_style( 'dpe-fp-widget', $dir . 'css/admin.css', array(), DPE_FP_Version );
 	}
 	
+	/**
+	 * Setup our get terms/AJAX callback
+	 */
+	public function add_actions_filters() {
+		add_action( 'wp_ajax_dpe_fp_get_terms', array( &$this, 'dpe_fp_term_me' ) );
+	}
+	
+	/**
+	 * return a list of terms for the chosen taxonomy used via AJAX
+	 */
+	public function dpe_fp_term_me() {
+		
+		$taxonomy = esc_attr( $_POST['taxonomy'] );
+		$term = esc_attr( $_POST['term'] );
+		
+		if ( empty($taxonomy) || 'none' == $taxonomy ) {
+			echo false;
+			die();
+		}
+		
+		$args = array (
+			'hide_empty' => 0,
+		);
+		
+		$terms = get_terms( $taxonomy, $args );
+		
+		if( empty($terms) ) { 
+			$output = '<option value="-1">No terms found...</option>';
+		} else {
+			$output = '<option value="-1">Please select...</option>';
+			foreach ( $terms as $option ) {
+				$output .= '<option value="' . $option->slug . '"' . ( $term == $option->slug ? ' selected="selected"' : '' ) . '>' . $option->name . '</option>';
+			}
+		}
+		
+		echo( $output );
+		
+		die();
+		
+	}
+	
 
 } // class DPE_Flexible_Posts_Widget
-
-
-// return a list of terms for the chosen taxonomy used via AJAX
-function dpe_fp_term_me() {
-	
-	$taxonomy = esc_attr( $_POST['taxonomy'] );
-	$term = esc_attr( $_POST['term'] );
-	
-	if ( empty($taxonomy) || 'none' == $taxonomy ) {
-		echo false;
-		die();
-	}
-	
-	$args = array (
-		'hide_empty' => 0,
-	);
-	
-	$terms = get_terms( $taxonomy, $args );
-	
-	if( empty($terms) ) { 
-		$output = '<option value="-1">No terms found...</option>';
-	} else {
-		$output = '<option value="-1">Please select...</option>';
-		foreach ( $terms as $option ) {
-			$output .= '<option value="' . $option->slug . '"' . ( $term == $option->slug ? ' selected="selected"' : '' ) . '>' . $option->name . '</option>';
-		}
-	}
-	
-	echo( $output );
-	
-	die();
-	
-}
 
 ?>
