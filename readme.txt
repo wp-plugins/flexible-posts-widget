@@ -12,19 +12,19 @@ An advanced posts display widget with many options. Display posts in your sideba
 
 == Description ==
 
-The default Recent Posts widget is exceptionally basic. I always find myself in need of a way to easily display a selection of posts from any combination post type and/or taxnomy. Hence, Flexible Post Widget.
+The default Recent Posts widget is exceptionally basic. I always find myself in need of a way to easily display a selection of posts from any combination post type or taxonomy. Hence, Flexible Post Widget.
 
 Flexible Posts Widget (FPW) is more than just a simple alternative to the default Recent Posts widget.  With many per-instance options it is highly customizable and allows advanced users to display the resulting posts virtually anyway imaginable. 
 
-Version 3.0 is a major enhancement as widgets can now get posts by *BOTH* post type and/or taxonomy & term.  Previous versions of the plugin only allowed post type OR taxonomy & term queries, not both.
+Version 3.0 is a major enhancement as widgets can now get posts by *BOTH* post type and/or taxonomy & term as well as select *multiple* post types and terms.  Previous versions of the plugin only allowed post type OR taxonomy & term queries, not both.
 
 = Features & options =
 
 * Customizable widget title
-* Get posts via post type and/or taxonomy & term.
+* Get posts via post type(s) and/or taxonomy & term(s).
 * Control the number of posts displayed and the number of posts to offset.
 * Option to display the post feature image.
-* Select the post feature image size to display from existing image sizes: thumbnail, medium, large, post-thubnail or any size defined by the current theme.
+* Select the post feature image size to display from existing image sizes: thumbnail, medium, large, post-thumbnail or any size defined by the current theme.
 * Order posts by: date, ID, title, menu order, random; and sort posts: ascending or descending.
 * Each widget's output can be customized by user-defined templates added to the current theme folder.
 
@@ -58,7 +58,8 @@ To get answers to your questions, request help or submit a bug report, please vi
 
 == Screenshots ==
 
-1. Configuring a FPW widget in wp-admin.
+1. Configuring a Flexible Posts Widget in wp-admin with the Post Type tab displayed.
+1. Configuring a Flexible Posts Widget in wp-admin with the Taxonomy & Term tab displayed.
 1. An example of posts displayed using WordPress's TwentyTwelve theme and the default Feature Image (post-thumbnail) size.  This demonstrates how the plugin looks out-of-the-box with no user-customized styling or output in a default theme.
 1. In the Wild: FPW displaying a selection of featured beers (Post Type: Brew) over at http://canalparkbrewery.com.  This example uses slightly customized output and some theme-specific styles. 
 1. In the wild: FPW displaying a selection media attachments, with custom thumbnails.  This example uses highly customized HTML output and very theme-specific styles.
@@ -82,7 +83,6 @@ Edit the new file in your theme to your desired HTML layout. Please do not edit 
 
 = Future updates & feature requests list =
 
-* Allow for multiple post type or term selections.
 * Dynamically populate the "Template Filename" field based on the templates available.
 * Adjust widget output template for Media-type posts.
 * Add shortcode functionality.
@@ -93,9 +93,10 @@ Edit the new file in your theme to your desired HTML layout. Please do not edit 
 
 = 3.0 =
 * Allow widgets to query by post type and/or taxonomy & term instead of just one or the other.
+* Allow widgets to query by multiple post types and multiple terms within the same taxonomy. 
 * Changed the list of available post types and taxonomies from every possible option to just those that are public.
 * General UI enhancements for the widget admin.
-* Some minor code cleanup and security improvments. 
+* Some minor code cleanup and security improvements.
 
 = 2.1.1 =
 * Fixed a source order bug in the widget.php template file. (Props: Carsten Bach).
