@@ -23,6 +23,8 @@ if ( !defined('ABSPATH') )
 		
 			<div id="<?php echo $this->get_field_id('getemby'); ?>" class="categorydiv getembytabs">
 				
+				<input id="<?php echo $this->get_field_id('cur_tab'); ?>" class="cur_tab" name="<?php echo $this->get_field_name('cur_tab'); ?>" type="hidden" value="<?php echo $cur_tab; ?>" />
+				
 				<ul id="<?php echo $this->get_field_id('getemby-tabs'); ?>" class="category-tabs">
 					<li><a href="#<?php echo $this->get_field_id('getemby-pt'); ?>">Post Type</a></li>
 					<li><a href="#<?php echo $this->get_field_id('getemby-tt'); ?>">Taxonomy &amp; Term</a></li>
@@ -34,7 +36,7 @@ if ( !defined('ABSPATH') )
 				
 				<div id="<?php echo $this->get_field_id('getemby-tt'); ?>" class="tabs-panel tt" style="display:none;">
 					<p>	
-						<!-- label for="<?php echo $this->get_field_id('taxonomy'); ?>"><?php _e('Select a taxonomy:'); ?></label --> 
+						<label for="<?php echo $this->get_field_id('taxonomy'); ?>"><?php _e('Select a taxonomy:'); ?></label> 
 						<select class="widefat dpe-fp-taxonomy" name="<?php echo $this->get_field_name('taxonomy'); ?>" id="<?php echo $this->get_field_id('taxonomy'); ?>">
 							<option value="none" <?php echo 'none' == $taxonomy ? ' selected="selected"' : ''; ?>>Ignore Taxonomy &amp; Term</option>
 							<?php
@@ -44,35 +46,36 @@ if ( !defined('ABSPATH') )
 							?>
 						</select>		
 					</p>
-					<p<?php echo 'none' == $taxonomy ? ' style="display:none;"' : ''; ?>>
-						<label for="<?php echo $this->get_field_id('term'); ?>"><?php _e('Select a term:'); ?></label> 
-						<select class="widefat dpe-fp-term" name="<?php echo $this->get_field_name('term'); ?>" id="<?php echo $this->get_field_id('term'); ?>">
-							<option value="-1">Please select...</option>
-							<?php
-								if ( $taxonomy && $taxonomy != 'none' ) {
-									$args = array (
-										'hide_empty' => 0,
-									);
-									
-									$terms = get_terms( $taxonomy, $args );
-									
-									if ( !empty($terms) ) {
-										$output = '';
-										foreach ( $terms as $option )
-											$output .= '<option value="' . $option->slug . '"' . ( $term == $option->slug ? ' selected="selected"' : '' ) . '>' . $option->name . '</option>';
-										echo $output;
+					<label <?php echo 'none' == $taxonomy ? ' style="display:none;"' : ''; ?>><?php _e('Select terms:'); ?></label> 
+					<div class="terms" <?php echo 'none' == $taxonomy ? ' style="display:none;"' : ''; ?>>
+						<?php
+							if ( !empty($taxonomy) && 'none' != $taxonomy ) {
+							
+								$args = array (
+									'hide_empty' => 0,
+								);
+								
+								$terms = get_terms( $taxonomy, $args );
+								
+								if( !empty( $terms ) ) {
+									$output .= '<ul class="categorychecklist termschecklist form-no-clear">';
+									foreach ( $terms as $option ) {
+										$output .= "\n<li>" . '<label class="selectit"><input value="' . esc_attr( $option->slug ) . '" type="checkbox" name="' . $this->get_field_name('term') . '[]"' . checked( in_array( $option->slug, (array)$term ), true, false ) . ' /> ' . esc_html( $option->name ) . "</label></li>\n";
 									}
+									$output .= "</ul>\n";
+								} else {
+									$output = '<p>No terms found.</p>';
 								}
-							?>
-						</select>
-					</p>
+								
+								echo ( $output );
+							}
+						?>
+					</div>
 				</div><!-- .tt.getemby -->
 			
 			</div><!-- #<?php echo $this->get_field_id('getemby'); ?> -->
 			
 		</div><!-- .inside -->
-	
-		<p class="description warning" style="display:none;"><strong>Woah!</strong> Your current settings will return absolutely everything. You might want to choose a post type or taxonomy &amp; term.</p> 
 	
 	</div>
 	
