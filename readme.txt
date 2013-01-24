@@ -92,14 +92,14 @@ Edit the new file in your theme to your desired HTML layout. Please do not edit 
 == Changelog ==
 
 = 3.0 =
-* Allow widgets to query by post type and/or taxonomy & term instead of just one or the other.
-* Allow widgets to query by multiple post types and multiple terms within the same taxonomy. 
+* Allow widgets to query by post type and/or taxonomy & term instead of just one or the other. (Props: @vernal)
+* Allow widgets to query by multiple post types and multiple terms within the same taxonomy.  (Props: @vernal)
 * Changed the list of available post types and taxonomies from every possible option to just those that are public.
 * General UI enhancements for the widget admin.
 * Some minor code cleanup and security improvements.
 
 = 2.1.1 =
-* Fixed a source order bug in the widget.php template file. (Props: Carsten Bach).
+* Fixed a source order bug in the widget.php template file. (Props: @carstenbach).
 
 = 2.1 =
 * Added offset parameter to display options.
