@@ -5,14 +5,7 @@
  * URI: http://wordpress.org/extend/plugins/flexible-posts-widget/
  */
 
-jQuery(document).ready(function($) {
-	
-	// Setup the get posts by select box
-	jQuery('select.dpe-fp-getemby').each( function() {
-		var thisone = 'div.' + jQuery(this).val();
-		jQuery(this).parent().nextAll('.getembies').hide();
-		jQuery(this).parent().nextAll(thisone).show();
-	});
+jQuery(function($) {
 	
 	// Setup the show/hide thumbnails box
 	jQuery('input.dpe-fp-thumbnail').each( function() {
@@ -23,18 +16,36 @@ jQuery(document).ready(function($) {
 		}
 	});
 	
+	// Enable the Get Em By tabs
+	jQuery('.getembytabs').tabs({
+		// Set the active tab to a widget option
+		activate: function( event, ui ) {
+			jQuery(this).find('.cur_tab').val( jQuery( this ).tabs( "option", "active" ) );
+		},
+		// retrieve the saved active tab and set it for the UI
+		create: function( event, ui ) {
+			jQuery( this ).tabs( "option", "active", jQuery(this).find('.cur_tab').val() );
+		}
+	});
+	
 });
 
-
-// Add event triggers to the get posts by box
-jQuery(document).on("change", 'select.dpe-fp-getemby', function(event) {
-	var thisone = 'div.' + jQuery(this).val();
-	jQuery(this).parent().nextAll('.getembies').hide();
-	jQuery(this).parent().nextAll(thisone).slideDown('fast');
+// Add the tabs functionality AJAX returns
+jQuery(document).ajaxComplete(function() {
+	jQuery('.getembytabs').tabs({
+		// Set the active tab to a widget option
+		activate: function( event, ui ) {
+			jQuery(this).find('.cur_tab').val( jQuery(this).tabs( "option", "active" ) );
+		},
+		// retrieve the saved active tab and set it for the UIß
+		create: function( event, ui ) {
+			jQuery(this).tabs( "option", "active", jQuery(this).find('.cur_tab').val() );
+		}
+	});
 });
 
 // Add event triggers to the show/hide thumbnails box
-jQuery(document).on("change", 'input.dpe-fp-thumbnail', function(event) {
+jQuery('#widgets-right').on("change", 'input.dpe-fp-thumbnail', function(event) {
 	if( this.checked ) {
 		jQuery(this).parent().next().slideDown('fast');
 	} else {
@@ -43,27 +54,38 @@ jQuery(document).on("change", 'input.dpe-fp-thumbnail', function(event) {
 });
 
 // Setup the get_terms callback
-jQuery(document).on("change", 'select.dpe-fp-taxonomy', function(event) {
+jQuery('#widgets-right').on("change", 'select.dpe-fp-taxonomy', function(event) {
 	
-	var terms_select = jQuery(this).parent().next('p').find('select');
-	var terms_first_opt = terms_select.children(":first");
+	var terms_div	= jQuery(this).parent().nextAll('div.terms');
+	var terms_label	= jQuery(this).parent().next('label');
 	
-	terms_first_opt.text('Getting terms...');
-	terms_select.attr('disabled', true);
+	// If we're not ignoring Taxonomy & Term...
+	if( jQuery(this).val() != 'none' ) {
+		
+		terms_label.html('Getting terms...').show();
+		
+		var selected_terms = [];
+		terms_div.find("input:checked").each(function () {
+		    selected_terms.push( jQuery(this).val() );
+		});
+		
+		var data = {
+			action:		'dpe_fp_get_terms',
+			taxonomy:	jQuery(this).val(),
+			term:		selected_terms,
+		};
+		
+		jQuery.post(ajaxurl, data, function(response) {
+			terms_div.html(response);
+			terms_label.html('Select terms:').show();
+			terms_div.slideDown();
+		}).error( function() {
+			terms_label.html('No terms found.').show();		
+		});
 	
-	var data = {
-		action:		'dpe_fp_get_terms',
-		taxonomy:	jQuery(this).val(),
-		term:		terms_select.val(),
-	};
-	
-	jQuery.post(ajaxurl, data, function(response) {
-		terms_select.html(response);
-		terms_select.attr('disabled', false);
-	}).error( function() {
-		terms_first_opt.text('No terms found...');		
-	});
-	
-	
+	} else {
+		terms_div.slideUp().html('');
+		terms_label.hide();
+	}
 	
 });

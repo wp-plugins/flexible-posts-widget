@@ -1,31 +1,32 @@
 === Flexible Posts Widget ===
 Contributors: dpe415
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=DJKSKHJWYAWDU
-Tags: widget, widgets, posts, recent posts, thumbnails, custom post types, custom taxonomies
+Tags: widget, widgets, posts, categories, tags, recent posts, thumbnails, custom post types, custom taxonomies, feature image
 Requires at least: 3.2
-Tested up to: 3.4
+Tested up to: 3.5
 Stable tag: 2.1.1
 License: GPL2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-An advanced posts display widget with many options. Display posts in your sidebars exactly the way you like!
+An advanced posts display widget with many options. Display posts in your sidebars any way you'd like!
 
 == Description ==
 
-The default WordPress Recent Posts widget is exceptionally basic. I found myself always in need of a way to display a selection of posts from any taxonomy or post type in a theme sidebar; hence, Flexible Posts Widget. Flexible Posts Widget extends the default widget with many per-instance options.
+The default Recent Posts widget is exceptionally basic. I always find myself in need of a way to easily display a selection of posts from any combination post type or taxonomy. Hence, Flexible Post Widget.
 
-= Upgrading from v1 to v2 =
-When upgrading from version 1.0.x to version 2, please remember to double-check the settings for any existing widgets.  Not all settings combinations will be saved after the upgrade.
+Flexible Posts Widget (FPW) is more than just a simple alternative to the default Recent Posts widget.  With many per-instance options it is highly customizable and allows advanced users to display the resulting posts virtually anyway imaginable. 
+
+Version 3.0 is a major enhancement as widgets can now get posts by *BOTH* post type and/or taxonomy & term as well as select *multiple* post types and terms.  Previous versions of the plugin only allowed post type OR taxonomy & term queries, not both.
 
 = Features & options =
 
 * Customizable widget title
-* Get posts using either a selectable taxonomy & term *OR* by selecting any post type.
-* Control the number of posts displayed.
-* Option to display the post thumbnail (feature image).
-* Select the post thumbnail size to display from available image sizes.
-* Select the sort orderby: Date, ID, Title, Menu Order, Random and sort order: ASC or DESC.
-* The widget's HTML output can be customized by user-defined templates added to the current theme folder.
+* Get posts via post type(s) and/or taxonomy & term(s).
+* Control the number of posts displayed and the number of posts to offset.
+* Option to display the post feature image.
+* Select the post feature image size to display from existing image sizes: thumbnail, medium, large, post-thumbnail or any size defined by the current theme.
+* Order posts by: date, ID, title, menu order, random; and sort posts: ascending or descending.
+* Each widget's output can be customized by user-defined templates added to the current theme folder.
 
 
 == Installation ==
@@ -37,7 +38,7 @@ When upgrading from version 1.0.x to version 2, please remember to double-check 
 = To use a customized HTML output template =
 
 1. Create a folder called `flexible-posts-widget` in the root of your theme folder.
-1. Copy `widget.php` from within this plugin's `views` folder into your theme's new `flexible-posts-widget` folder.
+1. Copy `widget.php` from within the plugin's `views` folder into your theme's new `flexible-posts-widget` folder.
 1. Optional: Rename your theme's `widget.php` template file to a name of your choice (to use different templates for each widget instance).
 1. Go to 'Appearance' > 'Widgets' in WordPress to configure an instance of the widget.
 1. In the 'Template Filename' field enter the name of the template file you added to your theme. Example: `my-themes-widget.php`
@@ -45,42 +46,57 @@ When upgrading from version 1.0.x to version 2, please remember to double-check 
 
 == Frequently Asked Questions ==
 
+= How can I style the images, titles or other widget output a certain way? =
+FPW intentionally does NOT add any styling of it's own.  To adjust the font size, color, alignment, image size, etc. of any output from this widget, you'll need to edit your theme's styles.
+
+= Does this plugin/widget insert any styles or scripts into my site? =
+FPW does NOT add styles or scripts to your public theme.  The plugin is intentionally designed work within your existing theme.  FPW does add one stylesheet and one JavaScript to Widgets page in wp-admin to help with the widget administration.
+
 = Questions, Support & Bug Reports =
 To get answers to your questions, request help or submit a bug report, please visit the forum: http://wordpress.org/tags/flexible-posts-widget/
 
 
 == Screenshots ==
 
-1. Flexible Posts Widget admin screen showing get posts by taxonomy and term with thumbnails.
-1. Flexible Posts Widget admin screen showing get posts by post type without thumbnails.
-1. Example Flexible Posts Widget showing the post thumbnail and title wrapped in a link to the post.
+1. Configuring a Flexible Posts Widget in wp-admin with the Post Type tab displayed.
+1. Configuring a Flexible Posts Widget in wp-admin with the Taxonomy & Term tab displayed.
+1. An example of posts displayed using WordPress's TwentyTwelve theme and the default Feature Image (post-thumbnail) size.  This demonstrates how the plugin looks out-of-the-box with no user-customized styling or output in a default theme.
+1. In the Wild: FPW displaying a selection of featured beers (Post Type: Brew) over at http://canalparkbrewery.com.  This example uses slightly customized output and some theme-specific styles. 
+1. In the wild: FPW displaying a selection media attachments, with custom thumbnails.  This example uses highly customized HTML output and very theme-specific styles.
+1. In the wild: FPW displaying several posts over at http://chnl7700.mnsu.edu.  Also highly customized output and theme styles.
 
 == Upgrade Notice ==
 
-= 2.0 =
-When upgrading from version 1.0.x to version 2.x, please remember to double-check the settings for any existing widgets.  Not all settings combinations will be saved after the upgrade.
+When upgrading from one major version to another (version 1.x to version 2.x to version 3.x, etc), please remember to verify your settings for any existing widgets.  Not all settings combinations will be saved after a major release upgrade.
 
 
 == Other Notes ==
 
-= Upgrading from v1 to v2 =
-When upgrading from version 1.0.x to version 2.x, please remember to double-check the settings for any existing widgets.  Not all settings combinations will be saved after the upgrade.
+= Upgrading from one major version to another =
+When upgrading between major releases (version 1.x to version 2.x to version 3.x, etc), please remember to verify your settings for any existing widgets.  Not all settings combinations will be saved after a major release upgrade.
 
 = Default vs. Custom Templates =
 
-Flexible Posts Widget comes with a default template for the widget output. If you would like to alter the widget display code, create a new folder called `flexible-posts-widget` in your template directory and copy over the "views/widget.php" file.
+FPW comes with a default template for the widget output. If you would like to alter the widget display code, create a new folder called `flexible-posts-widget` in your template directory and copy over the "views/widget.php" file.
 
 Edit the new file in your theme to your desired HTML layout. Please do not edit the one in the plugin folder as that will cause conflicts when you update the plugin to the latest release.
 
-= Future updates & features list =
+= Future updates & feature requests list =
 
-* Allow for multiple post type or term selections.
 * Dynamically populate the "Template Filename" field based on the templates available.
 * Adjust widget output template for Media-type posts.
-* Add default styles for the widget display & an option to load or not load them. (?)
+* Add shortcode functionality.
+* Allow shortcode output to dynamically load more posts (AJAX-ified).
 
 
 == Changelog ==
+
+= 3.0 =
+* Allow widgets to query by post type and/or taxonomy & term instead of just one or the other.
+* Allow widgets to query by multiple post types and multiple terms within the same taxonomy. 
+* Changed the list of available post types and taxonomies from every possible option to just those that are public.
+* General UI enhancements for the widget admin.
+* Some minor code cleanup and security improvements.
 
 = 2.1.1 =
 * Fixed a source order bug in the widget.php template file. (Props: Carsten Bach).

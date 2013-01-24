@@ -4,13 +4,13 @@ Plugin Name: Flexible Posts Widget
 Plugin URI: http://wordpress.org/extend/plugins/flexible-posts-widget/
 Author: dpe415
 Author URI: http://dpedesign.com
-Version: 2.1.1
-Description: An advanced posts display widget with many options: post by taxonomy & term or post type, thumbnails, order & order by, customizable templates
+Version: 3.0
+Description: An advanced posts display widget with many options: get posts by post type, taxonomy & term; sorting & ordering; feature images; custom templates and more.
 License: GPL2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 */
 
-/*  Copyright 2012  David Paul Ellenwood  (email : david@dpedesign.com)
+/*  Copyright 2013  David Paul Ellenwood  (email : david@dpedesign.com)
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License, version 2, as 
@@ -31,7 +31,7 @@ if( !defined('ABSPATH') )
 	die('-1');
 	
 if( !defined('DPE_FP_Version') )
-	define( 'DPE_FP_Version', '2.1.1' );
+	define( 'DPE_FP_Version', '3.0' );
 
 
 // Load the widget on widgets_init
@@ -40,14 +40,10 @@ function dpe_load_flexible_posts_widget() {
 }
 add_action('widgets_init', 'dpe_load_flexible_posts_widget');
 
-		
-// Setup our get terms/AJAX callback
-add_action( 'wp_ajax_dpe_fp_get_terms', 'dpe_fp_term_me' );
 
 /**
  * Flexible Posts Widget Class
  */
-
 class DPE_Flexible_Posts_Widget extends WP_Widget {
 	
 	/**
@@ -55,23 +51,43 @@ class DPE_Flexible_Posts_Widget extends WP_Widget {
 	 */
 	public function __construct() {
 		
+		global $pagenow;
+		
 		parent::__construct(
 	 		'dpe_fp_widget', // Base ID
 			'Flexible Posts Widget', // Name
 			array( 'description' => __( 'Display posts as widget items', 'text_domain' ), ) // Args
 		);
 		
-		$this->register_sns(); // Register styles & scripts
+		$this->directory	= plugins_url( '/', __FILE__ );
+		$this->posttypes	= get_post_types( array('public' => true ), 'objects' );
+		$this->taxonomies	= get_taxonomies( array('public' => true ), 'objects' );
+		$this->thumbsizes	= get_intermediate_image_sizes();
+		$this->orderbys		= array(
+			'date'		 	=> 'Publish Date',
+			'title'			=> 'Title',
+			'menu_order'	=> 'Menu Order',
+			'ID'			=> 'Post ID',
+			'author'		=> 'Author',
+			'name'	 		=> 'Post Slug',
+			'comment_count'	=> 'Comment Count',
+			'rand'			=> 'Random',
+		);
+		$this->orders		= array(
+			'ASC'	=> 'Ascending',
+			'DESC'	=> 'Descending',
+		);
 		
-		global $pagenow;
+		$this->register_hooks();					// Register actions & filters
+		$this->register_sns( $this->directory ); 	// Register styles & scripts
 		
 		// Enqueue admin scripts
-		if (defined("WP_ADMIN") && WP_ADMIN) {
+		if ( defined("WP_ADMIN") && WP_ADMIN ) {
 			if ( 'widgets.php' == $pagenow ) {
 				wp_enqueue_script( 'dpe-fp-widget' );
+				wp_enqueue_style( 'dpe-fp-widget' );
 			}
 		}
-
 		
 	}
 	
@@ -87,35 +103,30 @@ class DPE_Flexible_Posts_Widget extends WP_Widget {
     function widget($args, $instance) {	
         extract( $args );
 		extract( $instance );
+				
 		$title = apply_filters( 'widget_title', empty( $title ) ? '' : $title );
 		
-		if( empty($template) )
+		if ( empty($template) )
 			$template = 'widget.php';
 		
-		// Setup our query 
-		if( 'tnt' == $getemby ) {
-			$args = array(
-				'tax_query' => array(
-					array(
-						'taxonomy' => $taxonomy,
-						'field' => 'slug',
-						'terms' => $term,
-					)
-				),
-				'post_status'		=> array('publish', 'inherit'),
-				'posts_per_page'	=> $number,
-				'offset'			=> $offset,
-				'orderby'			=> $orderby,
-				'order'				=> $order,
-			);
-		} else {
-			$args = array(
-				'post_status'		=> array('publish', 'inherit'),
-				'post_type'			=> $posttype,
-				'posts_per_page'	=> $number,
-				'offset'			=> $offset,
-				'orderby'			=> $orderby,
-				'order'				=> $order,
+		// Setup the query
+		$args = array(
+			'post_type'			=> $posttype,
+			'post_status'		=> array('publish', 'inherit'),
+			'posts_per_page'	=> $number,
+			'offset'			=> $offset,
+			'orderby'			=> $orderby,
+			'order'				=> $order,
+		);
+		
+		// Setup the tax & term query based on the user's selection
+		if ( $taxonomy != 'none' ) {
+			$args['tax_query'] = array(
+				array(
+					'taxonomy' => $taxonomy,
+					'field' => 'slug',
+					'terms' => $term,
+				)
 			);
 		}
 		
@@ -140,22 +151,58 @@ class DPE_Flexible_Posts_Widget extends WP_Widget {
 	 *
 	 * @return array Updated safe values to be saved.
 	 */
-    function update($new_instance, $old_instance) {		
-		global $posttypes;
+    function update( $new_instance, $old_instance ) {
+		
+		// Get our defaults to test against
+		$pt_names		= get_post_types( array('public' => true ), 'names' );
+		$tax_names		= get_taxonomies( array('public' => true ), 'names' );
+		$tax_names[]	= 'none';
+		
+		// Validate posttype submissions
+		$posttypes = array();
+		foreach( $new_instance['posttype'] as $pt ) {
+			if( in_array( $pt, $pt_names ) )
+				$posttypes[] = $pt;
+		}
+		if( empty($posttypes) )
+			$posttypes[] = 'post';
+		
+		// Validate taxonomy & term submissions 
+		if( in_array( $new_instance['taxonomy'], $tax_names ) ) {
+			$taxonomy	= $new_instance['taxonomy'];
+			$terms		= array();
+			if( 'none' != $taxonomy ) {
+				$term_objects = get_terms( $taxonomy, array( 'hide_empty' => false ) );
+				$term_names = array();
+				foreach ( $term_objects as $object ) {
+					$term_names[] = $object->slug;
+				}
+				foreach( $new_instance['term'] as $term ) {
+					if( in_array( $term, $term_names ) )
+						$terms[] = $term;
+				}
+			}
+		} else {
+			$taxonomy = 'none';
+			$terms = array();
+		}
+		
 		$instance 				= $old_instance;
 		$instance['title']		= strip_tags( $new_instance['title'] );
-		$instance['getemby']	= $new_instance['getemby'];
-		$instance['posttype']	= $new_instance['posttype'];
-		$instance['taxonomy']	= $new_instance['taxonomy'];
-		$instance['term']		= strip_tags( $new_instance['term'] );
-		$instance['number']		= strip_tags( $new_instance['number'] );
-		$instance['offset']		= strip_tags( $new_instance['offset'] );
-		$instance['orderby']	= $new_instance['orderby'];
-		$instance['order']		= $new_instance['order'];
-		$instance['thumbsize']	= $new_instance['thumbsize'];
-		$instance['thumbnail']	= $new_instance['thumbnail'];
+		$instance['posttype']	= $posttypes;
+		$instance['taxonomy']	= $taxonomy;
+		$instance['term']		= $terms;
+		$instance['number']		= (int)$new_instance['number'];
+		$instance['offset']		= (int)$new_instance['offset'];
+		$instance['orderby']	= ( array_key_exists( $new_instance['orderby'], $this->orderbys ) ? $new_instance['orderby'] : 'date' );
+		$instance['order']		= ( array_key_exists( $new_instance['order'], $this->orders ) ? $new_instance['order'] : 'DESC' );
+		$instance['thumbnail']	= (bool)$new_instance['thumbnail'];
+		$instance['thumbsize']	= (in_array ( $new_instance['thumbsize'], $this->thumbsizes ) ? $new_instance['thumbsize'] : '' );
 		$instance['template']	= strip_tags( $new_instance['template'] );
+		$instance['cur_tab']	= (int)( $new_instance['cur_tab'] );
+        
         return $instance;
+      
     }
 
     /**
@@ -165,21 +212,13 @@ class DPE_Flexible_Posts_Widget extends WP_Widget {
 	 *
 	 * @param array $instance Previously saved values from database.
 	 */
-    function form($instance) {
+    function form( $instance ) {
 		
-		$getembies = array( 'tnt', 'pt' );
-		$posttypes = get_post_types('', 'objects');
-		$taxonomies = get_taxonomies('', 'objects');
-		$orderbys = array( 'ID', 'title', 'date', 'rand', 'menu_order', );
-		$orders = array( 'ASC', 'DESC', );
-		$thumb_sizes = get_intermediate_image_sizes();		
-
 		$instance = wp_parse_args( (array) $instance, array(
 			'title'		=> '',
-			'getemby'	=> 'tnt',
-			'posttype'	=> 'post',
-			'taxonomy'	=> 'category',
-			'term'		=> '',
+			'posttype'	=> array('post'),
+			'taxonomy'	=> 'none',
+			'term'		=> array(),
 			'number'	=> '3',
 			'offset'	=> '0',
 			'orderby'	=> 'date',
@@ -187,127 +226,13 @@ class DPE_Flexible_Posts_Widget extends WP_Widget {
 			'thumbnail' => false,
 			'thumbsize' => '',
 			'template'	=> 'widget.php',
+			'cur_tab'	=> '0',
 		) );
 		
 		extract( $instance );
 		
-        ?>
-        <p>
-			<label for="<?php echo $this->get_field_id('title'); ?>"><?php _e('Widget Title:'); ?></label> 
-			<input class="widefat" id="<?php echo $this->get_field_id('title'); ?>" name="<?php echo $this->get_field_name('title'); ?>" type="text" value="<?php echo $title; ?>" />
-        </p>
-		<h4 style="margin-bottom:.2em;"><label for="<?php echo $this->get_field_id('getemby'); ?>"><?php _e('Get posts by:'); ?></label></strong></h4>
-		<p>
-			<select class="widefat dpe-fp-getemby" name="<?php echo $this->get_field_name('getemby'); ?>" id="<?php echo $this->get_field_id('getemby'); ?>">
-				<option value="tnt"<?php echo $getemby == 'tnt' ? ' selected="selected"' : ''?>>Taxonomy &amp; Term</option>
-				<option value="pt"<?php echo $getemby == 'pt' ? ' selected="selected"' : ''?>>Post Type</option>
-			</select>
-		</p>
-		
-		<div id="<?php echo $this->get_field_id('tnt-box'); ?>" class="getembies tnt" <?php echo $getemby == 'tnt' ? '' : 'style="display:none;"'?>>
-			<p>	
-				<label for="<?php echo $this->get_field_id('taxonomy'); ?>"><?php _e('Select a taxonomy:'); ?></label> 
-				<select style="background-color:#fff;" class="widefat dpe-fp-taxonomy" name="<?php echo $this->get_field_name('taxonomy'); ?>" id="<?php echo $this->get_field_id('taxonomy'); ?>">
-					<?php
-					foreach ($taxonomies as $option) {
-						echo '<option value="' . $option->name . '"', $taxonomy == $option->name ? ' selected="selected"' : '', '>', $option->label, '</option>';
-					}
-					?>
-				</select>		
-			</p>
-			<p>
-				<label for="<?php echo $this->get_field_id('term'); ?>"><?php _e('Select a term:'); ?></label> 
-				<select class="widefat dpe-fp-term" name="<?php echo $this->get_field_name('term'); ?>" id="<?php echo $this->get_field_id('term'); ?>">
-					<option value="-1">Please select...</option>
-					<?php
-						if( $taxonomy ) {
-							$args = array (
-								'hide_empty' => 0,
-							);
-							
-							$terms = get_terms( $taxonomy, $args );
-							
-							if( !empty($terms) ) {
-								$output = '';
-								foreach ( $terms as $option )
-									$output .= '<option value="' . $option->slug . '"' . ( $term == $option->slug ? ' selected="selected"' : '' ) . '>' . $option->name . '</option>';
-								echo( $output );
-							}
-						}
-					?>
-				</select>
-			</p>
-		</div><!-- .tnt.getemby -->
-		
-		<div id="<?php echo $this->get_field_id('pt-box'); ?>" class="getembies pt" <?php echo $getemby == 'pt' ? '' : 'style="display:none;"'?>>
-			<p>	
-				<label for="<?php echo $this->get_field_id('posttype'); ?>"><?php _e('Select a post type:'); ?></label> 
-				<select class="widefat" name="<?php echo $this->get_field_name('posttype'); ?>" id="<?php echo $this->get_field_id('posttype'); ?>">
-					<?php
-					foreach ($posttypes as $option) {
-						echo '<option value="' . $option->name . '"', $posttype == $option->name ? ' selected="selected"' : '', '>', $option->labels->name, '</option>';
-					}
-					?>
-				</select>
-			</p>
-		</div><!-- .pt.getemby -->
-		
-		<hr style="margin-bottom:1.33em; border:none; border-bottom:1px solid #dfdfdf;" />
-		<h4 style="">Display options</h4>
-		<p>
-          <label for="<?php echo $this->get_field_id('number'); ?>"><?php _e('Number of posts to show:'); ?></label> 
-          <input id="<?php echo $this->get_field_id('number'); ?>" name="<?php echo $this->get_field_name('number'); ?>" type="text" value="<?php echo $number; ?>" style="width:40px; margin-left:.2em; text-align:right;" />
-        </p>
-		<p>
-          <label for="<?php echo $this->get_field_id('offset'); ?>"><?php _e('Number of posts to skip:'); ?></label> 
-          <input id="<?php echo $this->get_field_id('offset'); ?>" name="<?php echo $this->get_field_name('offset'); ?>" type="text" value="<?php echo $offset; ?>" style="width:40px; margin-left:.2em; text-align:right;" />
-        </p>
-   		<p>	
-			<label for="<?php echo $this->get_field_id('orderby'); ?>"><?php _e('Order post by:'); ?></label> 
-			<select class="widefat" name="<?php echo $this->get_field_name('orderby'); ?>" id="<?php echo $this->get_field_id('orderby'); ?>">
-				<?php
-				foreach ($orderbys as $option) {
-					echo '<option value="' . $option . '" id="' . $option . '"', $orderby == $option ? ' selected="selected"' : '', '>', $option, '</option>';
-				}
-				?>
-			</select>		
-		</p>
-		<p>	
-			<label for="<?php echo $this->get_field_id('order'); ?>"><?php _e('Order:'); ?></label> 
-			<select class="widefat" name="<?php echo $this->get_field_name('order'); ?>" id="<?php echo $this->get_field_id('order'); ?>">
-				<?php
-				foreach ($orders as $option) {
-					echo '<option value="' . $option . '"', $order == $option ? ' selected="selected"' : '', '>', $option, '</option>';
-				}
-				?>
-			</select>
-			<br />
-			<span style="padding-top:3px;" class="description"><?php _e('ASC = 1,2,3 or A,B,C<br />DESC = 3,2,1 or C,B,A'); ?></span>		
-		</p>
-		<hr style="margin-bottom:1.33em; border:none; border-bottom:1px solid #dfdfdf;" />
-		<p style="margin-top:1.33em;">
-          <input class="dpe-fp-thumbnail" id="<?php echo $this->get_field_id('thumbnail'); ?>" name="<?php echo $this->get_field_name('thumbnail'); ?>" type="checkbox" value="1" <?php checked( '1', $thumbnail ); ?>/>
-          <label style="font-weight:bold;" for="<?php echo $this->get_field_id('thumbnail'); ?>"><?php _e('Display thumbnails?'); ?></label> 
-        </p>
-		<p <?php echo $thumbnail == '1' ? '' : 'style="display:none;"'?>  class="thumb-size">	
-			<label for="<?php echo $this->get_field_id('thumbsize'); ?>"><?php _e('Select a thumbnail size to show:'); ?></label> 
-			<select class="widefat" name="<?php echo $this->get_field_name('thumbsize'); ?>" id="<?php echo $this->get_field_id('thumbsize'); ?>">
-				<?php
-				foreach ($thumb_sizes as $option) {
-					echo '<option value="' . $option . '" id="' . $option . '"', $thumbsize == $option ? ' selected="selected"' : '', '>', $option, '</option>';
-				}
-				?>
-			</select>		
-		</p>
-		<hr style="margin-bottom:1.33em; border:none; border-bottom:1px solid #dfdfdf;" />
-		<p style="margin:1.33em 0;">
-			<label for="<?php echo $this->get_field_id('template'); ?>"><?php _e('Template filename:'); ?></label>
-			<input id="<?php echo $this->get_field_id('template'); ?>" name="<?php echo $this->get_field_name('template'); ?>" type="text" value="<?php echo $template; ?>" />
-			<br />
-			<span style="padding-top:3px;" class="description"><a target="_blank" href="http://wordpress.org/extend/plugins/flexible-posts-widget/other_notes/">See documentation</a> for details.</span>
-		</p>
-		<hr style="margin-bottom:1.33em; border:none; border-bottom:1px solid #dfdfdf;" />
-        <?php 
+		include( $this->getTemplateHierarchy( 'admin' ) );
+        
     }
 
 	/**
@@ -322,8 +247,7 @@ class DPE_Flexible_Posts_Widget extends WP_Widget {
 	 * @param string $template template file to search for
 	 * @return template path
 	 **/
-
-	function getTemplateHierarchy( $template ) {
+	public function getTemplateHierarchy( $template ) {
 		
 		// whether or not .php was added
 		$template_slug = rtrim( $template, '.php' );
@@ -341,44 +265,77 @@ class DPE_Flexible_Posts_Widget extends WP_Widget {
 		
 	}
 	
-	// Register styles & scripts
-	function register_sns() {
-		$dir = plugins_url('/', __FILE__);
-		wp_register_script( 'dpe-fp-widget', $dir . 'js/admin.js', array('jquery'), DPE_FP_Version, true );
+	/**
+	 * Register styles & scripts
+	 */
+	public function register_sns( $dir ) {
+		wp_register_script( 'dpe-fp-widget', $dir . 'js/admin.js', array('jquery', 'jquery-ui-tabs' ), DPE_FP_Version, true );
+		wp_register_style( 'dpe-fp-widget', $dir . 'css/admin.css', array(), DPE_FP_Version );
+	}
+	
+	/**
+	 * Setup our get terms/AJAX callback
+	 */
+	public function register_hooks() {
+		add_action( 'wp_ajax_dpe_fp_get_terms', array( &$this, 'terms_checklist' ) );
+	}
+	
+	/**
+	 * return a list of terms for the chosen taxonomy used via AJAX
+	 */
+	public function terms_checklist( $term ) {
+
+		$taxonomy = esc_attr( $_POST['taxonomy'] );
+
+		if ( !isset( $term ) )
+			$term = esc_attr( $_POST['term'] );
+		
+		if ( empty($taxonomy) || 'none' == $taxonomy ) {
+			echo false;
+			die();
+		}
+		
+		$args = array (
+			'hide_empty' => 0,
+		);
+		
+		$terms = get_terms( $taxonomy, $args );
+		
+		if( empty($terms) ) { 
+			$output = '<p>No terms found.</p>';
+		} else {
+			$output = '<ul class="categorychecklist termschecklist form-no-clear">';
+			foreach ( $terms as $option ) {
+				$output .= "\n<li>" . '<label class="selectit"><input value="' . esc_attr( $option->slug ) . '" type="checkbox" name="' . $this->get_field_name('term') . '[]"' . checked( in_array( $option->slug, (array)$term ), true, false ) . ' /> ' . esc_html( $option->name ) . "</label></li>\n";
+			}
+			$output .= "</ul>\n";
+		}
+		
+		echo ( $output );
+		
+		die();
+		
+	}
+	
+	/**
+     * 
+     */
+	public function posttype_checklist( $posttype ) {
+		
+		//Get pubic post type objects
+		$posttypes = get_post_types( array('public' => true ), 'objects' );
+
+		$output = '<ul class="categorychecklist posttypechecklist form-no-clear">';
+		foreach ( $posttypes as $type ) {
+			$output .= "\n<li>" . '<label class="selectit"><input value="' . esc_attr( $type->name ) . '" type="checkbox" name="' . $this->get_field_name('posttype') . '[]"' . checked( in_array( $type->name, $posttype ), true, false ) . ' /> ' . esc_html( $type->labels->name ) . "</label></li>\n";
+		}
+		$output .= "</ul>\n";
+		
+		echo ( $output );
+		
 	}
 	
 
 } // class DPE_Flexible_Posts_Widget
-
-
-// return a list of terms for the chosen taxonomy used via AJAX
-function dpe_fp_term_me() {
-	
-	$taxonomy = esc_attr( $_POST['taxonomy'] );
-	$term = esc_attr( $_POST['term'] );
-	
-	if( empty($taxonomy) )
-		echo false;
-	
-	$args = array (
-		'hide_empty' => 0,
-	);
-	
-	$terms = get_terms( $taxonomy, $args );
-	
-	if( empty($terms) ) { 
-		$output = '<option value="-1">No terms found...</option>';
-	} else {
-		$output = '<option value="-1">Please select...</option>';
-		foreach ( $terms as $option ) {
-			$output .= '<option value="' . $option->slug . '"' . ( $term == $option->slug ? ' selected="selected"' : '' ) . '>' . $option->name . '</option>';
-		}
-	}
-	
-	echo( $output );
-	
-	die();
-	
-}
 
 ?>
