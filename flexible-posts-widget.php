@@ -327,7 +327,7 @@ class DPE_Flexible_Posts_Widget extends WP_Widget {
 
 		$output = '<ul class="categorychecklist posttypechecklist form-no-clear">';
 		foreach ( $posttypes as $type ) {
-			$output .= "\n<li>" . '<label class="selectit"><input value="' . esc_attr( $type->name ) . '" type="checkbox" name="' . $this->get_field_name('posttype') . '[]"' . checked( in_array( $type->name, $posttype ), true, false ) . ' /> ' . esc_html( $type->labels->name ) . "</label></li>\n";
+			$output .= "\n<li>" . '<label class="selectit"><input value="' . esc_attr( $type->name ) . '" type="checkbox" name="' . $this->get_field_name('posttype') . '[]"' . checked( in_array( $type->name, (array)$posttype ), true, false ) . ' /> ' . esc_html( $type->labels->name ) . "</label></li>\n";
 		}
 		$output .= "</ul>\n";
 		
