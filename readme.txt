@@ -3,8 +3,8 @@ Contributors: dpe415
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=DJKSKHJWYAWDU
 Tags: widget, widgets, posts, categories, tags, recent posts, thumbnails, custom post types, custom taxonomies, feature image
 Requires at least: 3.2
-Tested up to: 3.5
-Stable tag: 3.0
+Tested up to: 3.5.1
+Stable tag: 3.0.1
 License: GPL2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -91,6 +91,11 @@ Edit the new file in your theme to your desired HTML layout. Please do not edit 
 
 == Changelog ==
 
+= 3.0.1 =
+* Bug fix: Not able to get all registered post types & taxonomies until after widget init.  Had to reorder some code.
+* Bug fix: when getting post types for display in widget admin. (Props: @angelfish276).
+
+
 = 3.0 =
 * Allow widgets to query by post type and/or taxonomy & term instead of just one or the other. (Props: @vernal)
 * Allow widgets to query by multiple post types and multiple terms within the same taxonomy.  (Props: @vernal)
@@ -111,7 +116,7 @@ Edit the new file in your theme to your desired HTML layout. Please do not edit 
 * Miscellaneous admin improvements.
 
 = 1.0.5 =
-* Bug fix - Removed post_status 'private' from wp_queries. We don't want to show private posts in our loops.
+* Bug fix: Removed post_status 'private' from wp_queries. We don't want to show private posts in our loops.
 
 = 1.0.4 =
 * Fixed an issue where post thumbnails aren't displaying.
