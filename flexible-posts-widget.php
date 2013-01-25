@@ -4,7 +4,7 @@ Plugin Name: Flexible Posts Widget
 Plugin URI: http://wordpress.org/extend/plugins/flexible-posts-widget/
 Author: dpe415
 Author URI: http://dpedesign.com
-Version: 3.0
+Version: 3.0.1
 Description: An advanced posts display widget with many options: get posts by post type, taxonomy & term; sorting & ordering; feature images; custom templates and more.
 License: GPL2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -31,14 +31,14 @@ if( !defined('ABSPATH') )
 	die('-1');
 	
 if( !defined('DPE_FP_Version') )
-	define( 'DPE_FP_Version', '3.0' );
+	define( 'DPE_FP_Version', '3.0.1' );
 
 
 // Load the widget on widgets_init
 function dpe_load_flexible_posts_widget() {
 	register_widget('DPE_Flexible_Posts_Widget');
 }
-add_action('widgets_init', 'dpe_load_flexible_posts_widget');
+add_action('widgets_init', 'dpe_load_flexible_posts_widget' );
 
 
 /**
@@ -60,23 +60,6 @@ class DPE_Flexible_Posts_Widget extends WP_Widget {
 		);
 		
 		$this->directory	= plugins_url( '/', __FILE__ );
-		$this->posttypes	= get_post_types( array('public' => true ), 'objects' );
-		$this->taxonomies	= get_taxonomies( array('public' => true ), 'objects' );
-		$this->thumbsizes	= get_intermediate_image_sizes();
-		$this->orderbys		= array(
-			'date'		 	=> 'Publish Date',
-			'title'			=> 'Title',
-			'menu_order'	=> 'Menu Order',
-			'ID'			=> 'Post ID',
-			'author'		=> 'Author',
-			'name'	 		=> 'Post Slug',
-			'comment_count'	=> 'Comment Count',
-			'rand'			=> 'Random',
-		);
-		$this->orders		= array(
-			'ASC'	=> 'Ascending',
-			'DESC'	=> 'Descending',
-		);
 		
 		$this->register_hooks();					// Register actions & filters
 		$this->register_sns( $this->directory ); 	// Register styles & scripts
@@ -154,6 +137,24 @@ class DPE_Flexible_Posts_Widget extends WP_Widget {
     function update( $new_instance, $old_instance ) {
 		
 		// Get our defaults to test against
+		$this->posttypes	= get_post_types( array('public' => true ), 'objects' );
+		$this->taxonomies	= get_taxonomies( array('public' => true ), 'objects' );
+		$this->thumbsizes	= get_intermediate_image_sizes();
+		$this->orderbys		= array(
+			'date'		 	=> 'Publish Date',
+			'title'			=> 'Title',
+			'menu_order'	=> 'Menu Order',
+			'ID'			=> 'Post ID',
+			'author'		=> 'Author',
+			'name'	 		=> 'Post Slug',
+			'comment_count'	=> 'Comment Count',
+			'rand'			=> 'Random',
+		);
+		$this->orders		= array(
+			'ASC'	=> 'Ascending',
+			'DESC'	=> 'Descending',
+		);
+		
 		$pt_names		= get_post_types( array('public' => true ), 'names' );
 		$tax_names		= get_taxonomies( array('public' => true ), 'names' );
 		$tax_names[]	= 'none';
@@ -213,6 +214,24 @@ class DPE_Flexible_Posts_Widget extends WP_Widget {
 	 * @param array $instance Previously saved values from database.
 	 */
     function form( $instance ) {
+    	
+   		$this->posttypes	= get_post_types( array('public' => true ), 'objects' );
+		$this->taxonomies	= get_taxonomies( array('public' => true ), 'objects' );
+		$this->thumbsizes	= get_intermediate_image_sizes();
+		$this->orderbys		= array(
+			'date'		 	=> 'Publish Date',
+			'title'			=> 'Title',
+			'menu_order'	=> 'Menu Order',
+			'ID'			=> 'Post ID',
+			'author'		=> 'Author',
+			'name'	 		=> 'Post Slug',
+			'comment_count'	=> 'Comment Count',
+			'rand'			=> 'Random',
+		);
+		$this->orders		= array(
+			'ASC'	=> 'Ascending',
+			'DESC'	=> 'Descending',
+		);
 		
 		$instance = wp_parse_args( (array) $instance, array(
 			'title'		=> '',
