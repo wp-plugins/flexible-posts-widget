@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_i
 Tags: widget, widgets, posts, categories, tags, recent posts, thumbnails, custom post types, custom taxonomies, feature image
 Requires at least: 3.2
 Tested up to: 3.5.1
-Stable tag: 3.0.1
+Stable tag: 3.0.2
 License: GPL2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -14,7 +14,7 @@ An advanced posts display widget with many options. Display posts in your sideba
 
 The default Recent Posts widget is exceptionally basic. I always find myself in need of a way to easily display a selection of posts from any combination post type or taxonomy. Hence, Flexible Post Widget.
 
-Flexible Posts Widget (FPW) is more than just a simple alternative to the default Recent Posts widget.  With many per-instance options it is highly customizable and allows advanced users to display the resulting posts virtually anyway imaginable. 
+Flexible Posts Widget (FPW) is more than just a simple alternative to the default Recent Posts widget.  With many per-instance options it is highly customizable and allows advanced users to display the resulting posts virtually any way imaginable. 
 
 Version 3.0 is a major enhancement as widgets can now get posts by *BOTH* post type and/or taxonomy & term as well as select *multiple* post types and terms.  Previous versions of the plugin only allowed post type OR taxonomy & term queries, not both.
 
@@ -35,7 +35,7 @@ Version 3.0 is a major enhancement as widgets can now get posts by *BOTH* post t
 1. Activate the plugin through the 'Plugins' menu in WordPress.
 1. Go to 'Appearance' > 'Widgets' and place the widget into a sidebar to configure it.
 
-= To use a customized HTML output template =
+= To use a custom HTML output template =
 
 1. Create a folder called `flexible-posts-widget` in the root of your theme folder.
 1. Copy `widget.php` from within the plugin's `views` folder into your theme's new `flexible-posts-widget` folder.
@@ -45,6 +45,13 @@ Version 3.0 is a major enhancement as widgets can now get posts by *BOTH* post t
 
 
 == Frequently Asked Questions ==
+
+= How can I display custom fields (custom meta values) with FPW? =
+You'll want to create a custom HTML template by following [the instructions](http://wordpress.org/extend/plugins/flexible-posts-widget/installation/ "View instructions for creating custom FPW templates") and then you can use the standard WordPress [Custom Field](http://codex.wordpress.org/Custom_Fields "View custom field functions on the WordPress Codex") functions the same way you would if you were editing your theme's other template files.
+
+A simple code example for a custom field named "test_field" _might_ look like the following:
+`$test_field_value = get_post_meta( get_the_ID(), 'test_field', true );
+echo $test_field_value;`
 
 = How can I style the images, titles or other widget output a certain way? =
 FPW intentionally does NOT add any styling of it's own.  To adjust the font size, color, alignment, image size, etc. of any output from this widget, you'll need to edit your theme's styles.
@@ -90,6 +97,9 @@ Edit the new file in your theme to your desired HTML layout. Please do not edit 
 
 
 == Changelog ==
+
+= 3.0.2 =
+* Bug fix: Added a check to make sure both taxonomy & term are set for tax queries.
 
 = 3.0.1 =
 * Bug fix: Not able to get all registered post types & taxonomies until after widget init.  Had to reorder some code.

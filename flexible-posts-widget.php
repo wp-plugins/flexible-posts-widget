@@ -4,7 +4,7 @@ Plugin Name: Flexible Posts Widget
 Plugin URI: http://wordpress.org/extend/plugins/flexible-posts-widget/
 Author: dpe415
 Author URI: http://dpedesign.com
-Version: 3.0.1
+Version: 3.0.2
 Description: An advanced posts display widget with many options: get posts by post type, taxonomy & term; sorting & ordering; feature images; custom templates and more.
 License: GPL2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -31,7 +31,7 @@ if( !defined('ABSPATH') )
 	die('-1');
 	
 if( !defined('DPE_FP_Version') )
-	define( 'DPE_FP_Version', '3.0.1' );
+	define( 'DPE_FP_Version', '3.0.2' );
 
 
 // Load the widget on widgets_init
@@ -103,7 +103,7 @@ class DPE_Flexible_Posts_Widget extends WP_Widget {
 		);
 		
 		// Setup the tax & term query based on the user's selection
-		if ( $taxonomy != 'none' ) {
+		if ( $taxonomy != 'none' && !empty( $term ) ) {
 			$args['tax_query'] = array(
 				array(
 					'taxonomy' => $taxonomy,
