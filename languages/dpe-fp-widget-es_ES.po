@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Flexible Posts Widget en español\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-03-08 11:14+0100\n"
-"PO-Revision-Date: 2013-03-08 11:15+0100\n"
+"Report-Msgid-Bugs-To: http://wordpress.org/tag/flexible-posts-widget\n"
+"POT-Creation-Date: 2013-03-10 04:29:57+00:00\n"
+"PO-Revision-Date: 2013-03-10 17:25+0100\n"
 "Last-Translator: Eduardo Larequi <elarequi@gmail.com>\n"
 "Language-Team: PNTE <blogs@educacion.navarra.es>\n"
 "MIME-Version: 1.0\n"
@@ -13,59 +13,75 @@ msgstr ""
 "X-Poedit-Basepath: ..\n"
 "X-Poedit-Language: Spanish\n"
 "X-Poedit-Country: Spain\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Poedit-SearchPath-0: .\n"
 
-#: flexible-posts-widget.php:65
+#: flexible-posts-widget.php:71
 msgid "Display posts as widget items"
 msgstr "Muestra las entradas como elementos de un widget"
 
-#: flexible-posts-widget.php:150
-#: flexible-posts-widget.php:228
-msgid "Publish Date"
-msgstr "Fecha de publicación"
+#: flexible-posts-widget.php:85
+msgid "Getting terms..."
+msgstr "Obteniendo términos..."
 
-#: flexible-posts-widget.php:151
-#: flexible-posts-widget.php:229
-msgid "Title"
-msgstr "Título"
+#: flexible-posts-widget.php:86
+#: views/admin.php:49
+msgid "Select terms:"
+msgstr "Seleccionar términos:"
 
-#: flexible-posts-widget.php:152
-#: flexible-posts-widget.php:230
-msgid "Menu Order"
-msgstr "Orden de menú"
-
-#: flexible-posts-widget.php:153
-#: flexible-posts-widget.php:231
-msgid "Post ID"
-msgstr "ID de entrada"
-
-#: flexible-posts-widget.php:154
-#: flexible-posts-widget.php:232
-msgid "Author"
-msgstr "Autor"
-
-#: flexible-posts-widget.php:155
-#: flexible-posts-widget.php:233
-msgid "Post Slug"
-msgstr "Nombre de la entrada (slug)"
-
-#: flexible-posts-widget.php:156
-#: flexible-posts-widget.php:234
-msgid "Comment Count"
-msgstr "Total de comentarios"
-
-#: flexible-posts-widget.php:157
-#: flexible-posts-widget.php:235
-msgid "Random"
-msgstr "Al azar"
-
-#: flexible-posts-widget.php:160
-#: flexible-posts-widget.php:238
-msgid "Ascending"
-msgstr "Ascendente"
+#: flexible-posts-widget.php:87
+#: flexible-posts-widget.php:341
+#: views/admin.php:67
+msgid "No terms found."
+msgstr "No se ha encontrado ningún término."
 
 #: flexible-posts-widget.php:161
 #: flexible-posts-widget.php:239
+msgid "Publish Date"
+msgstr "Fecha de publicación"
+
+#: flexible-posts-widget.php:162
+#: flexible-posts-widget.php:240
+msgid "Title"
+msgstr "Título"
+
+#: flexible-posts-widget.php:163
+#: flexible-posts-widget.php:241
+msgid "Menu Order"
+msgstr "Orden de menú"
+
+#: flexible-posts-widget.php:164
+#: flexible-posts-widget.php:242
+msgid "Post ID"
+msgstr "ID de entrada"
+
+#: flexible-posts-widget.php:165
+#: flexible-posts-widget.php:243
+msgid "Author"
+msgstr "Autor"
+
+#: flexible-posts-widget.php:166
+#: flexible-posts-widget.php:244
+msgid "Post Slug"
+msgstr "Nombre de la entrada (slug)"
+
+#: flexible-posts-widget.php:167
+#: flexible-posts-widget.php:245
+msgid "Comment Count"
+msgstr "Total de comentarios"
+
+#: flexible-posts-widget.php:168
+#: flexible-posts-widget.php:246
+msgid "Random"
+msgstr "Al azar"
+
+#: flexible-posts-widget.php:171
+#: flexible-posts-widget.php:249
+msgid "Ascending"
+msgstr "Ascendente"
+
+#: flexible-posts-widget.php:172
+#: flexible-posts-widget.php:250
 msgid "Descending"
 msgstr "Descendente"
 
@@ -92,14 +108,6 @@ msgstr "Seleccionar una taxonomía:"
 #: views/admin.php:41
 msgid "Ignore Taxonomy &amp; Term"
 msgstr "Ignorar taxonomías y términos"
-
-#: views/admin.php:49
-msgid "Select terms:"
-msgstr "Seleccionar términos:"
-
-#: views/admin.php:67
-msgid "No terms found."
-msgstr "No se ha encontrado ningún término."
 
 #: views/admin.php:83
 msgid "Display options"
@@ -141,7 +149,27 @@ msgstr "Ver la documentación"
 msgid "for details."
 msgstr "para saber más sobre la plantilla personalizada para el widget."
 
-#: views/widget.php:32
+#: views/widget.php:39
 msgid "No post found"
 msgstr "No se ha encontrado ninguna entrada"
+
+#. Plugin Name of the plugin/theme
+msgid "Flexible Posts Widget"
+msgstr "Flexible Posts Widget"
+
+#. Plugin URI of the plugin/theme
+msgid "http://wordpress.org/extend/plugins/flexible-posts-widget/"
+msgstr "http://wordpress.org/extend/plugins/flexible-posts-widget/"
+
+#. Description of the plugin/theme
+msgid "An advanced posts display widget with many options: get posts by post type, taxonomy & term; sorting & ordering; feature images; custom templates and more."
+msgstr "Un widget avanzado para mostrar entradas, con muchas opciones: obtener entradas por tipo de contenido, taxonomía y términos; clasificación y ordenación; imágenes destacadas; plantillas personalizadas, etc."
+
+#. Author of the plugin/theme
+msgid "dpe415"
+msgstr "dpe415"
+
+#. Author URI of the plugin/theme
+msgid "http://dpedesign.com"
+msgstr "http://dpedesign.com"
 
