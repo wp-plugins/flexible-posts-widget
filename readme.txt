@@ -28,6 +28,10 @@ Version 3.0 is a major enhancement as widgets can now get posts by *BOTH* post t
 * Order posts by: date, ID, title, menu order, random; and sort posts: ascending or descending.
 * Each widget's output can be customized by user-defined templates added to the current theme folder.
 
+== Supported Languages =
+* English
+* Spanish
+
 
 == Installation ==
 
@@ -57,7 +61,7 @@ echo $test_field_value;`
 FPW intentionally does NOT add any styling of it's own.  To adjust the font size, color, alignment, image size, etc. of any output from this widget, you'll need to edit your theme's styles.
 
 = Does this plugin/widget insert any styles or scripts into my site? =
-FPW does NOT add styles or scripts to your public theme.  The plugin is intentionally designed work within your existing theme.  FPW does add one stylesheet and one JavaScript to Widgets page in wp-admin to help with the widget administration.
+FPW does not add styles or scripts to your public theme.  The plugin is intentionally designed to work within your existing theme.  FPW does add one stylesheet and one JavaScript to the Widgets page in wp-admin to help with the administration of any FPWs in use.
 
 = Questions, Support & Bug Reports =
 To get answers to your questions, request help or submit a bug report, please visit the forum: http://wordpress.org/tags/flexible-posts-widget/
@@ -89,21 +93,24 @@ FPW comes with a default template for the widget output. If you would like to al
 Edit the new file in your theme to your desired HTML layout. Please do not edit the one in the plugin folder as that will cause conflicts when you update the plugin to the latest release.
 
 = Future updates & feature requests list =
-
 * Dynamically populate the "Template Filename" field based on the templates available.
-* Adjust widget output template for Media-type posts.
+* Add a CSS class field to be applied to each widget in a (non-existant) Advanced section.
+* Add filters & hooks for other plugins.
 * Add shortcode functionality.
 * Allow shortcode output to dynamically load more posts (AJAX-ified).
 
 
 == Changelog ==
 
+= 3.1 =
+* Internationalized and added Spanish. (Props: @elarequi)
+
 = 3.0.2 =
 * Bug fix: Added a check to make sure both taxonomy & term are set for tax queries.
 
 = 3.0.1 =
 * Bug fix: Not able to get all registered post types & taxonomies until after widget init.  Had to reorder some code.
-* Bug fix: when getting post types for display in widget admin. (Props: @angelfish276).
+* Bug fix: when getting post types for display in widget admin. (Props: @angelfish276)
 
 
 = 3.0 =

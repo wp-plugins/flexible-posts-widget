@@ -26,6 +26,12 @@ License URI: http://www.gnu.org/licenses/gpl-2.0.html
     Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
+/* Plugin internationalization */
+function dpe_flexible_posts_widget_init() {
+	load_plugin_textdomain( 'flexible-posts-widget', false, dirname( plugin_basename( __FILE__ ) ) . '/languages/' );
+}
+add_action('plugins_loaded', 'dpe_flexible_posts_widget_init');  
+
 // Block direct requests
 if( !defined('ABSPATH') )
 	die('-1');
@@ -56,7 +62,7 @@ class DPE_Flexible_Posts_Widget extends WP_Widget {
 		parent::__construct(
 	 		'dpe_fp_widget', // Base ID
 			'Flexible Posts Widget', // Name
-			array( 'description' => __( 'Display posts as widget items', 'text_domain' ), ) // Args
+			array( 'description' => __( 'Display posts as widget items', 'flexible-posts-widget' ) ) // Args
 		);
 		
 		$this->directory	= plugins_url( '/', __FILE__ );
@@ -141,18 +147,18 @@ class DPE_Flexible_Posts_Widget extends WP_Widget {
 		$this->taxonomies	= get_taxonomies( array('public' => true ), 'objects' );
 		$this->thumbsizes	= get_intermediate_image_sizes();
 		$this->orderbys		= array(
-			'date'		 	=> 'Publish Date',
-			'title'			=> 'Title',
-			'menu_order'	=> 'Menu Order',
-			'ID'			=> 'Post ID',
-			'author'		=> 'Author',
-			'name'	 		=> 'Post Slug',
-			'comment_count'	=> 'Comment Count',
-			'rand'			=> 'Random',
+			'date'		 	=> __('Publish Date', 'flexible-posts-widget'),
+			'title'			=> __('Title', 'flexible-posts-widget'),
+			'menu_order'	=> __('Menu Order', 'flexible-posts-widget'),
+			'ID'			=> __('Post ID', 'flexible-posts-widget'),
+			'author'		=> __('Author', 'flexible-posts-widget'),
+			'name'	 		=> __('Post Slug', 'flexible-posts-widget'),
+			'comment_count'	=> __('Comment Count', 'flexible-posts-widget'),
+			'rand'			=> __('Random', 'flexible-posts-widget'),
 		);
 		$this->orders		= array(
-			'ASC'	=> 'Ascending',
-			'DESC'	=> 'Descending',
+			'ASC'	=> __('Ascending', 'flexible-posts-widget'),
+			'DESC'	=> __('Descending', 'flexible-posts-widget'),
 		);
 		
 		$pt_names		= get_post_types( array('public' => true ), 'names' );
@@ -219,18 +225,18 @@ class DPE_Flexible_Posts_Widget extends WP_Widget {
 		$this->taxonomies	= get_taxonomies( array('public' => true ), 'objects' );
 		$this->thumbsizes	= get_intermediate_image_sizes();
 		$this->orderbys		= array(
-			'date'		 	=> 'Publish Date',
-			'title'			=> 'Title',
-			'menu_order'	=> 'Menu Order',
-			'ID'			=> 'Post ID',
-			'author'		=> 'Author',
-			'name'	 		=> 'Post Slug',
-			'comment_count'	=> 'Comment Count',
-			'rand'			=> 'Random',
+			'date'		 	=> __('Publish Date', 'flexible-posts-widget'),
+			'title'			=> __('Title', 'flexible-posts-widget'),
+			'menu_order'	=> __('Menu Order', 'flexible-posts-widget'),
+			'ID'			=> __('Post ID', 'flexible-posts-widget'),
+			'author'		=> __('Author', 'flexible-posts-widget'),
+			'name'	 		=> __('Post Slug', 'flexible-posts-widget'),
+			'comment_count'	=> __('Comment Count', 'flexible-posts-widget'),
+			'rand'			=> __('Random', 'flexible-posts-widget'),
 		);
 		$this->orders		= array(
-			'ASC'	=> 'Ascending',
-			'DESC'	=> 'Descending',
+			'ASC'	=> __('Ascending', 'flexible-posts-widget'),
+			'DESC'	=> __('Descending', 'flexible-posts-widget'),
 		);
 		
 		$instance = wp_parse_args( (array) $instance, array(
@@ -356,5 +362,3 @@ class DPE_Flexible_Posts_Widget extends WP_Widget {
 	
 
 } // class DPE_Flexible_Posts_Widget
-
-?>

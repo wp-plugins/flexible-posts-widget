@@ -12,13 +12,13 @@ if ( !defined('ABSPATH') )
 
 	<div class="section title">
         <p>
-			<label for="<?php echo $this->get_field_id('title'); ?>"><?php _e('Widget title:'); ?></label> 
+			<label for="<?php echo $this->get_field_id('title'); ?>"><?php _e('Widget title:', 'flexible-posts-widget'); ?></label> 
 			<input class="widefat" id="<?php echo $this->get_field_id('title'); ?>" name="<?php echo $this->get_field_name('title'); ?>" type="text" value="<?php echo $title; ?>" />
         </p>
 	</div>
     
     <div class="section getemby">
-		<h4><?php _e('Get posts by'); ?></h4>
+		<h4><?php _e('Get posts by', 'flexible-posts-widget'); ?></h4>
 		<div class="inside">
 		
 			<div id="<?php echo $this->get_field_id('getemby'); ?>" class="categorydiv getembytabs">
@@ -26,8 +26,8 @@ if ( !defined('ABSPATH') )
 				<input id="<?php echo $this->get_field_id('cur_tab'); ?>" class="cur_tab" name="<?php echo $this->get_field_name('cur_tab'); ?>" type="hidden" value="<?php echo $cur_tab; ?>" />
 				
 				<ul id="<?php echo $this->get_field_id('getemby-tabs'); ?>" class="category-tabs">
-					<li><a href="#<?php echo $this->get_field_id('getemby-pt'); ?>">Post Type</a></li>
-					<li><a href="#<?php echo $this->get_field_id('getemby-tt'); ?>">Taxonomy &amp; Term</a></li>
+					<li><a href="#<?php echo $this->get_field_id('getemby-pt'); ?>"><?php _e('Post Type', 'flexible-posts-widget'); ?></a></li>
+					<li><a href="#<?php echo $this->get_field_id('getemby-tt'); ?>"><?php _e('Taxonomy &amp; Term', 'flexible-posts-widget'); ?></a></li>
 				</ul>
 				
 				<div id="<?php echo $this->get_field_id('getemby-pt'); ?>" class="tabs-panel pt">
@@ -36,9 +36,9 @@ if ( !defined('ABSPATH') )
 				
 				<div id="<?php echo $this->get_field_id('getemby-tt'); ?>" class="tabs-panel tt" style="display:none;">
 					<p>	
-						<label for="<?php echo $this->get_field_id('taxonomy'); ?>"><?php _e('Select a taxonomy:'); ?></label> 
+						<label for="<?php echo $this->get_field_id('taxonomy'); ?>"><?php _e('Select a taxonomy:', 'flexible-posts-widget'); ?></label> 
 						<select class="widefat dpe-fp-taxonomy" name="<?php echo $this->get_field_name('taxonomy'); ?>" id="<?php echo $this->get_field_id('taxonomy'); ?>">
-							<option value="none" <?php echo 'none' == $taxonomy ? ' selected="selected"' : ''; ?>>Ignore Taxonomy &amp; Term</option>
+							<option value="none" <?php echo 'none' == $taxonomy ? ' selected="selected"' : ''; ?>><?php _e('Ignore Taxonomy &amp; Term', 'flexible-posts-widget'); ?></option>
 							<?php
 							foreach ($this->taxonomies as $option) {
 								echo '<option value="' . $option->name . '"', $taxonomy == $option->name ? ' selected="selected"' : '', '>', $option->label, '</option>';
@@ -46,7 +46,7 @@ if ( !defined('ABSPATH') )
 							?>
 						</select>		
 					</p>
-					<label <?php echo 'none' == $taxonomy ? ' style="display:none;"' : ''; ?>><?php _e('Select terms:'); ?></label> 
+					<label <?php echo 'none' == $taxonomy ? ' style="display:none;"' : ''; ?>><?php _e('Select terms:', 'flexible-posts-widget'); ?></label> 
 					<div class="terms" <?php echo 'none' == $taxonomy ? ' style="display:none;"' : ''; ?>>
 						<?php
 							if ( !empty($taxonomy) && 'none' != $taxonomy ) {
@@ -64,7 +64,7 @@ if ( !defined('ABSPATH') )
 									}
 									$output .= "</ul>\n";
 								} else {
-									$output = '<p>No terms found.</p>';
+									$output = '<p>' . __('No terms found.', 'flexible-posts-widget') . '</p>';
 								}
 								
 								echo ( $output );
@@ -80,17 +80,17 @@ if ( !defined('ABSPATH') )
 	</div>
 	
 	<div class="section display">
-		<h4>Display options</h4>
+		<h4><?php _e('Display options', 'flexible-posts-widget'); ?></h4>
 		<p class="cf">
-          <label for="<?php echo $this->get_field_id('number'); ?>"><?php _e('Number of posts to show:'); ?></label> 
+          <label for="<?php echo $this->get_field_id('number'); ?>"><?php _e('Number of posts to show:', 'flexible-posts-widget'); ?></label> 
           <input id="<?php echo $this->get_field_id('number'); ?>" name="<?php echo $this->get_field_name('number'); ?>" type="text" value="<?php echo $number; ?>" />
         </p>
 		<p class="cf">
-          <label for="<?php echo $this->get_field_id('offset'); ?>"><?php _e('Number of posts to skip:'); ?></label> 
+          <label for="<?php echo $this->get_field_id('offset'); ?>"><?php _e('Number of posts to skip:', 'flexible-posts-widget'); ?></label> 
           <input id="<?php echo $this->get_field_id('offset'); ?>" name="<?php echo $this->get_field_name('offset'); ?>" type="text" value="<?php echo $offset; ?>" />
         </p>
    		<p class="cf">
-			<label for="<?php echo $this->get_field_id('orderby'); ?>"><?php _e('Order posts by:'); ?></label> 
+			<label for="<?php echo $this->get_field_id('orderby'); ?>"><?php _e('Order posts by:', 'flexible-posts-widget'); ?></label> 
 			<select name="<?php echo $this->get_field_name('orderby'); ?>" id="<?php echo $this->get_field_id('orderby'); ?>">
 				<?php
 				foreach ( $this->orderbys as $key => $value ) {
@@ -100,7 +100,7 @@ if ( !defined('ABSPATH') )
 			</select>		
 		</p>
 		<p class="cf">
-			<label for="<?php echo $this->get_field_id('order'); ?>"><?php _e('Order:'); ?></label> 
+			<label for="<?php echo $this->get_field_id('order'); ?>"><?php _e('Order:', 'flexible-posts-widget'); ?></label> 
 			<select name="<?php echo $this->get_field_name('order'); ?>" id="<?php echo $this->get_field_id('order'); ?>">
 				<?php
 				foreach ( $this->orders as $key => $value ) {
@@ -114,10 +114,10 @@ if ( !defined('ABSPATH') )
 	<div class="section thumbnails">
 		<p style="margin-top:1.33em;">
           <input class="dpe-fp-thumbnail" id="<?php echo $this->get_field_id('thumbnail'); ?>" name="<?php echo $this->get_field_name('thumbnail'); ?>" type="checkbox" value="1" <?php checked( '1', $thumbnail ); ?>/>
-          <label style="font-weight:bold;" for="<?php echo $this->get_field_id('thumbnail'); ?>"><?php _e('Display thumbnails?'); ?></label> 
+          <label style="font-weight:bold;" for="<?php echo $this->get_field_id('thumbnail'); ?>"><?php _e('Display thumbnails?', 'flexible-posts-widget'); ?></label> 
         </p>
 		<p <?php echo $thumbnail ? '' : 'style="display:none;"'?>  class="thumb-size">	
-			<label for="<?php echo $this->get_field_id('thumbsize'); ?>"><?php _e('Select a thumbnail size to show:'); ?></label> 
+			<label for="<?php echo $this->get_field_id('thumbsize'); ?>"><?php _e('Select a thumbnail size to show:', 'flexible-posts-widget'); ?></label> 
 			<select class="widefat" name="<?php echo $this->get_field_name('thumbsize'); ?>" id="<?php echo $this->get_field_id('thumbsize'); ?>">
 				<?php
 				foreach ($this->thumbsizes as $option) {
@@ -130,10 +130,10 @@ if ( !defined('ABSPATH') )
 	
 	<div class="section template">
 		<p style="margin:1.33em 0;">
-			<label for="<?php echo $this->get_field_id('template'); ?>"><?php _e('Template filename:'); ?></label>
+			<label for="<?php echo $this->get_field_id('template'); ?>"><?php _e('Template filename:', 'flexible-posts-widget'); ?></label>
 			<input id="<?php echo $this->get_field_id('template'); ?>" name="<?php echo $this->get_field_name('template'); ?>" type="text" value="<?php echo $template; ?>" />
 			<br />
-			<span style="padding-top:3px;" class="description"><a target="_blank" href="http://wordpress.org/extend/plugins/flexible-posts-widget/other_notes/">See documentation</a> for details.</span>
+			<span style="padding-top:3px;" class="description"><a target="_blank" href="http://wordpress.org/extend/plugins/flexible-posts-widget/other_notes/"><?php _e('See documentation', 'flexible-posts-widget'); ?></a> <?php _e('for details.', 'flexible-posts-widget'); ?></span>
 		</p>
 	</div>
 	

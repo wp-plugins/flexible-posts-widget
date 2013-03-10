@@ -1,0 +1,147 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Flexible Posts Widget en español\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2013-03-08 11:14+0100\n"
+"PO-Revision-Date: 2013-03-08 11:15+0100\n"
+"Last-Translator: Eduardo Larequi <elarequi@gmail.com>\n"
+"Language-Team: PNTE <blogs@educacion.navarra.es>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-KeywordsList: __;_e;_x:1,2c;_n:1,2;_c;esc_html__;esc_html_e;esc_attr__;esc_attr_e\n"
+"X-Poedit-Basepath: ..\n"
+"X-Poedit-Language: Spanish\n"
+"X-Poedit-Country: Spain\n"
+"X-Poedit-SearchPath-0: .\n"
+
+#: flexible-posts-widget.php:65
+msgid "Display posts as widget items"
+msgstr "Muestra las entradas como elementos de un widget"
+
+#: flexible-posts-widget.php:150
+#: flexible-posts-widget.php:228
+msgid "Publish Date"
+msgstr "Fecha de publicación"
+
+#: flexible-posts-widget.php:151
+#: flexible-posts-widget.php:229
+msgid "Title"
+msgstr "Título"
+
+#: flexible-posts-widget.php:152
+#: flexible-posts-widget.php:230
+msgid "Menu Order"
+msgstr "Orden de menú"
+
+#: flexible-posts-widget.php:153
+#: flexible-posts-widget.php:231
+msgid "Post ID"
+msgstr "ID de entrada"
+
+#: flexible-posts-widget.php:154
+#: flexible-posts-widget.php:232
+msgid "Author"
+msgstr "Autor"
+
+#: flexible-posts-widget.php:155
+#: flexible-posts-widget.php:233
+msgid "Post Slug"
+msgstr "Nombre de la entrada (slug)"
+
+#: flexible-posts-widget.php:156
+#: flexible-posts-widget.php:234
+msgid "Comment Count"
+msgstr "Total de comentarios"
+
+#: flexible-posts-widget.php:157
+#: flexible-posts-widget.php:235
+msgid "Random"
+msgstr "Al azar"
+
+#: flexible-posts-widget.php:160
+#: flexible-posts-widget.php:238
+msgid "Ascending"
+msgstr "Ascendente"
+
+#: flexible-posts-widget.php:161
+#: flexible-posts-widget.php:239
+msgid "Descending"
+msgstr "Descendente"
+
+#: views/admin.php:15
+msgid "Widget title:"
+msgstr "Título del widget:"
+
+#: views/admin.php:21
+msgid "Get posts by"
+msgstr "Obtener entradas por"
+
+#: views/admin.php:29
+msgid "Post Type"
+msgstr "Tipo de contenido"
+
+#: views/admin.php:30
+msgid "Taxonomy &amp; Term"
+msgstr "Taxonomías y términos"
+
+#: views/admin.php:39
+msgid "Select a taxonomy:"
+msgstr "Seleccionar una taxonomía:"
+
+#: views/admin.php:41
+msgid "Ignore Taxonomy &amp; Term"
+msgstr "Ignorar taxonomías y términos"
+
+#: views/admin.php:49
+msgid "Select terms:"
+msgstr "Seleccionar términos:"
+
+#: views/admin.php:67
+msgid "No terms found."
+msgstr "No se ha encontrado ningún término."
+
+#: views/admin.php:83
+msgid "Display options"
+msgstr "Opciones de visualización"
+
+#: views/admin.php:85
+msgid "Number of posts to show:"
+msgstr "Número de entradas que mostrar:"
+
+#: views/admin.php:89
+msgid "Number of posts to skip:"
+msgstr "Número de entradas que saltar:"
+
+#: views/admin.php:93
+msgid "Order posts by:"
+msgstr "Ordenar entradas por:"
+
+#: views/admin.php:103
+msgid "Order:"
+msgstr "Orden:"
+
+#: views/admin.php:117
+msgid "Display thumbnails?"
+msgstr "¿Mostrar miniaturas?"
+
+#: views/admin.php:120
+msgid "Select a thumbnail size to show:"
+msgstr "Selecciona el tamaño de miniatura que se mostrará:"
+
+#: views/admin.php:133
+msgid "Template filename:"
+msgstr "Nombre del fichero de plantilla:"
+
+#: views/admin.php:136
+msgid "See documentation"
+msgstr "Ver la documentación"
+
+#: views/admin.php:136
+msgid "for details."
+msgstr "para saber más sobre la plantilla personalizada para el widget."
+
+#: views/widget.php:32
+msgid "No post found"
+msgstr "No se ha encontrado ninguna entrada"
+

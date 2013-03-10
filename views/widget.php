@@ -15,12 +15,16 @@ if ( !empty($title) )
 if( $flexible_posts->have_posts() ):
 ?>
 	<ul class="dpe-flexible-posts">
-	<?php while( $flexible_posts->have_posts() ) : $flexible_posts->the_post(); ?>
+	<?php while( $flexible_posts->have_posts() ) : $flexible_posts->the_post(); global $post; ?>
 		<li id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
 			<a href="<?php echo the_permalink(); ?>">
 				<?php
-					if( $thumbnail == true )
-						the_post_thumbnail( $thumbsize );
+					if( $thumbnail == true ) {
+						// If the post has a feature image, show it
+						if( has_post_thumbnail() ) {
+							the_post_thumbnail( $thumbsize );
+						}
+					}
 				?>
 				<h4 class="title"><?php the_title(); ?></h4>
 			</a>
@@ -29,10 +33,9 @@ if( $flexible_posts->have_posts() ):
 	</ul><!-- .dpe-flexible-posts -->
 <?php else: // We have no posts ?>
 	<div class="dpe-flexible-posts no-posts">
-		<p>No post found</p>
+		<p><?php _e( 'No post found', 'flexible-posts-widget' ); ?></p>
 	</div>
 <?php	
 endif; // End have_posts()
 	
 echo $after_widget;
-?>
