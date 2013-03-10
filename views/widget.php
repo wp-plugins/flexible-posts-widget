@@ -36,7 +36,7 @@ if( $flexible_posts->have_posts() ):
 	</ul><!-- .dpe-flexible-posts -->
 <?php else: // We have no posts ?>
 	<div class="dpe-flexible-posts no-posts">
-		<p><?php _e( 'No post found', 'dpe-fp-widget' ); ?></p>
+		<p><?php _e( 'No post found', 'flexible-posts-widget' ); ?></p>
 	</div>
 <?php	
 endif; // End have_posts()

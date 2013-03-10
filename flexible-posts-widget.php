@@ -39,7 +39,7 @@ if( !defined('DPE_FP_Version') )
  * Used for internationalization only at this point
  */
 function dpe_flexible_posts_widget_init() {
-	load_plugin_textdomain( 'dpe-fp-widget', false, dirname( plugin_basename( __FILE__ ) ) . '/languages/' );
+	load_plugin_textdomain( 'flexible-posts-widget', false, dirname( plugin_basename( __FILE__ ) ) . '/languages/' );
 }
 add_action('plugins_loaded', 'dpe_flexible_posts_widget_init'); 
 
@@ -68,7 +68,7 @@ class DPE_Flexible_Posts_Widget extends WP_Widget {
 		parent::__construct(
 	 		'dpe_fp_widget', // Base ID
 			'Flexible Posts Widget', // Name
-			array( 'description' => __( 'Display posts as widget items', 'dpe-fp-widget' ) ) // Args
+			array( 'description' => __( 'Display posts as widget items', 'flexible-posts-widget' ) ) // Args
 		);
 		
 		$this->directory	= plugins_url( '/', __FILE__ );
@@ -79,12 +79,12 @@ class DPE_Flexible_Posts_Widget extends WP_Widget {
 		// Enqueue admin scripts
 		if ( defined("WP_ADMIN") && WP_ADMIN ) {
 			if ( 'widgets.php' == $pagenow ) {
-				wp_enqueue_script( 'dpe-fp-widget' );
-				wp_enqueue_style( 'dpe-fp-widget' );
-				wp_localize_script( 'dpe-fp-widget', 'objectL10n', array(
-					'gettingTerms' => __( 'Getting terms...', 'dpe-fp-widget' ),
-					'selectTerms' => __( 'Select terms:', 'dpe-fp-widget' ),
-					'noTermsFound' => __( 'No terms found.', 'dpe-fp-widget' ),
+				wp_enqueue_script( 'flexible-posts-widget' );
+				wp_enqueue_style( 'flexible-posts-widget' );
+				wp_localize_script( 'flexible-posts-widget', 'objectL10n', array(
+					'gettingTerms' => __( 'Getting terms...', 'flexible-posts-widget' ),
+					'selectTerms' => __( 'Select terms:', 'flexible-posts-widget' ),
+					'noTermsFound' => __( 'No terms found.', 'flexible-posts-widget' ),
 				) );
 			}
 		}
@@ -158,18 +158,18 @@ class DPE_Flexible_Posts_Widget extends WP_Widget {
 		$this->taxonomies	= get_taxonomies( array('public' => true ), 'objects' );
 		$this->thumbsizes	= get_intermediate_image_sizes();
 		$this->orderbys		= array(
-			'date'		 	=> __('Publish Date', 'dpe-fp-widget'),
-			'title'			=> __('Title', 'dpe-fp-widget'),
-			'menu_order'	=> __('Menu Order', 'dpe-fp-widget'),
-			'ID'			=> __('Post ID', 'dpe-fp-widget'),
-			'author'		=> __('Author', 'dpe-fp-widget'),
-			'name'	 		=> __('Post Slug', 'dpe-fp-widget'),
-			'comment_count'	=> __('Comment Count', 'dpe-fp-widget'),
-			'rand'			=> __('Random', 'dpe-fp-widget'),
+			'date'		 	=> __('Publish Date', 'flexible-posts-widget'),
+			'title'			=> __('Title', 'flexible-posts-widget'),
+			'menu_order'	=> __('Menu Order', 'flexible-posts-widget'),
+			'ID'			=> __('Post ID', 'flexible-posts-widget'),
+			'author'		=> __('Author', 'flexible-posts-widget'),
+			'name'	 		=> __('Post Slug', 'flexible-posts-widget'),
+			'comment_count'	=> __('Comment Count', 'flexible-posts-widget'),
+			'rand'			=> __('Random', 'flexible-posts-widget'),
 		);
 		$this->orders		= array(
-			'ASC'	=> __('Ascending', 'dpe-fp-widget'),
-			'DESC'	=> __('Descending', 'dpe-fp-widget'),
+			'ASC'	=> __('Ascending', 'flexible-posts-widget'),
+			'DESC'	=> __('Descending', 'flexible-posts-widget'),
 		);
 		
 		$pt_names		= get_post_types( array('public' => true ), 'names' );
@@ -236,18 +236,18 @@ class DPE_Flexible_Posts_Widget extends WP_Widget {
 		$this->taxonomies	= get_taxonomies( array('public' => true ), 'objects' );
 		$this->thumbsizes	= get_intermediate_image_sizes();
 		$this->orderbys		= array(
-			'date'		 	=> __('Publish Date', 'dpe-fp-widget'),
-			'title'			=> __('Title', 'dpe-fp-widget'),
-			'menu_order'	=> __('Menu Order', 'dpe-fp-widget'),
-			'ID'			=> __('Post ID', 'dpe-fp-widget'),
-			'author'		=> __('Author', 'dpe-fp-widget'),
-			'name'	 		=> __('Post Slug', 'dpe-fp-widget'),
-			'comment_count'	=> __('Comment Count', 'dpe-fp-widget'),
-			'rand'			=> __('Random', 'dpe-fp-widget'),
+			'date'		 	=> __('Publish Date', 'flexible-posts-widget'),
+			'title'			=> __('Title', 'flexible-posts-widget'),
+			'menu_order'	=> __('Menu Order', 'flexible-posts-widget'),
+			'ID'			=> __('Post ID', 'flexible-posts-widget'),
+			'author'		=> __('Author', 'flexible-posts-widget'),
+			'name'	 		=> __('Post Slug', 'flexible-posts-widget'),
+			'comment_count'	=> __('Comment Count', 'flexible-posts-widget'),
+			'rand'			=> __('Random', 'flexible-posts-widget'),
 		);
 		$this->orders		= array(
-			'ASC'	=> __('Ascending', 'dpe-fp-widget'),
-			'DESC'	=> __('Descending', 'dpe-fp-widget'),
+			'ASC'	=> __('Ascending', 'flexible-posts-widget'),
+			'DESC'	=> __('Descending', 'flexible-posts-widget'),
 		);
 		
 		$instance = wp_parse_args( (array) $instance, array(
@@ -305,8 +305,8 @@ class DPE_Flexible_Posts_Widget extends WP_Widget {
 	 * Register styles & scripts
 	 */
 	public function register_sns( $dir ) {
-		wp_register_script( 'dpe-fp-widget', $dir . 'js/admin.js', array('jquery', 'jquery-ui-tabs' ), DPE_FP_Version, true );
-		wp_register_style( 'dpe-fp-widget', $dir . 'css/admin.css', array(), DPE_FP_Version );
+		wp_register_script( 'flexible-posts-widget', $dir . 'js/admin.js', array('jquery', 'jquery-ui-tabs' ), DPE_FP_Version, true );
+		wp_register_style( 'flexible-posts-widget', $dir . 'css/admin.css', array(), DPE_FP_Version );
 	}
 	
 	/**
@@ -338,7 +338,7 @@ class DPE_Flexible_Posts_Widget extends WP_Widget {
 		$terms = get_terms( $taxonomy, $args );
 		
 		if( empty($terms) ) { 
-			$output = '<p>' . __( 'No terms found.', 'dpe-fp-widget' ) . '</p>';
+			$output = '<p>' . __( 'No terms found.', 'flexible-posts-widget' ) . '</p>';
 		} else {
 			$output = '<ul class="categorychecklist termschecklist form-no-clear">';
 			foreach ( $terms as $option ) {
