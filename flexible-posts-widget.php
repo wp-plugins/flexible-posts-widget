@@ -4,7 +4,7 @@ Plugin Name: Flexible Posts Widget
 Plugin URI: http://wordpress.org/extend/plugins/flexible-posts-widget/
 Author: dpe415
 Author URI: http://dpedesign.com
-Version: 3.0.2
+Version: 3.1
 Description: An advanced posts display widget with many options: get posts by post type, taxonomy & term; sorting & ordering; feature images; custom templates and more.
 License: GPL2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -24,23 +24,29 @@ License URI: http://www.gnu.org/licenses/gpl-2.0.html
     You should have received a copy of the GNU General Public License
     along with this program; if not, write to the Free Software
     Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-*/
-
-/* Plugin internationalization */
-function dpe_flexible_posts_widget_init() {
-	load_plugin_textdomain( 'flexible-posts-widget', false, dirname( plugin_basename( __FILE__ ) ) . '/languages/' );
-}
-add_action('plugins_loaded', 'dpe_flexible_posts_widget_init');  
+*/ 
 
 // Block direct requests
 if( !defined('ABSPATH') )
 	die('-1');
-	
+
+// Define our version number
 if( !defined('DPE_FP_Version') )
-	define( 'DPE_FP_Version', '3.0.2' );
+	define( 'DPE_FP_Version', '3.1' );
+
+/**
+ * Plugin Initialization
+ * Used for internationalization only at this point
+ */
+function dpe_flexible_posts_widget_init() {
+	load_plugin_textdomain( 'dpe-fp-widget', false, dirname( plugin_basename( __FILE__ ) ) . '/languages/' );
+}
+add_action('plugins_loaded', 'dpe_flexible_posts_widget_init'); 
 
 
-// Load the widget on widgets_init
+/**
+ * Initialize the widget on widgets_init
+ */
 function dpe_load_flexible_posts_widget() {
 	register_widget('DPE_Flexible_Posts_Widget');
 }
@@ -62,7 +68,7 @@ class DPE_Flexible_Posts_Widget extends WP_Widget {
 		parent::__construct(
 	 		'dpe_fp_widget', // Base ID
 			'Flexible Posts Widget', // Name
-			array( 'description' => __( 'Display posts as widget items', 'flexible-posts-widget' ) ) // Args
+			array( 'description' => __( 'Display posts as widget items', 'dpe-fp-widget' ) ) // Args
 		);
 		
 		$this->directory	= plugins_url( '/', __FILE__ );
@@ -75,6 +81,11 @@ class DPE_Flexible_Posts_Widget extends WP_Widget {
 			if ( 'widgets.php' == $pagenow ) {
 				wp_enqueue_script( 'dpe-fp-widget' );
 				wp_enqueue_style( 'dpe-fp-widget' );
+				wp_localize_script( 'dpe-fp-widget', 'objectL10n', array(
+					'gettingTerms' => __( 'Getting terms...', 'dpe-fp-widget' ),
+					'selectTerms' => __( 'Select terms:', 'dpe-fp-widget' ),
+					'noTermsFound' => __( 'No terms found.', 'dpe-fp-widget' ),
+				) );
 			}
 		}
 		
@@ -147,18 +158,18 @@ class DPE_Flexible_Posts_Widget extends WP_Widget {
 		$this->taxonomies	= get_taxonomies( array('public' => true ), 'objects' );
 		$this->thumbsizes	= get_intermediate_image_sizes();
 		$this->orderbys		= array(
-			'date'		 	=> __('Publish Date', 'flexible-posts-widget'),
-			'title'			=> __('Title', 'flexible-posts-widget'),
-			'menu_order'	=> __('Menu Order', 'flexible-posts-widget'),
-			'ID'			=> __('Post ID', 'flexible-posts-widget'),
-			'author'		=> __('Author', 'flexible-posts-widget'),
-			'name'	 		=> __('Post Slug', 'flexible-posts-widget'),
-			'comment_count'	=> __('Comment Count', 'flexible-posts-widget'),
-			'rand'			=> __('Random', 'flexible-posts-widget'),
+			'date'		 	=> __('Publish Date', 'dpe-fp-widget'),
+			'title'			=> __('Title', 'dpe-fp-widget'),
+			'menu_order'	=> __('Menu Order', 'dpe-fp-widget'),
+			'ID'			=> __('Post ID', 'dpe-fp-widget'),
+			'author'		=> __('Author', 'dpe-fp-widget'),
+			'name'	 		=> __('Post Slug', 'dpe-fp-widget'),
+			'comment_count'	=> __('Comment Count', 'dpe-fp-widget'),
+			'rand'			=> __('Random', 'dpe-fp-widget'),
 		);
 		$this->orders		= array(
-			'ASC'	=> __('Ascending', 'flexible-posts-widget'),
-			'DESC'	=> __('Descending', 'flexible-posts-widget'),
+			'ASC'	=> __('Ascending', 'dpe-fp-widget'),
+			'DESC'	=> __('Descending', 'dpe-fp-widget'),
 		);
 		
 		$pt_names		= get_post_types( array('public' => true ), 'names' );
@@ -225,18 +236,18 @@ class DPE_Flexible_Posts_Widget extends WP_Widget {
 		$this->taxonomies	= get_taxonomies( array('public' => true ), 'objects' );
 		$this->thumbsizes	= get_intermediate_image_sizes();
 		$this->orderbys		= array(
-			'date'		 	=> __('Publish Date', 'flexible-posts-widget'),
-			'title'			=> __('Title', 'flexible-posts-widget'),
-			'menu_order'	=> __('Menu Order', 'flexible-posts-widget'),
-			'ID'			=> __('Post ID', 'flexible-posts-widget'),
-			'author'		=> __('Author', 'flexible-posts-widget'),
-			'name'	 		=> __('Post Slug', 'flexible-posts-widget'),
-			'comment_count'	=> __('Comment Count', 'flexible-posts-widget'),
-			'rand'			=> __('Random', 'flexible-posts-widget'),
+			'date'		 	=> __('Publish Date', 'dpe-fp-widget'),
+			'title'			=> __('Title', 'dpe-fp-widget'),
+			'menu_order'	=> __('Menu Order', 'dpe-fp-widget'),
+			'ID'			=> __('Post ID', 'dpe-fp-widget'),
+			'author'		=> __('Author', 'dpe-fp-widget'),
+			'name'	 		=> __('Post Slug', 'dpe-fp-widget'),
+			'comment_count'	=> __('Comment Count', 'dpe-fp-widget'),
+			'rand'			=> __('Random', 'dpe-fp-widget'),
 		);
 		$this->orders		= array(
-			'ASC'	=> __('Ascending', 'flexible-posts-widget'),
-			'DESC'	=> __('Descending', 'flexible-posts-widget'),
+			'ASC'	=> __('Ascending', 'dpe-fp-widget'),
+			'DESC'	=> __('Descending', 'dpe-fp-widget'),
 		);
 		
 		$instance = wp_parse_args( (array) $instance, array(
@@ -327,7 +338,7 @@ class DPE_Flexible_Posts_Widget extends WP_Widget {
 		$terms = get_terms( $taxonomy, $args );
 		
 		if( empty($terms) ) { 
-			$output = '<p>No terms found.</p>';
+			$output = '<p>' . __( 'No terms found.', 'dpe-fp-widget' ) . '</p>';
 		} else {
 			$output = '<ul class="categorychecklist termschecklist form-no-clear">';
 			foreach ( $terms as $option ) {

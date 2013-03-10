@@ -29,6 +29,7 @@ Version 3.0 is a major enhancement as widgets can now get posts by *BOTH* post t
 * Each widget's output can be customized by user-defined templates added to the current theme folder.
 
 == Supported Languages =
+
 * English
 * Spanish
 

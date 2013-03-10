@@ -62,7 +62,8 @@ jQuery('#widgets-right').on("change", 'select.dpe-fp-taxonomy', function(event) 
 	// If we're not ignoring Taxonomy & Term...
 	if( jQuery(this).val() != 'none' ) {
 		
-		terms_label.html('Getting terms...').show();
+		
+		terms_label.html(objectL10n.gettingTerms).show();
 		
 		var selected_terms = [];
 		terms_div.find("input:checked").each(function () {
@@ -77,10 +78,10 @@ jQuery('#widgets-right').on("change", 'select.dpe-fp-taxonomy', function(event) 
 		
 		jQuery.post(ajaxurl, data, function(response) {
 			terms_div.html(response);
-			terms_label.html('Select terms:').show();
+			terms_label.html(objectL10n.selectTerms).show();
 			terms_div.slideDown();
 		}).error( function() {
-			terms_label.html('No terms found.').show();		
+			terms_label.html(objectL10n.noTermsFound).show();		
 		});
 	
 	} else {
