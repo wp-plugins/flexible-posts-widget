@@ -23,6 +23,9 @@ if( $flexible_posts->have_posts() ):
 						// If the post has a feature image, show it
 						if( has_post_thumbnail() ) {
 							the_post_thumbnail( $thumbsize );
+						// Else if the post has a mime type that starts with "image/" then show the image directly.
+						} elseif( 'image/' == substr( $post->post_mime_type, 0, 6 ) ) {
+							echo wp_get_attachment_image( $post->ID, $thumbsize );
 						}
 					}
 				?>
