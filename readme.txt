@@ -93,8 +93,8 @@ FPW comes with a default template for the widget output. If you would like to al
 Edit the new file in your theme to your desired HTML layout. Please do not edit the one in the plugin folder as that will cause conflicts when you update the plugin to the latest release.
 
 = Future updates & feature requests list =
-* Dynamically populate the "Template Filename" field based on the templates available.
 * Add a CSS class field to be applied to each widget in a (non-existant) Advanced section.
+* Dynamically populate the "Template Filename" field based on the templates available.
 * Add filters & hooks for other plugins.
 * Add shortcode functionality.
 * Allow shortcode output to dynamically load more posts (AJAX-ified).
@@ -104,6 +104,7 @@ Edit the new file in your theme to your desired HTML layout. Please do not edit 
 
 = 3.1 =
 * Internationalized and added Spanish. (Props: @elarequi)
+* Added support for Media post types with "image/" mime types to be displayed directly in the default template.
 
 = 3.0.2 =
 * Bug fix: Added a check to make sure both taxonomy & term are set for tax queries.
