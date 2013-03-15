@@ -4,7 +4,7 @@ Plugin Name: Flexible Posts Widget
 Plugin URI: http://wordpress.org/extend/plugins/flexible-posts-widget/
 Author: dpe415
 Author URI: http://dpedesign.com
-Version: 3.1
+Version: 3.1.1
 Description: An advanced posts display widget with many options: get posts by post type, taxonomy & term; sorting & ordering; feature images; custom templates and more.
 License: GPL2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -32,7 +32,7 @@ if( !defined('ABSPATH') )
 
 // Define our version number
 if( !defined('DPE_FP_Version') )
-	define( 'DPE_FP_Version', '3.1' );
+	define( 'DPE_FP_Version', '3.1.1' );
 
 /**
  * Plugin Initialization
@@ -276,7 +276,7 @@ class DPE_Flexible_Posts_Widget extends WP_Widget {
 	 * 2) parent template, 3) plugin resources. will look in the flexible-posts-widget/
 	 * directory in a theme and the views/ directory in the plugin
 	 *
-	 * Function generously borrowed from the amazing image-widget
+	 * Based on a function in the amazing image-widget
 	 * by Matt Wiebe at Modern Tribe, Inc.
 	 * http://wordpress.org/extend/plugins/image-widget/
 	 * 
@@ -286,7 +286,7 @@ class DPE_Flexible_Posts_Widget extends WP_Widget {
 	public function getTemplateHierarchy( $template ) {
 		
 		// whether or not .php was added
-		$template_slug = rtrim( $template, '.php' );
+		$template_slug = preg_replace( '/.php$/', '', $template );
 		$template = $template_slug . '.php';
 
 		if ( $theme_file = locate_template( array( 'flexible-posts-widget/' . $template ) ) ) {
