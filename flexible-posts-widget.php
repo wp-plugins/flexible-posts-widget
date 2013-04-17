@@ -4,8 +4,8 @@ Plugin Name: Flexible Posts Widget
 Plugin URI: http://wordpress.org/extend/plugins/flexible-posts-widget/
 Author: dpe415
 Author URI: http://dpedesign.com
-Version: 3.1.1
-Description: An advanced posts display widget with many options: get posts by post type, taxonomy & term; sorting & ordering; feature images; custom templates and more.
+Version: 3.2
+Description: An advanced posts display widget with many options: get posts by post type, taxonomy & term, post IDs; sorting & ordering; feature images; custom templates and more.
 License: GPL2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 */
@@ -32,7 +32,7 @@ if( !defined('ABSPATH') )
 
 // Define our version number
 if( !defined('DPE_FP_Version') )
-	define( 'DPE_FP_Version', '3.1.1' );
+	define( 'DPE_FP_Version', '3.2' );
 
 /**
  * Plugin Initialization
@@ -130,6 +130,11 @@ class DPE_Flexible_Posts_Widget extends WP_Widget {
 			);
 		}
 		
+		// Add post_id specific values as needed
+		if ( !empty( $pids ) ) {
+			$args['post__in'] = $pids;
+		}
+		
 		// Get the posts for this instance
 		$flexible_posts = new WP_Query( $args );
 		
@@ -205,11 +210,21 @@ class DPE_Flexible_Posts_Widget extends WP_Widget {
 			$terms = array();
 		}
 		
+		// Validate Post ID submissions 
+		$pids = array();
+		if( !empty( $new_instance['pids'] ) ) {
+			$pids_array = explode( ',', $new_instance['pids'] );
+			foreach ( $pids_array as $id ) {
+				$pids[] = absint( $id );
+			}
+		}
+		
 		$instance 				= $old_instance;
 		$instance['title']		= strip_tags( $new_instance['title'] );
 		$instance['posttype']	= $posttypes;
 		$instance['taxonomy']	= $taxonomy;
 		$instance['term']		= $terms;
+		$instance['pids']		= $pids;
 		$instance['number']		= (int)$new_instance['number'];
 		$instance['offset']		= (int)$new_instance['offset'];
 		$instance['orderby']	= ( array_key_exists( $new_instance['orderby'], $this->orderbys ) ? $new_instance['orderby'] : 'date' );
@@ -255,6 +270,7 @@ class DPE_Flexible_Posts_Widget extends WP_Widget {
 			'posttype'	=> array('post'),
 			'taxonomy'	=> 'none',
 			'term'		=> array(),
+			'pids'		=> '',
 			'number'	=> '3',
 			'offset'	=> '0',
 			'orderby'	=> 'date',

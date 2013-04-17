@@ -28,6 +28,7 @@ if ( !defined('ABSPATH') )
 				<ul id="<?php echo $this->get_field_id('getemby-tabs'); ?>" class="category-tabs">
 					<li><a href="#<?php echo $this->get_field_id('getemby-pt'); ?>"><?php _e('Post Type', 'flexible-posts-widget'); ?></a></li>
 					<li><a href="#<?php echo $this->get_field_id('getemby-tt'); ?>"><?php _e('Taxonomy &amp; Term', 'flexible-posts-widget'); ?></a></li>
+					<li><a href="#<?php echo $this->get_field_id('getemby-id'); ?>"><?php _e('ID', 'flexible-posts-widget'); ?></a></li>
 				</ul>
 				
 				<div id="<?php echo $this->get_field_id('getemby-pt'); ?>" class="tabs-panel pt">
@@ -72,6 +73,14 @@ if ( !defined('ABSPATH') )
 						?>
 					</div>
 				</div><!-- .tt.getemby -->
+				
+				<div id="<?php echo $this->get_field_id('getemby-id'); ?>" class="tabs-panel id" style="display:none;">
+					<p>	
+						<label for="<?php echo $this->get_field_id('pids'); ?>"><?php _e('Comma-separated list of post IDs:', 'flexible-posts-widget'); ?></label><br />
+						<input id="<?php echo $this->get_field_id('pids'); ?>" name="<?php echo $this->get_field_name('pids'); ?>" class="widefat" type="text" value="<?php echo ( empty( $pids ) ? '' : implode( ',', $pids ) ); ?>" /><br />
+						<span class="description"><?php _e( 'This field obeys values set on the Post Type and Taxonomy &amp; Term tabs.', 'flexible-posts-widget' ); ?> <a target="_blank" href="http://wordpress.org/extend/plugins/flexible-posts-widget/faq/"><?php _e('See documentation', 'flexible-posts-widget'); ?></a> <?php _e('for details.', 'flexible-posts-widget'); ?></span>
+					</p>
+				</div><!-- .id.getemby -->
 			
 			</div><!-- #<?php echo $this->get_field_id('getemby'); ?> -->
 			
@@ -83,11 +92,11 @@ if ( !defined('ABSPATH') )
 		<h4><?php _e('Display options', 'flexible-posts-widget'); ?></h4>
 		<p class="cf">
           <label for="<?php echo $this->get_field_id('number'); ?>"><?php _e('Number of posts to show:', 'flexible-posts-widget'); ?></label> 
-          <input id="<?php echo $this->get_field_id('number'); ?>" name="<?php echo $this->get_field_name('number'); ?>" type="text" value="<?php echo $number; ?>" />
+          <input id="<?php echo $this->get_field_id('number'); ?>" name="<?php echo $this->get_field_name('number'); ?>" type="text" value="<?php echo esc_attr( $number ); ?>" />
         </p>
 		<p class="cf">
-          <label for="<?php echo $this->get_field_id('offset'); ?>"><?php _e('Number of posts to skip:', 'flexible-posts-widget'); ?></label> 
-          <input id="<?php echo $this->get_field_id('offset'); ?>" name="<?php echo $this->get_field_name('offset'); ?>" type="text" value="<?php echo $offset; ?>" />
+          <label for="<?php echo $this->get_field_id('offset'); ?>"><?php _e('Number of posts to skip:', 'flexible-posts-widget'); ?></label>
+          <input id="<?php echo $this->get_field_id('offset'); ?>" name="<?php echo $this->get_field_name('offset'); ?>" type="text" value="<?php echo esc_attr( $offset ); ?>" />
         </p>
    		<p class="cf">
 			<label for="<?php echo $this->get_field_id('orderby'); ?>"><?php _e('Order posts by:', 'flexible-posts-widget'); ?></label> 
@@ -131,9 +140,9 @@ if ( !defined('ABSPATH') )
 	<div class="section template">
 		<p style="margin:1.33em 0;">
 			<label for="<?php echo $this->get_field_id('template'); ?>"><?php _e('Template filename:', 'flexible-posts-widget'); ?></label>
-			<input id="<?php echo $this->get_field_id('template'); ?>" name="<?php echo $this->get_field_name('template'); ?>" type="text" value="<?php echo $template; ?>" />
+			<input id="<?php echo $this->get_field_id('template'); ?>" name="<?php echo $this->get_field_name('template'); ?>" type="text" value="<?php echo esc_attr( $template ); ?>" />
 			<br />
-			<span style="padding-top:3px;" class="description"><a target="_blank" href="http://wordpress.org/extend/plugins/flexible-posts-widget/other_notes/"><?php _e('See documentation', 'flexible-posts-widget'); ?></a> <?php _e('for details.', 'flexible-posts-widget'); ?></span>
+			<span class="description"><a target="_blank" href="http://wordpress.org/extend/plugins/flexible-posts-widget/other_notes/"><?php _e('See documentation', 'flexible-posts-widget'); ?></a> <?php _e('for details.', 'flexible-posts-widget'); ?></span>
 		</p>
 	</div>
 	
