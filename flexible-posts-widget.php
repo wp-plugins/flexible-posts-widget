@@ -225,14 +225,14 @@ class DPE_Flexible_Posts_Widget extends WP_Widget {
 		$instance['taxonomy']	= $taxonomy;
 		$instance['term']		= $terms;
 		$instance['pids']		= $pids;
-		$instance['number']		= (int)$new_instance['number'];
-		$instance['offset']		= (int)$new_instance['offset'];
+		$instance['number']		= (int) $new_instance['number'];
+		$instance['offset']		= (int) $new_instance['offset'];
 		$instance['orderby']	= ( array_key_exists( $new_instance['orderby'], $this->orderbys ) ? $new_instance['orderby'] : 'date' );
 		$instance['order']		= ( array_key_exists( $new_instance['order'], $this->orders ) ? $new_instance['order'] : 'DESC' );
-		$instance['thumbnail']	= (bool)$new_instance['thumbnail'];
-		$instance['thumbsize']	= (in_array ( $new_instance['thumbsize'], $this->thumbsizes ) ? $new_instance['thumbsize'] : '' );
+		$instance['thumbnail']	= ( isset( $new_instance['thumbnail'] ) ? (int) $new_instance['thumbnail'] : '0' );
+		$instance['thumbsize']	= ( in_array ( $new_instance['thumbsize'], $this->thumbsizes ) ? $new_instance['thumbsize'] : '' );
 		$instance['template']	= strip_tags( $new_instance['template'] );
-		$instance['cur_tab']	= (int)( $new_instance['cur_tab'] );
+		$instance['cur_tab']	= (int) $new_instance['cur_tab'];
         
         return $instance;
       
@@ -275,7 +275,7 @@ class DPE_Flexible_Posts_Widget extends WP_Widget {
 			'offset'	=> '0',
 			'orderby'	=> 'date',
 			'order'		=> 'DESC',
-			'thumbnail' => false,
+			'thumbnail' => '0',
 			'thumbsize' => '',
 			'template'	=> 'widget.php',
 			'cur_tab'	=> '0',
