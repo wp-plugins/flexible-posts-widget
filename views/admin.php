@@ -58,7 +58,7 @@ if ( !defined('ABSPATH') )
 								$terms = get_terms( $taxonomy, $args );
 								
 								if( !empty( $terms ) ) {
-									$output .= '<ul class="categorychecklist termschecklist form-no-clear">';
+									$output = '<ul class="categorychecklist termschecklist form-no-clear">';
 									foreach ( $terms as $option ) {
 										$output .= "\n<li>" . '<label class="selectit"><input value="' . esc_attr( $option->slug ) . '" type="checkbox" name="' . $this->get_field_name('term') . '[]"' . checked( in_array( $option->slug, (array)$term ), true, false ) . ' /> ' . esc_html( $option->name ) . "</label></li>\n";
 									}
