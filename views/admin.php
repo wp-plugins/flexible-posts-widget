@@ -28,6 +28,7 @@ if ( !defined('ABSPATH') )
 				<ul id="<?php echo $this->get_field_id('getemby-tabs'); ?>" class="category-tabs">
 					<li><a href="#<?php echo $this->get_field_id('getemby-pt'); ?>"><?php _e('Post Type', 'flexible-posts-widget'); ?></a></li>
 					<li><a href="#<?php echo $this->get_field_id('getemby-tt'); ?>"><?php _e('Taxonomy &amp; Term', 'flexible-posts-widget'); ?></a></li>
+					<li><a href="#<?php echo $this->get_field_id('getemby-id'); ?>"><?php _e('ID', 'flexible-posts-widget'); ?></a></li>
 				</ul>
 				
 				<div id="<?php echo $this->get_field_id('getemby-pt'); ?>" class="tabs-panel pt">
@@ -72,6 +73,14 @@ if ( !defined('ABSPATH') )
 						?>
 					</div>
 				</div><!-- .tt.getemby -->
+				
+				<div id="<?php echo $this->get_field_id('getemby-id'); ?>" class="tabs-panel id" style="display:none;">
+					<p>	
+						<label for="<?php echo $this->get_field_id('pids'); ?>"><?php _e('Comma-separated list of post IDs:', 'flexible-posts-widget'); ?></label><br />
+						<input id="<?php echo $this->get_field_id('pids'); ?>" name="<?php echo $this->get_field_name('pids'); ?>" class="widefat" type="text" value="<?php echo ( empty( $pids ) ? '' : implode( ',', $pids ) ); ?>" /><br />
+						<span class="description"><?php _e( 'Overrides Post Type and Taxonomy &amp; Term settings.', 'flexible-posts-widget' ); ?></span>
+					</p>
+				</div><!-- .id.getemby -->
 			
 			</div><!-- #<?php echo $this->get_field_id('getemby'); ?> -->
 			
@@ -109,10 +118,14 @@ if ( !defined('ABSPATH') )
 				?>
 			</select>		
 		</p>
+		<p class="checkbox cf">
+          <input class="dpe-fp-sticky" id="<?php echo $this->get_field_id('sticky'); ?>" name="<?php echo $this->get_field_name('sticky'); ?>" type="checkbox" value="1" <?php checked( '1', $sticky ); ?>/>
+          <label for="<?php echo $this->get_field_id('sticky'); ?>"><?php _e('Ignore sticky posts?', 'flexible-posts-widget'); ?></label> 
+        </p>
 	</div>
 	
 	<div class="section thumbnails">
-		<p style="margin-top:1.33em;">
+		<p class="checkbox">
           <input class="dpe-fp-thumbnail" id="<?php echo $this->get_field_id('thumbnail'); ?>" name="<?php echo $this->get_field_name('thumbnail'); ?>" type="checkbox" value="1" <?php checked( '1', $thumbnail ); ?>/>
           <label style="font-weight:bold;" for="<?php echo $this->get_field_id('thumbnail'); ?>"><?php _e('Display thumbnails?', 'flexible-posts-widget'); ?></label> 
         </p>

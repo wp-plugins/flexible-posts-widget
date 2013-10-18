@@ -21,6 +21,7 @@
 .dpe-fp-widget .section.getemby	{padding-bottom:1.333em;}
 
 .dpe-fp-widget .tabs-panel.tt			{padding:1.333em 1em;}
+.dpe-fp-widget .tabs-panel.id			{padding:1.333em 1em 0;}
 .dpe-fp-widget .tabs-panel .terms		{max-height:110px; overflow:auto; border:1px solid #DFDFDF;}
 .dpe-fp-widget .tabs-panel .terms ul	{margin-left:1em;}
 .dpe-fp-widget .tabs-panel .terms p		{margin:1em;}
@@ -31,4 +32,9 @@
 .dpe-fp-widget .display input			{float:right; width:60px; text-align:right;}
 .dpe-fp-widget .display select			{float:right; width:120px;}
 
+.dpe-fp-widget .checkbox input			{width:auto;}
+.dpe-fp-widget .checkbox label			{padding-top:0;}
+
 .dpe-fp-widget .thumbnails label		{padding-top:0.4em;}
+
+.dpe-fp-widget .description	{display:inline-block; padding-top:5px; font-size:80%;}

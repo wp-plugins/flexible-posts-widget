@@ -4,8 +4,8 @@ Plugin Name: Flexible Posts Widget
 Plugin URI: http://wordpress.org/extend/plugins/flexible-posts-widget/
 Author: dpe415
 Author URI: http://dpedesign.com
-Version: 3.1.2
-Description: An advanced posts display widget with many options: get posts by post type, taxonomy & term; sorting & ordering; feature images; custom templates and more.
+Version: 3.2
+Description: An advanced posts display widget with many options: get posts by id, post type, taxonomy & term; sorting & ordering; feature images; custom templates and more.
 License: GPL2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 */
@@ -27,12 +27,12 @@ License URI: http://www.gnu.org/licenses/gpl-2.0.html
 */ 
 
 // Block direct requests
-if( !defined('ABSPATH') )
-	die('-1');
+if( ! defined( 'ABSPATH' ) )
+	die( '-1' );
 
 // Define our version number
-if( !defined('DPE_FP_Version') )
-	define( 'DPE_FP_Version', '3.1.2' );
+if( ! defined( 'DPE_FP_Version' ) )
+	define( 'DPE_FP_Version', '3.2' );
 
 /**
  * Plugin Initialization
@@ -48,7 +48,7 @@ add_action('plugins_loaded', 'dpe_flexible_posts_widget_init');
  * Initialize the widget on widgets_init
  */
 function dpe_load_flexible_posts_widget() {
-	register_widget('DPE_Flexible_Posts_Widget');
+	register_widget( 'DPE_Flexible_Posts_Widget' );
 }
 add_action('widgets_init', 'dpe_load_flexible_posts_widget' );
 
@@ -77,7 +77,7 @@ class DPE_Flexible_Posts_Widget extends WP_Widget {
 		$this->register_sns( $this->directory ); 	// Register styles & scripts
 		
 		// Enqueue admin scripts
-		if ( defined("WP_ADMIN") && WP_ADMIN ) {
+		if ( defined( 'WP_ADMIN' ) && WP_ADMIN ) {
 			if ( 'widgets.php' == $pagenow ) {
 				wp_enqueue_script( 'flexible-posts-widget' );
 				wp_enqueue_style( 'flexible-posts-widget' );
@@ -100,35 +100,57 @@ class DPE_Flexible_Posts_Widget extends WP_Widget {
 	 * @param array $args     Widget arguments.
 	 * @param array $instance Saved values from database.
 	 */
-    function widget($args, $instance) {	
+    function widget( $args, $instance ) {	
         extract( $args );
 		extract( $instance );
 				
 		$title = apply_filters( 'widget_title', empty( $title ) ? '' : $title );
 		
-		if ( empty($template) )
+		if ( empty( $template ) )
 			$template = 'widget.php';
 		
-		// Setup the query
-		$args = array(
-			'post_type'			=> $posttype,
-			'post_status'		=> array('publish', 'inherit'),
-			'posts_per_page'	=> $number,
-			'offset'			=> $offset,
-			'orderby'			=> $orderby,
-			'order'				=> $order,
-		);
 		
-		// Setup the tax & term query based on the user's selection
-		if ( $taxonomy != 'none' && !empty( $term ) ) {
-			$args['tax_query'] = array(
-				array(
-					'taxonomy' => $taxonomy,
-					'field' => 'slug',
-					'terms' => $term,
-				)
-			);
+		// Setup the query arguments array
+		$args = array();
+		
+		// Get posts by post_ids specifically (ignore post type & tax/term values).
+		if ( !empty( $pids ) ) {
+		
+			// Setup the query
+			$args['post__in']	= $pids;
+			$args['post_type']	= get_post_types( array( 'public' => true ) );
+		
+		
+		// Else get posts by post type and tax/term
+		} else { 
+		
+			// Setup the post types
+			$args['post_type'] = $posttype;
+			
+			// Setup the tax & term query based on the user's selection
+			if ( $taxonomy != 'none' && !empty( $term ) ) {
+				$args['tax_query'] = array(
+					array(
+						'taxonomy'	=> $taxonomy,
+						'field'		=> 'slug',
+						'terms'		=> $term,
+					)
+				);
+			}
+			
 		}
+		
+		// Finish the query
+		$args['post_status']			= array( 'publish', 'inherit' );
+		$args['posts_per_page']			= $number;
+		$args['offset']					= $offset;
+		$args['orderby']				= $orderby;
+		$args['order']					= $order;
+		$args['ignore_sticky_posts']	= $sticky;
+		
+		
+		// Allow filtering of the query arguments
+		$args = apply_filters( 'dpe_fpw_args', $args );
 		
 		// Get the posts for this instance
 		$flexible_posts = new WP_Query( $args );
@@ -154,26 +176,26 @@ class DPE_Flexible_Posts_Widget extends WP_Widget {
     function update( $new_instance, $old_instance ) {
 		
 		// Get our defaults to test against
-		$this->posttypes	= get_post_types( array('public' => true ), 'objects' );
-		$this->taxonomies	= get_taxonomies( array('public' => true ), 'objects' );
+		$this->posttypes	= get_post_types( array( 'public' => true ), 'objects' );
+		$this->taxonomies	= get_taxonomies( array( 'public' => true ), 'objects' );
 		$this->thumbsizes	= get_intermediate_image_sizes();
 		$this->orderbys		= array(
-			'date'		 	=> __('Publish Date', 'flexible-posts-widget'),
-			'title'			=> __('Title', 'flexible-posts-widget'),
-			'menu_order'	=> __('Menu Order', 'flexible-posts-widget'),
-			'ID'			=> __('Post ID', 'flexible-posts-widget'),
-			'author'		=> __('Author', 'flexible-posts-widget'),
-			'name'	 		=> __('Post Slug', 'flexible-posts-widget'),
-			'comment_count'	=> __('Comment Count', 'flexible-posts-widget'),
-			'rand'			=> __('Random', 'flexible-posts-widget'),
+			'date'		 	=> __( 'Publish Date', 'flexible-posts-widget' ),
+			'title'			=> __( 'Title', 'flexible-posts-widget' ),
+			'menu_order'	=> __( 'Menu Order', 'flexible-posts-widget' ),
+			'ID'			=> __( 'Post ID', 'flexible-posts-widget' ),
+			'author'		=> __( 'Author', 'flexible-posts-widget' ),
+			'name'	 		=> __( 'Post Slug', 'flexible-posts-widget' ),
+			'comment_count'	=> __( 'Comment Count', 'flexible-posts-widget' ),
+			'rand'			=> __( 'Random', 'flexible-posts-widget' ),
 		);
 		$this->orders		= array(
-			'ASC'	=> __('Ascending', 'flexible-posts-widget'),
-			'DESC'	=> __('Descending', 'flexible-posts-widget'),
+			'ASC'	=> __( 'Ascending', 'flexible-posts-widget' ),
+			'DESC'	=> __( 'Descending', 'flexible-posts-widget' ),
 		);
 		
-		$pt_names		= get_post_types( array('public' => true ), 'names' );
-		$tax_names		= get_taxonomies( array('public' => true ), 'names' );
+		$pt_names		= get_post_types( array( 'public' => true ), 'names' );
+		$tax_names		= get_taxonomies( array( 'public' => true ), 'names' );
 		$tax_names[]	= 'none';
 		
 		// Validate posttype submissions
@@ -182,7 +204,7 @@ class DPE_Flexible_Posts_Widget extends WP_Widget {
 			if( in_array( $pt, $pt_names ) )
 				$posttypes[] = $pt;
 		}
-		if( empty($posttypes) )
+		if( empty( $posttypes ) )
 			$posttypes[] = 'post';
 		
 		// Validate taxonomy & term submissions 
@@ -205,15 +227,26 @@ class DPE_Flexible_Posts_Widget extends WP_Widget {
 			$terms = array();
 		}
 		
+		// Validate Post ID submissions 
+		$pids = array();
+		if( !empty( $new_instance['pids'] ) ) {
+			$pids_array = explode( ',', $new_instance['pids'] );
+			foreach ( $pids_array as $id ) {
+				$pids[] = absint( $id );
+			}
+		}
+		
 		$instance 				= $old_instance;
 		$instance['title']		= strip_tags( $new_instance['title'] );
 		$instance['posttype']	= $posttypes;
 		$instance['taxonomy']	= $taxonomy;
 		$instance['term']		= $terms;
+		$instance['pids']		= $pids;
 		$instance['number']		= (int) $new_instance['number'];
 		$instance['offset']		= (int) $new_instance['offset'];
 		$instance['orderby']	= ( array_key_exists( $new_instance['orderby'], $this->orderbys ) ? $new_instance['orderby'] : 'date' );
 		$instance['order']		= ( array_key_exists( $new_instance['order'], $this->orders ) ? $new_instance['order'] : 'DESC' );
+		$instance['sticky']		= ( isset(  $new_instance['sticky'] ) ? (int) $new_instance['sticky'] : '0' );
 		$instance['thumbnail']	= ( isset(  $new_instance['thumbnail'] ) ? (int) $new_instance['thumbnail'] : '0' );
 		$instance['thumbsize']	= ( in_array ( $new_instance['thumbsize'], $this->thumbsizes ) ? $new_instance['thumbsize'] : '' );
 		$instance['template']	= strip_tags( $new_instance['template'] );
@@ -232,33 +265,35 @@ class DPE_Flexible_Posts_Widget extends WP_Widget {
 	 */
     function form( $instance ) {
     	
-   		$this->posttypes	= get_post_types( array('public' => true ), 'objects' );
-		$this->taxonomies	= get_taxonomies( array('public' => true ), 'objects' );
+   		$this->posttypes	= get_post_types( array( 'public' => true ), 'objects' );
+		$this->taxonomies	= get_taxonomies( array( 'public' => true ), 'objects' );
 		$this->thumbsizes	= get_intermediate_image_sizes();
 		$this->orderbys		= array(
-			'date'		 	=> __('Publish Date', 'flexible-posts-widget'),
-			'title'			=> __('Title', 'flexible-posts-widget'),
-			'menu_order'	=> __('Menu Order', 'flexible-posts-widget'),
-			'ID'			=> __('Post ID', 'flexible-posts-widget'),
-			'author'		=> __('Author', 'flexible-posts-widget'),
-			'name'	 		=> __('Post Slug', 'flexible-posts-widget'),
-			'comment_count'	=> __('Comment Count', 'flexible-posts-widget'),
-			'rand'			=> __('Random', 'flexible-posts-widget'),
+			'date'		 	=> __( 'Publish Date', 'flexible-posts-widget' ),
+			'title'			=> __( 'Title', 'flexible-posts-widget' ),
+			'menu_order'	=> __( 'Menu Order', 'flexible-posts-widget' ),
+			'ID'			=> __( 'Post ID', 'flexible-posts-widget' ),
+			'author'		=> __( 'Author', 'flexible-posts-widget' ),
+			'name'	 		=> __( 'Post Slug', 'flexible-posts-widget' ),
+			'comment_count'	=> __( 'Comment Count', 'flexible-posts-widget' ),
+			'rand'			=> __( 'Random', 'flexible-posts-widget' ),
 		);
 		$this->orders		= array(
-			'ASC'	=> __('Ascending', 'flexible-posts-widget'),
-			'DESC'	=> __('Descending', 'flexible-posts-widget'),
+			'ASC'	=> __( 'Ascending', 'flexible-posts-widget' ),
+			'DESC'	=> __( 'Descending', 'flexible-posts-widget' ),
 		);
 		
 		$instance = wp_parse_args( (array) $instance, array(
 			'title'		=> '',
-			'posttype'	=> array('post'),
+			'posttype'	=> array( 'post' ),
 			'taxonomy'	=> 'none',
 			'term'		=> array(),
+			'pids'		=> '',
 			'number'	=> '3',
 			'offset'	=> '0',
 			'orderby'	=> 'date',
 			'order'		=> 'DESC',
+			'sticky'	=> '0',
 			'thumbnail' => '0',
 			'thumbsize' => '',
 			'template'	=> 'widget.php',
@@ -295,9 +330,7 @@ class DPE_Flexible_Posts_Widget extends WP_Widget {
 			$file = 'views/' . $template;
 		}		
 		
-		//return apply_filters( 'dpe_template_flexible-posts_'.$template, $file); // - Maybe we'll add this in the future
-		
-		return $file;
+		return apply_filters( 'dpe_fpw_template_' . $template, $file );
 		
 	}
 	
@@ -323,10 +356,10 @@ class DPE_Flexible_Posts_Widget extends WP_Widget {
 
 		$taxonomy = esc_attr( $_POST['taxonomy'] );
 
-		if ( !isset( $term ) )
+		if ( ! isset( $term ) )
 			$term = esc_attr( $_POST['term'] );
 		
-		if ( empty($taxonomy) || 'none' == $taxonomy ) {
+		if ( empty( $taxonomy ) || 'none' == $taxonomy ) {
 			echo false;
 			die();
 		}
@@ -359,11 +392,11 @@ class DPE_Flexible_Posts_Widget extends WP_Widget {
 	public function posttype_checklist( $posttype ) {
 		
 		//Get pubic post type objects
-		$posttypes = get_post_types( array('public' => true ), 'objects' );
+		$posttypes = get_post_types( array( 'public' => true ), 'objects' );
 
 		$output = '<ul class="categorychecklist posttypechecklist form-no-clear">';
 		foreach ( $posttypes as $type ) {
-			$output .= "\n<li>" . '<label class="selectit"><input value="' . esc_attr( $type->name ) . '" type="checkbox" name="' . $this->get_field_name('posttype') . '[]"' . checked( in_array( $type->name, (array)$posttype ), true, false ) . ' /> ' . esc_html( $type->labels->name ) . "</label></li>\n";
+			$output .= "\n<li>" . '<label class="selectit"><input value="' . esc_attr( $type->name ) . '" type="checkbox" name="' . $this->get_field_name( 'posttype'  ) . '[]"' . checked( in_array( $type->name, (array)$posttype ), true, false ) . ' /> ' . esc_html( $type->labels->name ) . "</label></li>\n";
 		}
 		$output .= "</ul>\n";
 		
