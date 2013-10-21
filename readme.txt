@@ -29,6 +29,7 @@ Version 3.0 is a major enhancement as widgets can now get posts by *both* post t
 = Supported Languages =
 * English
 * Spanish
+* Polish
 
 
 == Installation ==
@@ -110,6 +111,7 @@ Edit the new file in your theme to your desired HTML layout. Please do not edit 
 = 3.2 =
 * Added option to ignore sticky posts.
 * Added support to get post by post ID directly.
+* Added Polish language support. (Props: @Invens)
 * Added a few filters: `dpe_fpw_args` to filter the query vars before submitting the query and `'dpe_fpw_template_' . [$template_name]` to filter the selected template.
 
 = 3.1.2 =
