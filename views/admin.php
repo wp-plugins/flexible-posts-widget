@@ -27,7 +27,7 @@ if ( !defined('ABSPATH') )
 				
 				<ul id="<?php echo $this->get_field_id('getemby-tabs'); ?>" class="category-tabs">
 					<li><a title="<?php _e('Post Type', 'flexible-posts-widget'); ?>" href="#<?php echo $this->get_field_id('getemby-pt'); ?>"><?php _e('Post Type', 'flexible-posts-widget'); ?></a></li>
-					<li><a title="<?php _e('Taxonomy &amp; Term', 'flexible-posts-widget'); ?>" href="#<?php echo $this->get_field_id('getemby-tt'); ?>"><?php _e('Tax &amp; Term', 'flexible-posts-widget'); ?></a></li>
+					<li><a title="<?php _e('Taxonomy &amp; Term', 'flexible-posts-widget'); ?>" href="#<?php echo $this->get_field_id('getemby-tt'); ?>"><?php _e('Taxonomy &amp; Term', 'flexible-posts-widget'); ?></a></li>
 					<li><a title="<?php _e('Post ID', 'flexible-posts-widget'); ?>" href="#<?php echo $this->get_field_id('getemby-id'); ?>"><?php _e('ID', 'flexible-posts-widget'); ?></a></li>
 				</ul>
 				
