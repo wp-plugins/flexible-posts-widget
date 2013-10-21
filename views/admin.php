@@ -26,9 +26,9 @@ if ( !defined('ABSPATH') )
 				<input id="<?php echo $this->get_field_id('cur_tab'); ?>" class="cur_tab" name="<?php echo $this->get_field_name('cur_tab'); ?>" type="hidden" value="<?php echo $cur_tab; ?>" />
 				
 				<ul id="<?php echo $this->get_field_id('getemby-tabs'); ?>" class="category-tabs">
-					<li><a href="#<?php echo $this->get_field_id('getemby-pt'); ?>"><?php _e('Post Type', 'flexible-posts-widget'); ?></a></li>
-					<li><a href="#<?php echo $this->get_field_id('getemby-tt'); ?>"><?php _e('Taxonomy &amp; Term', 'flexible-posts-widget'); ?></a></li>
-					<li><a href="#<?php echo $this->get_field_id('getemby-id'); ?>"><?php _e('ID', 'flexible-posts-widget'); ?></a></li>
+					<li><a title="<?php _e('Post Type', 'flexible-posts-widget'); ?>" href="#<?php echo $this->get_field_id('getemby-pt'); ?>"><?php _e('Post Type', 'flexible-posts-widget'); ?></a></li>
+					<li><a title="<?php _e('Taxonomy &amp; Term', 'flexible-posts-widget'); ?>" href="#<?php echo $this->get_field_id('getemby-tt'); ?>"><?php _e('Tax &amp; Term', 'flexible-posts-widget'); ?></a></li>
+					<li><a title="<?php _e('Post ID', 'flexible-posts-widget'); ?>" href="#<?php echo $this->get_field_id('getemby-id'); ?>"><?php _e('ID', 'flexible-posts-widget'); ?></a></li>
 				</ul>
 				
 				<div id="<?php echo $this->get_field_id('getemby-pt'); ?>" class="tabs-panel pt">
