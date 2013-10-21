@@ -146,7 +146,7 @@ if ( !defined('ABSPATH') )
 			<label for="<?php echo $this->get_field_id('template'); ?>"><?php _e('Template filename:', 'flexible-posts-widget'); ?></label>
 			<input id="<?php echo $this->get_field_id('template'); ?>" name="<?php echo $this->get_field_name('template'); ?>" type="text" value="<?php echo $template; ?>" />
 			<br />
-			<span style="padding-top:3px;" class="description"><a target="_blank" href="http://wordpress.org/extend/plugins/flexible-posts-widget/other_notes/"><?php _e('See documentation', 'flexible-posts-widget'); ?></a> <?php _e('for details.', 'flexible-posts-widget'); ?></span>
+			<span style="padding-top:3px;" class="description"><a target="_blank" href="http://wordpress.org/extend/plugins/flexible-posts-widget/other_notes/"><?php _e('See documentation for details.', 'flexible-posts-widget'); ?></a></span>
 		</p>
 	</div>
 	
