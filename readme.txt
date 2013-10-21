@@ -79,9 +79,10 @@ To get answers to your questions, request help or submit a bug report, please st
 
 
 == Screenshots ==
-1. Configuring a Flexible Posts Widget in wp-admin with the Post Type tab displayed.
-1. Configuring a Flexible Posts Widget in wp-admin with the Taxonomy & Term tab displayed.
-1. An example of posts displayed using WordPress's TwentyTwelve theme and the default Feature Image (post-thumbnail) size.  This demonstrates how the plugin looks out-of-the-box with no user-customized styling or output in a default theme.
+1. Configuring a FPW in wp-admin with the Post Type tab displayed.
+1. Configuring a FPW in wp-admin with the Taxonomy & Term tab displayed.
+1. Configuring a FPW in wp-admin with the ID tab displayed.
+1. An example FPW displayed using WordPress's TwentyTwelve theme and the default Feature Image (post-thumbnail) size.  This demonstrates how the plugin looks out-of-the-box with no user-customized styling or output in a default theme.
 1. In the Wild: FPW displaying a selection of featured beers (Post Type: Brew) over at http://canalparkbrewery.com.  This example uses slightly customized output and some theme-specific styles. 
 1. In the wild: FPW displaying a selection media attachments, with custom thumbnails.  This example uses highly customized HTML output and very theme-specific styles.
 1. In the wild: FPW displaying several posts over at http://chnl7700.mnsu.edu.  Also highly customized output and theme styles.
