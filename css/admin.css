@@ -32,6 +32,7 @@
 .dpe-fp-widget .display input			{float:right; width:60px; text-align:right;}
 .dpe-fp-widget .display select			{float:right; width:120px;}
 
-.dpe-fp-widget .thumbnails label		{padding-top:0.4em;}
+.dpe-fp-widget .check input			{float:none; width:auto;}
+.dpe-fp-widget .check label			{float:none; padding-top:0.2em;}
 
-.dpe-fp-widget .description	{display:inline-block; padding-top:3px;}
+.dpe-fp-widget .description	{display:inline-block; padding-top:5px; font-size:80%;}
