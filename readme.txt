@@ -3,7 +3,7 @@ Contributors: dpe415
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=DJKSKHJWYAWDU
 Tags: widget, widgets, posts, categories, tags, recent posts, thumbnails, custom post types, custom taxonomies, feature image
 Requires at least: 3.2
-Tested up to: 3.7
+Tested up to: 3.5.1
 Stable tag: 3.1.2
 License: GPL2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -15,11 +15,11 @@ The default Recent Posts widget is exceptionally basic. I always find myself in 
 
 Flexible Posts Widget (FPW) is more than just a simple alternative to the default Recent Posts widget.  With many per-instance options it is highly customizable and allows advanced users to display the resulting posts virtually any way imaginable. 
 
-Version 3.0 is a major enhancement as widgets can now get posts by *both* post type and/or taxonomy & term as well as select *multiple* post types and terms.  Previous versions of the plugin only allowed post type *or* taxonomy & term queries, not both.
+Version 3.0 is a major enhancement as widgets can now get posts by *BOTH* post type and/or taxonomy & term as well as select *multiple* post types and terms.  Previous versions of the plugin only allowed post type OR taxonomy & term queries, not both.
 
 = Features & options =
 * Customizable widget title
-* Get posts by post type(s) and/or taxonomy & term(s) or directly by a list of post IDs.
+* Get posts via post type(s) and/or taxonomy & term(s).
 * Control the number of posts displayed and the number of posts to offset.
 * Option to display the post feature image.
 * Select the post feature image size to display from existing image sizes: thumbnail, medium, large, post-thumbnail or any size defined by the current theme.
@@ -45,19 +45,6 @@ Version 3.0 is a major enhancement as widgets can now get posts by *both* post t
 
 
 == Frequently Asked Questions ==
-
-= How does the "Comma-separated list of post IDs" work? =
-The third option (tab) available for getting posts is directly with a list of post IDs.  If there is a value in this field, any settings in the "Post Type" or "Taxonomy & Term" tabs will be ignored and all public post types will be queried for the specific post IDs provided.  All the other widget options (Display, Thumbnails and Template settings) will still be applied. 
-
-= How do I find a post's ID? =
-Per a [WordPress support thread](http://wordpress.org/support/topic/where-can-find-the-post-id):
-
-Go to Posts in your WordPress admin, and click the post you need the ID of. Then, if you look in the address bar of your browser, you'll see something like this:
-
-`http://example.com/wp-admin/post.php?post=1280&action=edit`
-
-The number, in this case 1280, is the post ID.
-
 = How can I display custom fields (custom meta values) with FPW? =
 You'll want to create a custom HTML template by following [the instructions](http://wordpress.org/extend/plugins/flexible-posts-widget/installation/ "View instructions for creating custom FPW templates") and then you can use the standard WordPress [Custom Field](http://codex.wordpress.org/Custom_Fields "View custom field functions on the WordPress Codex") functions the same way you would if you were editing your theme's other template files.
 
@@ -72,7 +59,7 @@ FPW intentionally does NOT add any styling of it's own.  To adjust the font size
 FPW does not add styles or scripts to your public theme.  The plugin is intentionally designed to work within your existing theme.  FPW does add one stylesheet and one JavaScript to the Widgets page in wp-admin to help with the administration of any FPWs in use.
 
 = Want to add support for another language? =
-I'd love to support more languages.  The plugin's POT file is available with the download.  Feel free to post PO & MO files for your language to a [new forum thread](http://wordpress.org/tags/flexible-posts-widget/) and I'll get them added to the plugin.
+I'd love to support more languages.  Feel free to post PO & MO files for your language to a [new forum thread](http://wordpress.org/tags/flexible-posts-widget/) and I'll get them added to the plugin.
 
 = Questions, Support & Bug Reports =
 To get answers to your questions, request help or submit a bug report, please start a [new forum thread](http://wordpress.org/tags/flexible-posts-widget/).
@@ -100,16 +87,14 @@ FPW comes with a default template for the widget output. If you would like to al
 Edit the new file in your theme to your desired HTML layout. Please do not edit the one in the plugin folder as that will cause conflicts when you update the plugin to the latest release.
 
 = Future updates & feature requests list =
+* Add a CSS class field to be applied to each widget in a (non-existant) Advanced section.
 * Dynamically populate the "Template Filename" field based on the templates available.
+* Add filters & hooks for other plugins.
 * Add shortcode functionality.
+* Allow shortcode output to dynamically load more posts (AJAX-ified).
 
 
 == Changelog ==
-
-= 3.2 =
-* Added option to ignore sticky posts.
-* Added support to get post by post ID directly.
-* Added a few filters: `dpe_fpw_args` to filter the query vars before submitting the query and `'dpe_fpw_template_' . [$template_name]` to filter the selected template.
 
 = 3.1.2 =
 * Fixed several pesky PHP notices. (Props: @eeb1)
