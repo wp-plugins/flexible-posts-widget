@@ -2,10 +2,11 @@
 /*
 Plugin Name: Flexible Posts Widget
 Plugin URI: http://wordpress.org/extend/plugins/flexible-posts-widget/
+Version: 3.2
 Author: dpe415
 Author URI: http://dpedesign.com
-Version: 3.2
-Description: An advanced posts display widget with many options: get posts by id, post type, taxonomy & term; sorting & ordering; feature images; custom templates and more.
+Text Domain: flexible-posts-widget
+Description: An advanced posts display widget with many options: get posts by post type and taxonomy & term or by post ID; sorting & ordering; feature images; custom templates and more.
 License: GPL2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 */

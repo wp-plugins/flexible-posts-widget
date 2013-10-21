@@ -78,7 +78,7 @@ if ( !defined('ABSPATH') )
 					<p>	
 						<label for="<?php echo $this->get_field_id('pids'); ?>"><?php _e('Comma-separated list of post IDs:', 'flexible-posts-widget'); ?></label><br />
 						<input id="<?php echo $this->get_field_id('pids'); ?>" name="<?php echo $this->get_field_name('pids'); ?>" class="widefat" type="text" value="<?php echo ( empty( $pids ) ? '' : implode( ',', $pids ) ); ?>" /><br />
-						<span class="description"><?php _e( 'Overrides Post Type and Taxonomy &amp; Term settings.', 'flexible-posts-widget' ); ?></span>
+						<span class="description"><?php _e( 'Will override settings on the Post Type and Taxonomy &amp; Term tabs.', 'flexible-posts-widget' ); ?> <a target="_blank" href="http://wordpress.org/extend/plugins/flexible-posts-widget/faq/"><?php _e('See documentation.', 'flexible-posts-widget'); ?></a></span>
 					</p>
 				</div><!-- .id.getemby -->
 			
@@ -90,6 +90,10 @@ if ( !defined('ABSPATH') )
 	
 	<div class="section display">
 		<h4><?php _e('Display options', 'flexible-posts-widget'); ?></h4>
+		<p class="check cf">
+          <input class="dpe-fp-sticky" id="<?php echo $this->get_field_id('sticky'); ?>" name="<?php echo $this->get_field_name('sticky'); ?>" type="checkbox" value="1" <?php checked( '1', $sticky ); ?>/>
+          <label for="<?php echo $this->get_field_id('sticky'); ?>"><?php _e('Ignore sticky posts?', 'flexible-posts-widget'); ?></label> 
+        </p>
 		<p class="cf">
           <label for="<?php echo $this->get_field_id('number'); ?>"><?php _e('Number of posts to show:', 'flexible-posts-widget'); ?></label> 
           <input id="<?php echo $this->get_field_id('number'); ?>" name="<?php echo $this->get_field_name('number'); ?>" type="text" value="<?php echo $number; ?>" />
@@ -118,14 +122,10 @@ if ( !defined('ABSPATH') )
 				?>
 			</select>		
 		</p>
-		<p class="checkbox cf">
-          <input class="dpe-fp-sticky" id="<?php echo $this->get_field_id('sticky'); ?>" name="<?php echo $this->get_field_name('sticky'); ?>" type="checkbox" value="1" <?php checked( '1', $sticky ); ?>/>
-          <label for="<?php echo $this->get_field_id('sticky'); ?>"><?php _e('Ignore sticky posts?', 'flexible-posts-widget'); ?></label> 
-        </p>
 	</div>
 	
 	<div class="section thumbnails">
-		<p class="checkbox">
+		<p class="check">
           <input class="dpe-fp-thumbnail" id="<?php echo $this->get_field_id('thumbnail'); ?>" name="<?php echo $this->get_field_name('thumbnail'); ?>" type="checkbox" value="1" <?php checked( '1', $thumbnail ); ?>/>
           <label style="font-weight:bold;" for="<?php echo $this->get_field_id('thumbnail'); ?>"><?php _e('Display thumbnails?', 'flexible-posts-widget'); ?></label> 
         </p>
