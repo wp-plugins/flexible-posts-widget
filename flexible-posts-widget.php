@@ -2,7 +2,7 @@
 /*
 Plugin Name: Flexible Posts Widget
 Plugin URI: http://wordpress.org/extend/plugins/flexible-posts-widget/
-Version: 3.2
+Version: 3.2.1
 Author: dpe415
 Author URI: http://dpedesign.com
 Text Domain: flexible-posts-widget

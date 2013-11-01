@@ -3,8 +3,8 @@ Contributors: dpe415
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=DJKSKHJWYAWDU
 Tags: widget, widgets, posts, categories, tags, recent posts, thumbnails, custom post types, custom taxonomies, feature image
 Requires at least: 3.2
-Tested up to: 3.7
-Stable tag: 3.2
+Tested up to: 3.7.1
+Stable tag: 3.2.1
 License: GPL2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -28,8 +28,9 @@ Version 3.0 is a major enhancement as widgets can now get posts by *both* post t
 
 = Supported Languages =
 * English
-* Spanish
+* Italian
 * Polish
+* Spanish
 
 
 == Installation ==
@@ -107,6 +108,10 @@ Edit the new file in your theme to your desired HTML layout. Please do not edit 
 
 
 == Changelog ==
+
+
+= 3.2.1 =
+* Added Italian language support. (Props: @adriano-esposito)
 
 = 3.2 =
 * Added option to ignore sticky posts.
