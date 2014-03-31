@@ -79,15 +79,13 @@ class DPE_Flexible_Posts_Widget extends WP_Widget {
 		
 		// Enqueue admin scripts
 		if ( defined( 'WP_ADMIN' ) && WP_ADMIN ) {
-			if ( 'widgets.php' == $pagenow ) {
-				wp_enqueue_script( 'flexible-posts-widget' );
-				wp_enqueue_style( 'flexible-posts-widget' );
-				wp_localize_script( 'flexible-posts-widget', 'objectL10n', array(
-					'gettingTerms' => __( 'Getting terms...', 'flexible-posts-widget' ),
-					'selectTerms' => __( 'Select terms:', 'flexible-posts-widget' ),
-					'noTermsFound' => __( 'No terms found.', 'flexible-posts-widget' ),
-				) );
-			}
+			wp_enqueue_script( 'flexible-posts-widget' );
+			wp_enqueue_style( 'flexible-posts-widget' );
+			wp_localize_script( 'flexible-posts-widget', 'objectL10n', array(
+				'gettingTerms' => __( 'Getting terms...', 'flexible-posts-widget' ),
+				'selectTerms' => __( 'Select terms:', 'flexible-posts-widget' ),
+				'noTermsFound' => __( 'No terms found.', 'flexible-posts-widget' ),
+			) );
 		}
 		
 	}
