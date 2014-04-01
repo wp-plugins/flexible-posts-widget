@@ -3,7 +3,7 @@
 **Donate link:** https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=DJKSKHJWYAWDU  
 **Tags:** widget, widgets, posts, categories, tags, recent posts, thumbnails, custom post types, custom taxonomies, feature image  
 **Requires at least:** 3.2  
-**Tested up to:** 3.8  
+**Tested up to:** 3.9  
 **Stable tag:** 3.2.2  
 **License:** GPL2 or later  
 **License URI:** http://www.gnu.org/licenses/gpl-2.0.html  
@@ -13,9 +13,7 @@ An advanced posts display widget with many options. Display posts in your sideba
 ## Description ##
 The default Recent Posts widget is exceptionally basic. I always find myself in need of a way to easily display a selection of posts from any combination post type or taxonomy. Hence, Flexible Post Widget.
 
-Flexible Posts Widget (FPW) is more than just a simple alternative to the default Recent Posts widget.  With many per-instance options it is highly customizable and allows advanced users to display the resulting posts virtually any way imaginable. 
-
-Version 3.0 is a major enhancement as widgets can now get posts by *both* post type and/or taxonomy & term as well as select *multiple* post types and terms.  Previous versions of the plugin only allowed post type *or* taxonomy & term queries, not both.
+Flexible Posts Widget (FPW) is more than just a simple alternative to the default Recent Posts widget.  With many per-instance options it is highly customizable and allows advanced users to display the resulting posts virtually any way imaginable.
 
 ### Features & options ###
 * Customizable widget title
@@ -23,13 +21,14 @@ Version 3.0 is a major enhancement as widgets can now get posts by *both* post t
 * Control the number of posts displayed and the number of posts to offset.
 * Option to display the post feature image.
 * Select the post feature image size to display from existing image sizes: thumbnail, medium, large, post-thumbnail or any size defined by the current theme.
-* Order posts by: date, ID, title, menu order, random; and sort posts: ascending or descending.
+* Order posts by: date, ID, title, menu order, random, Post ID Order; and sort posts: ascending or descending.
 * Each widget's output can be customized by user-defined templates added to the current theme folder.
 
 ### Supported Languages ###
 * English
 * Italian
 * Polish
+* Russian
 * Spanish
 
 
@@ -80,28 +79,6 @@ I'd love to support more languages.  The plugin's POT file is available with the
 To get answers to your questions, request help or submit a bug report, please start a [new forum thread](http://wordpress.org/tags/flexible-posts-widget/).
 
 
-## Screenshots ##
-###1. Configuring a FPW in wp-admin with the Post Type tab displayed.###
-[missing image]
-
-###2. Configuring a FPW in wp-admin with the Taxonomy & Term tab displayed.###
-[missing image]
-
-###3. Configuring a FPW in wp-admin with the ID tab displayed.###
-[missing image]
-
-###4. An example FPW displayed using WordPress's TwentyTwelve theme and the default Feature Image (post-thumbnail) size.  This demonstrates how the plugin looks out-of-the-box with no user-customized styling or output in a default theme.###
-[missing image]
-
-###5. In the Wild: FPW displaying a selection of featured beers (Post Type: Brew) over at http://canalparkbrewery.com.  This example uses slightly customized output and some theme-specific styles. ###
-[missing image]
-
-###6. In the wild: FPW displaying a selection media attachments, with custom thumbnails.  This example uses highly customized HTML output and very theme-specific styles.###
-[missing image]
-
-###7. In the wild: FPW displaying several posts over at http://chnl7700.mnsu.edu.  Also highly customized output and theme styles.###
-[missing image]
-
 
 ## Upgrade Notice ##
 When upgrading from one major version to another (version 1.x to version 2.x to version 3.x, etc), please remember to verify your settings for any existing widgets.  Not all settings combinations will be saved after a major release upgrade.
@@ -123,6 +100,13 @@ Edit the new file in your theme to your desired HTML layout. Please do not edit 
 
 ## Changelog ##
 
+### 3.3 ###
+* Refactored the PHP Class to encapsulate the plugin.
+* Added the ability to sort posts by "Post ID Order".  Useful when getting posts using the ID tab (`post__in`).
+* Added Russian translation. (Props: @mizhgun)
+
+### 3.2.2 ###
+* Version bump for WordPress 3.8 support
 
 ### 3.2.1 ###
 * Added Italian language support. (Props: @adriano-esposito)
