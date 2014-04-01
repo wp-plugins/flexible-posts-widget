@@ -5,7 +5,7 @@
  * URI: http://wordpress.org/extend/plugins/flexible-posts-widget/
  */
  
-/* global ajaxurl, objectL10n */
+/* global ajaxurl, fpwL10n */
 
 jQuery(function() {
 	
@@ -22,11 +22,11 @@ jQuery(function() {
 	jQuery('.dpe-fp-widget .getembytabs').tabs({
 		// Set the active tab to a widget option
 		activate: function() {
-			jQuery(this).find('.cur_tab').val( jQuery( this ).tabs( "option", "active" ) );
+			jQuery(this).find('.cur_tab').val( jQuery( this ).tabs( 'option', 'active' ) );
 		},
 		// retrieve the saved active tab and set it for the UI
 		create: function() {
-			jQuery( this ).tabs( "option", "active", jQuery(this).find('.cur_tab').val() );
+			jQuery( this ).tabs( 'option', 'active', jQuery(this).find('.cur_tab').val() );
 		}
 	});
 	
@@ -37,17 +37,17 @@ jQuery(document).ajaxComplete(function() {
 	jQuery('.dpe-fp-widget .getembytabs').tabs({
 		// Set the active tab to a widget option
 		activate: function() {
-			jQuery(this).find('.cur_tab').val( jQuery(this).tabs( "option", "active" ) );
+			jQuery(this).find('.cur_tab').val( jQuery(this).tabs( 'option', 'active' ) );
 		},
-		// retrieve the saved active tab and set it for the UIß
+		// retrieve the saved active tab and set it for the UI
 		create: function() {
-			jQuery(this).tabs( "option", "active", jQuery(this).find('.cur_tab').val() );
+			jQuery(this).tabs( 'option', 'active', jQuery(this).find('.cur_tab').val() );
 		}
 	});
 });
 
 // Add event triggers to the show/hide thumbnails box
-jQuery('.dpe-fp-widget').on("change", 'input.dpe-fp-thumbnail', function() {
+jQuery('#widgets-right').on('change', 'input.dpe-fp-thumbnail', function() {
 	if( this.checked ) {
 		jQuery(this).parent().next().slideDown('fast');
 	} else {
@@ -56,7 +56,7 @@ jQuery('.dpe-fp-widget').on("change", 'input.dpe-fp-thumbnail', function() {
 });
 
 // Setup the get_terms callback
-jQuery('.dpe-fp-widget').on("change", 'select.dpe-fp-taxonomy', function() {
+jQuery('#widgets-right').on('change', 'select.dpe-fp-taxonomy', function() {
 	
 	var terms_div		= jQuery(this).parent().nextAll('div.terms'),
 		terms_label		= jQuery(this).parent().next('label'),
@@ -65,9 +65,9 @@ jQuery('.dpe-fp-widget').on("change", 'select.dpe-fp-taxonomy', function() {
 	// If we're not ignoring Taxonomy & Term...
 	if( jQuery(this).val() !== 'none' ) {
 		
-		terms_label.html(objectL10n.gettingTerms).show();
+		terms_label.html(fpwL10n.gettingTerms).show();
 		
-		terms_div.find("input:checked").each(function () {
+		terms_div.find('input:checked').each(function () {
 			selected_terms.push( jQuery(this).val() );
 		});
 		
@@ -79,10 +79,10 @@ jQuery('.dpe-fp-widget').on("change", 'select.dpe-fp-taxonomy', function() {
 		
 		jQuery.post(ajaxurl, data, function(response) {
 			terms_div.html(response);
-			terms_label.html(objectL10n.selectTerms).show();
+			terms_label.html(fpwL10n.selectTerms).show();
 			terms_div.slideDown();
 		}).error( function() {
-			terms_label.html(objectL10n.noTermsFound).show();
+			terms_label.html(fpwL10n.noTermsFound).show();
 		});
 	
 	} else {
