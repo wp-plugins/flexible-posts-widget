@@ -1,12 +1,11 @@
 <?php
 /**
- * Flexible Posts Widget: Old Default widget template
+ * Flexible Posts Widget: Default widget template
  * 
- * @since 1.0.0
+ * @since 3.4.0
  *
- * This is the ORIGINAL default template used by the plugin.
- * There is a new default template (default.php) that will be 
- * used by default if no template was specified in a widget.
+ * This template was added to overcome some often-requested changes
+ * to the old default template (widget.php).
  */
 
 // Block direct requests
@@ -35,15 +34,11 @@ if( $flexible_posts->have_posts() ):
 						}
 					}
 				?>
-				<h4 class="title"><?php the_title(); ?></h4>
+				<div class="title"><?php the_title(); ?></div>
 			</a>
 		</li>
 	<?php endwhile; ?>
 	</ul><!-- .dpe-flexible-posts -->
-<?php else: // We have no posts ?>
-	<div class="dpe-flexible-posts no-posts">
-		<p><?php _e( 'No post found', 'flexible-posts-widget' ); ?></p>
-	</div>
 <?php	
 endif; // End have_posts()
 	
