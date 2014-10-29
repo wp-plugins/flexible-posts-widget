@@ -54,8 +54,18 @@ if ( ! defined( 'WPINC' ) ) {
 class DPE_Flexible_Posts_Widget extends WP_Widget {
 
     /**
-     * Unique identifier for your widget.
+     * Plugin version number
      *
+     * The variable name is used as a unique identifier for the widget
+     *
+     * @since    3.3.1
+     *
+     * @var      string
+     */
+    protected $plugin_version = '3.3.1';
+
+    /**
+     * Unique identifier for your widget.
      *
      * The variable name is used as a unique identifier for the widget
      *
@@ -68,7 +78,6 @@ class DPE_Flexible_Posts_Widget extends WP_Widget {
     /**
      * Unique identifier for your widget.
      *
-     *
      * The variable name is used as the text domain when internationalizing strings
      * of text. Its value should match the Text Domain file header in the main
      * widget file.
@@ -78,6 +87,20 @@ class DPE_Flexible_Posts_Widget extends WP_Widget {
      * @var      string
      */
     protected $widget_text_domain = 'flexible-posts-widget';
+    
+    /**
+	 * Setup a number of variables to hold our default values
+     *
+     * @since    3.3.1
+	 */
+	protected $posttypes  = '';
+	protected $pt_names   = '';
+	protected $taxonomies = '';
+	protected $tax_names  = '';
+	protected $thumbsizes = '';
+	protected $orderbys   = '';
+	protected $orders     = '';
+	protected $templates  = '';
 
 
 	/*--------------------------------------------------*/
@@ -89,10 +112,6 @@ class DPE_Flexible_Posts_Widget extends WP_Widget {
 	 * loads localization files, and includes necessary stylesheets and JavaScript.
 	 */
 	public function __construct() {
-	
-		// Define our version number
-		if( ! defined( 'DPE_FP_Version' ) )
-			define( 'DPE_FP_Version', '3.3' );
 		
 		// load plugin text domain
 		add_action( 'init', array( $this, 'widget_textdomain' ) );
@@ -106,6 +125,9 @@ class DPE_Flexible_Posts_Widget extends WP_Widget {
 				'description' => __( 'Display posts as widget items.', $this->get_widget_text_domain() ),
 			)
 		);
+		
+		// Setup the default variables after wp is loaded
+		add_action( 'wp_loaded', array( $this, 'setup_defaults' ) );
 
 		// Register admin styles and scripts
 		add_action( 'admin_enqueue_scripts', array( $this, 'register_admin_styles' ) );
@@ -137,6 +159,17 @@ class DPE_Flexible_Posts_Widget extends WP_Widget {
 	public function get_widget_text_domain() {
 		return $this->widget_text_domain;
 	}
+	
+	/**
+	 * Return the plugin version.
+	 *
+	 * @since    3.3.1
+	 *
+	 * @return    Plugin version variable.
+	 */
+	public function get_plugin_version() {
+		return $this->plugin_version;
+	}
 
 
 	/*--------------------------------------------------*/
@@ -159,18 +192,17 @@ class DPE_Flexible_Posts_Widget extends WP_Widget {
 		$title = apply_filters( 'widget_title', empty( $title ) ? '' : $title );
 		
 		if ( empty( $template ) )
-			$template = 'widget.php';
+			$template = 'default.php';
 		
 		// Setup the query arguments array
 		$args = array();
 		
 		// Get posts by post_ids specifically (ignore post type & tax/term values).
 		if ( !empty( $pids ) ) {
-		
+			
 			// Setup the query
 			$args['post__in']	= $pids;
-			$args['post_type']	= get_post_types( array( 'public' => true ) );
-		
+			$args['post_type']	= $this->posttypes;
 		
 		// Else get posts by post type and tax/term
 		} else { 
@@ -207,7 +239,7 @@ class DPE_Flexible_Posts_Widget extends WP_Widget {
 		$flexible_posts = new WP_Query( $args );
 		
 		// Get and include the template we're going to use
-		include( $this->getTemplateHierarchy( $template ) );
+		include( $this->get_template( $template ) );
 		
 		// Be sure to reset any post_data before proceeding
 		wp_reset_postdata();
@@ -226,41 +258,17 @@ class DPE_Flexible_Posts_Widget extends WP_Widget {
 	 */
 	public function update( $new_instance, $old_instance ) {
 		
-		// Get our defaults to test against
-		$this->posttypes	= get_post_types( array( 'public' => true ), 'objects' );
-		$this->taxonomies	= get_taxonomies( array( 'public' => true ), 'objects' );
-		$this->thumbsizes	= get_intermediate_image_sizes();
-		$this->orderbys		= array(
-			'date'		 	=> __( 'Publish Date', 'flexible-posts-widget' ),
-			'title'			=> __( 'Title', 'flexible-posts-widget' ),
-			'menu_order'	=> __( 'Menu Order', 'flexible-posts-widget' ),
-			'ID'			=> __( 'Post ID', 'flexible-posts-widget' ),
-			'author'		=> __( 'Author', 'flexible-posts-widget' ),
-			'name'	 		=> __( 'Post Slug', 'flexible-posts-widget' ),
-			'comment_count'	=> __( 'Comment Count', 'flexible-posts-widget' ),
-			'rand'			=> __( 'Random', 'flexible-posts-widget' ),
-			'post__in'		=> __( 'Post ID Order', 'flexible-posts-widget' ),
-		);
-		$this->orders		= array(
-			'ASC'	=> __( 'Ascending', 'flexible-posts-widget' ),
-			'DESC'	=> __( 'Descending', 'flexible-posts-widget' ),
-		);
-		
-		$pt_names		= get_post_types( array( 'public' => true ), 'names' );
-		$tax_names		= get_taxonomies( array( 'public' => true ), 'names' );
-		$tax_names[]	= 'none';
-		
 		// Validate posttype submissions
 		$posttypes = array();
 		foreach( $new_instance['posttype'] as $pt ) {
-			if( in_array( $pt, $pt_names ) )
+			if( in_array( $pt, $this->pt_names ) )
 				$posttypes[] = $pt;
 		}
 		if( empty( $posttypes ) )
 			$posttypes[] = 'post';
 		
 		// Validate taxonomy & term submissions 
-		if( in_array( $new_instance['taxonomy'], $tax_names ) ) {
+		if( in_array( $new_instance['taxonomy'], $this->tax_names ) ) {
 			$taxonomy	= $new_instance['taxonomy'];
 			$terms		= array();
 			if( 'none' != $taxonomy ) {
@@ -286,7 +294,7 @@ class DPE_Flexible_Posts_Widget extends WP_Widget {
 			foreach ( $pids_array as $id ) {
 				$pids[] = absint( $id );
 			}
-		}
+		}		
 		
 		$instance 				= $old_instance;
 		$instance['title']		= strip_tags( $new_instance['title'] );
@@ -301,7 +309,7 @@ class DPE_Flexible_Posts_Widget extends WP_Widget {
 		$instance['sticky']		= ( isset(  $new_instance['sticky'] ) ? (int) $new_instance['sticky'] : '0' );
 		$instance['thumbnail']	= ( isset(  $new_instance['thumbnail'] ) ? (int) $new_instance['thumbnail'] : '0' );
 		$instance['thumbsize']	= ( in_array ( $new_instance['thumbsize'], $this->thumbsizes ) ? $new_instance['thumbsize'] : '' );
-		$instance['template']	= strip_tags( $new_instance['template'] );
+		$instance['template']	= ( array_key_exists( $new_instance['template'], $this->templates ) ? $new_instance['template'] : 'default.php' );
 		$instance['cur_tab']	= (int) $new_instance['cur_tab'];
         
         return $instance;
@@ -317,25 +325,6 @@ class DPE_Flexible_Posts_Widget extends WP_Widget {
 	 */
 	public function form( $instance ) {
 		
-		$this->posttypes	= get_post_types( array( 'public' => true ), 'objects' );
-		$this->taxonomies	= get_taxonomies( array( 'public' => true ), 'objects' );
-		$this->thumbsizes	= get_intermediate_image_sizes();
-		$this->orderbys		= array(
-			'date'		 	=> __( 'Publish Date', 'flexible-posts-widget' ),
-			'title'			=> __( 'Title', 'flexible-posts-widget' ),
-			'menu_order'	=> __( 'Menu Order', 'flexible-posts-widget' ),
-			'ID'			=> __( 'Post ID', 'flexible-posts-widget' ),
-			'author'		=> __( 'Author', 'flexible-posts-widget' ),
-			'name'	 		=> __( 'Post Slug', 'flexible-posts-widget' ),
-			'comment_count'	=> __( 'Comment Count', 'flexible-posts-widget' ),
-			'rand'			=> __( 'Random', 'flexible-posts-widget' ),
-			'post__in'		=> __( 'Post ID Order', 'flexible-posts-widget' ),
-		);
-		$this->orders		= array(
-			'ASC'	=> __( 'Ascending', 'flexible-posts-widget' ),
-			'DESC'	=> __( 'Descending', 'flexible-posts-widget' ),
-		);
-		
 		$instance = wp_parse_args( (array) $instance, array(
 			'title'		=> '',
 			'posttype'	=> array( 'post' ),
@@ -349,20 +338,21 @@ class DPE_Flexible_Posts_Widget extends WP_Widget {
 			'sticky'	=> '0',
 			'thumbnail' => '0',
 			'thumbsize' => '',
-			'template'	=> 'widget.php',
+			'template'	=> 'default.php',
 			'cur_tab'	=> '0',
 		) );
 		
 		extract( $instance );
 		
-		include( $this->getTemplateHierarchy( 'admin' ) );
+		include( $this->get_template( 'admin' ) );
 		
 	}
 
 	/**
-	 * Loads theme files in appropriate hierarchy: 1) child theme,
-	 * 2) parent template, 3) plugin resources. will look in the flexible-posts-widget/
-	 * directory in a theme and the views/ directory in the plugin
+	 * Loads theme files in appropriate hierarchy:
+	 * 1. child theme 2. parent theme 3. plugin resources.
+	 * Will look in the flexible-posts-widget/ directory in a theme
+	 * and the views/ directory in the plugin
 	 *
 	 * Based on a function in the amazing image-widget
 	 * by Matt Wiebe at Modern Tribe, Inc.
@@ -371,17 +361,19 @@ class DPE_Flexible_Posts_Widget extends WP_Widget {
 	 * @param string $template template file to search for
 	 * @return template path
 	 **/
-	public function getTemplateHierarchy( $template ) {
+	public function get_template( $template ) {
 		
 		// whether or not .php was added
 		$template_slug = preg_replace( '/.php$/', '', $template );
 		$template = $template_slug . '.php';
+		
+		// Set to the default
+		$file = 'views/' . $template;
 
-		if ( $theme_file = locate_template( array( 'flexible-posts-widget/' . $template ) ) ) {
+		// Look for a custom version
+		if ( $theme_file = locate_template( array( $this->get_widget_text_domain() . '/' . $template ) ) ) {
 			$file = $theme_file;
-		} else {
-			$file = 'views/' . $template;
-		}		
+		}
 		
 		return apply_filters( 'dpe_fpw_template_' . $template, $file );
 		
@@ -395,9 +387,9 @@ class DPE_Flexible_Posts_Widget extends WP_Widget {
 	 * Loads the Widget's text domain for localization and translation.
 	 */
 	public function widget_textdomain() {
-
-		load_plugin_textdomain( $this->get_widget_slug(), false, plugin_dir_path( __FILE__ ) . 'languages/' );
-
+		
+		load_plugin_textdomain( $this->get_widget_text_domain(), false, dirname( plugin_basename( __FILE__ ) ) . '/languages/' );
+		
 	} // end widget_textdomain
 
 	/**
@@ -409,7 +401,7 @@ class DPE_Flexible_Posts_Widget extends WP_Widget {
 			$this->get_widget_slug() . '-admin',
 			plugins_url( 'css/admin.css', __FILE__ ),
 			array(),
-			DPE_FP_Version
+			$this->get_plugin_version()
 		);
 
 	} // end register_admin_styles
@@ -429,14 +421,14 @@ class DPE_Flexible_Posts_Widget extends WP_Widget {
 			$this->get_widget_slug() . '-admin',
 			plugins_url( $source, __FILE__ ),
 			array( 'jquery', 'jquery-ui-tabs' ),
-			DPE_FP_Version,
+			$this->get_plugin_version(),
 			true
 		);
 		
 		wp_localize_script( $this->get_widget_slug() . '-admin', 'fpwL10n', array(
-			'gettingTerms' => __( 'Getting terms...', 'flexible-posts-widget' ),
-			'selectTerms' => __( 'Select terms:', 'flexible-posts-widget' ),
-			'noTermsFound' => __( 'No terms found.', 'flexible-posts-widget' ),
+			'gettingTerms' => __( 'Getting terms...', $this->get_widget_text_domain() ),
+			'selectTerms' => __( 'Select terms:', $this->get_widget_text_domain() ),
+			'noTermsFound' => __( 'No terms found.', $this->get_widget_text_domain() ),
 		) );
 
 	} // end register_admin_scripts
@@ -464,7 +456,7 @@ class DPE_Flexible_Posts_Widget extends WP_Widget {
 		$terms = get_terms( $taxonomy, $args );
 		
 		if( empty($terms) ) { 
-			$output = '<p>' . __( 'No terms found.', 'flexible-posts-widget' ) . '</p>';
+			$output = '<p>' . __( 'No terms found.', $this->get_widget_text_domain() ) . '</p>';
 		} else {
 			$output = '<ul class="categorychecklist termschecklist form-no-clear">';
 			foreach ( $terms as $option ) {
@@ -483,18 +475,154 @@ class DPE_Flexible_Posts_Widget extends WP_Widget {
      * Return a list of post types via AJAX
      */
 	public function posttype_checklist( $posttype ) {
-		
-		//Get pubic post type objects
-		$posttypes = get_post_types( array( 'public' => true ), 'objects' );
 
 		$output = '<ul class="categorychecklist posttypechecklist form-no-clear">';
-		foreach ( $posttypes as $type ) {
+		foreach ( $this->posttypes as $type ) {
 			$output .= "\n<li>" . '<label class="selectit"><input value="' . esc_attr( $type->name ) . '" type="checkbox" name="' . $this->get_field_name( 'posttype'  ) . '[]"' . checked( in_array( $type->name, (array)$posttype ), true, false ) . ' /> ' . esc_html( $type->labels->name ) . "</label></li>\n";
 		}
 		$output .= "</ul>\n";
 		
 		echo ( $output );
 		
+	}
+	
+	/**
+     * Setup a number of default variables used throughout the plugin
+     *
+     * Since 3.3.1
+     *
+     */
+	public function setup_defaults() {
+		
+		// Get the registered post types
+		$this->posttypes = get_post_types( array( 'public' => true ), 'objects' );
+		$this->pt_names  = get_post_types( array( 'public' => true ), 'names' );
+		
+		// Get the registered taxonomies
+		$this->taxonomies  = get_taxonomies( array( 'public' => true ), 'objects' );
+		$this->tax_names   = get_taxonomies( array( 'public' => true ), 'names' );
+		$this->tax_names[] = 'none';
+		
+		// Get the registered image sizes
+		$this->thumbsizes = get_intermediate_image_sizes();
+		
+		// Set the options for orderby
+		$this->orderbys = array(
+			'date'		 	=> __( 'Publish Date', $this->get_widget_text_domain() ),
+			'title'			=> __( 'Title', $this->get_widget_text_domain() ),
+			'menu_order'	=> __( 'Menu Order', $this->get_widget_text_domain() ),
+			'ID'			=> __( 'Post ID', $this->get_widget_text_domain() ),
+			'author'		=> __( 'Author', $this->get_widget_text_domain() ),
+			'name'	 		=> __( 'Post Slug', $this->get_widget_text_domain() ),
+			'comment_count'	=> __( 'Comment Count', $this->get_widget_text_domain() ),
+			'rand'			=> __( 'Random', $this->get_widget_text_domain() ),
+			'post__in'		=> __( 'Post ID Order', $this->get_widget_text_domain() ),
+		);
+		
+		// Set the options for order
+		$this->orders = array(
+			'ASC'	=> __( 'Ascending', $this->get_widget_text_domain() ),
+			'DESC'	=> __( 'Descending', $this->get_widget_text_domain() ),
+		);
+		
+		// Set the available templates
+		$this->templates = wp_cache_get( 'templates', $this->widget_slug );
+		
+		if( false === $this->templates ) {
+			$this->templates = (array) $this->get_files( 'php', 0, true );
+			wp_cache_set( 'templates', $this->templates, $this->widget_slug );
+		}
+		
+		
+	}
+
+	/**
+	 * Return template files from the current theme, parent theme and the plugin views directory.
+	 *
+	 * @since 3.3.1
+	 * @access public
+	 *
+	 * Based on the function of the same name in wp-includes/class-wp-theme.php
+	 *
+	 * @param mixed $type Optional. Array of extensions to return. Defaults to all files (null).
+	 * @param int $depth Optional. How deep to search for files. Defaults to a flat scan (0 depth). -1 depth is infinite.
+	 * @param bool $search_parent Optional. Whether to return parent files. Defaults to false.
+	 * @return array Array of files, keyed by the path to the file relative to the theme's directory, with the values
+	 * 	being absolute paths.
+	 */
+	public function get_files( $type = null, $depth = 0, $search_parent = false ) {
+		
+		$files = array();
+		$theme_dir = get_stylesheet_directory() . '/' . $this->get_widget_text_domain();
+		$plugin_dir = dirname(__FILE__) . '/views';
+		
+		// Check the current theme
+		if( is_dir( $theme_dir ) ) {
+			$files += (array) self::scandir( $theme_dir, $type, $depth );
+		}
+
+		// Check the parent theme
+		if ( $search_parent && is_child_theme() ) {
+			$parent_theme_dir = get_template_directory() . '/' . $this->get_widget_text_domain();
+			if( is_dir( $parent_theme_dir ) ) {
+				$files += (array) self::scandir( $parent_theme_dir, $type, $depth );
+			}
+		}
+		
+		// Check the plugin views folder
+		if( is_dir( $plugin_dir ) ) {
+			$files += (array) self::scandir( $plugin_dir, $type, $depth );
+			// Remove the admin view
+			unset( $files['admin.php'] );
+		}
+		
+		return $files;
+	}
+	
+	/**
+	 * Scans a directory for files of a certain extension.
+	 *
+	 * @since 3.3.1
+	 * @access private
+	 *
+	 * Based on the function of the same name in wp-includes/class-wp-theme.php
+	 *
+	 * @param string $path Absolute path to search.
+	 * @param mixed  Array of extensions to find, string of a single extension, or null for all extensions.
+	 * @param int $depth How deep to search for files. Optional, defaults to a flat scan (0 depth). -1 depth is infinite.
+	 * @param string $relative_path The basename of the absolute path. Used to control the returned path
+	 * 	for the found files, particularly when this function recurses to lower depths.
+	 */
+	private static function scandir( $path, $extensions = null, $depth = 0, $relative_path = '' ) {
+		if ( ! is_dir( $path ) )
+			return false;
+
+		if ( $extensions ) {
+			$extensions = (array) $extensions;
+			$_extensions = implode( '|', $extensions );
+		}
+
+		$relative_path = trailingslashit( $relative_path );
+		if ( '/' == $relative_path )
+			$relative_path = '';
+
+		$results = scandir( $path );
+		$files = array();
+
+		foreach ( $results as $result ) {
+			if ( '.' == $result[0] )
+				continue;
+			if ( is_dir( $path . '/' . $result ) ) {
+				if ( ! $depth || 'CVS' == $result )
+					continue;
+				$found = self::scandir( $path . '/' . $result, $extensions, $depth - 1 , $relative_path . $result );
+				$files = array_merge_recursive( $files, $found );
+			} elseif ( ! $extensions || preg_match( '~\.(' . $_extensions . ')$~', $result ) ) {
+				$files[ $relative_path . $result ] = $path . '/' . $result;
+			}
+		}
+
+		return $files;
 	}
 	
 
